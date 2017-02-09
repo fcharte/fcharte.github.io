@@ -1,0 +1,83 @@
+---
+layout: post
+title: Configuración de un <i>cluster</i> con Ubuntu y SGE
+---
+
+<p>Los centros de cálculo utilizados por corporaciones empresariales, centros de investigación e instituciones similares utilizan desde hace años la configuración en <i><a href="http://es.wikipedia.org/wiki/Cluster_(inform%C3%A1tica)">cluster</a></i> como alternativa al más tradicional <i><a href="http://es.wikipedia.org/wiki/Mainframe">mainframe</a></i>, conectando un gran número de nodos entre sí para poder ofrecer así una potencia de cálculo igual o superior a la que se tendría con un <i><a href="http://en.wikipedia.org/wiki/Big_iron_(computing)">big iron</a></i>. Las personas que necesitan trabajar con este tipo de configuraciones lo hacen normalmente de forma remota o bien a través de un nodo que actúa como cabecera del cluster, facilitando las operaciones de supervisión y administración.</p>
+
+<p>Actualmente cualquier persona con unos conocimientos algo por encima de lo que podría considerar "básico" puede montarse su propio cluster en casa, aunque personalmente creo que esta posibilidad tiene especial interés para los programadores. Seguramente muchos preguntarán "¿para qué quiero yo un cluster en casa?". Cualquiera que necesite ejecutar tareas con una alta demanda de potencia de proceso, programas que pueden emplear horas, días o semanas trabajando con unos datos para generar resultados, pueden beneficiarse de este tipo de configuración dividiendo la tarea original en otras más pequeñas (siguiendo la máxima del <a href="http://es.wikipedia.org/wiki/Divide_y_vencer%C3%A1s">divide y vencerás</a>) que pueden ser ejecutadas en paralelo en varias máquinas. Más allá de la utilidad práctica e inmediata, no obstante, para los que siempre buscamos aprender y experimentar sencillamente no es necesario buscar una respuesta a la anterior pregunta. <b>Si puedo hacerlo, ¿por qué no voy a hacerlo?</b> 8-)</p>
+
+<p>Para poder configurar un cluster necesitamos utilizar, lógicamente, una combinación de hardware y software, a saber:</p>
+
+<ul class="enumeracion">
+<li><b>Ordenadores</b>: Dos o más máquinas que actuarán como nodos del cluster. No es necesario que sean equipos muy potentes, en mi caso he usado cuatro máquinas que tenía con poco uso, portátiles antiguos con entre 2 y 4 Gbytes de memoria RAM. Dado que la idea es mantenerlos en funcionamiento ininterrumpido durante mucho tiempo, cuanto más reducido sea su consumo menor será también el gasto energético, de ahí mi elección de usar ordenadores portátiles con poca potencia.
+
+</li><li><b>Conmutador</b>: Las máquinas del cluster necesitarán comunicarse continuamente y precisan para ello un canal de alta velocidad, de forma que las máquinas no tengan que estar esperando para poder acceder a datos compartidos o recibir comandos. En este entorno doméstico lo ideal es utilizar un conmutador o <i>switch</i> de tipo <a href="http://es.wikipedia.org/wiki/Gigabit_Ethernet">Gigabit Ethernet</a>, con su correspondiente cable a cada máquina.
+
+</li><li><b>SAI</b>: Si realmente vamos a usar el cluster para ejecutar procesos de cierta importancia, no solamente como experimentación, nos vendrá bien contar con un sistema de alimentación que evite la caída en caso de un corte eléctrico momentáneo.
+
+</li><li><b>Sistema operativo</b>: Todas las máquinas del cluster ejecutarán el mismo sistema operativo, normalmente con una configuración idéntica para así evitar fallos de compatibilidad y poder ejecutar un mismo programa en cualquiera de los nodos sin ningún problema. Aunque podrían uitlizarse otros, la mejor opción para montar un cluster en la actualidad es <a href="http://es.wikipedia.org/wiki/GNU/Linux">GNU/Linux</a>. En mi caso he utilizado <a href="http://www.ubuntu.com/">Ubuntu</a>.
+
+</li><li><b>Sistema de supervisión y gestión del cluster</b>: Sobre el sistema operativo será necesario agregar el software que facilite la supervisión del cluster y su administración, de forma que la carga de trabajo pendiente se distribuya de manera automática entre las máquinas disponibles. Hay varias opciones a nuestra disposición, entre las que yo he optado por <a href="http://es.wikipedia.org/wiki/Sun_Grid_Engine">SGE (<i>Sun Grid Engine</i>)</a> simplemente porque es un software que conozco al haberlo usado en los clusters de varias universidades.
+</li></ul>
+
+<p>La instalación del hardware no requiere ningún comentario adicional: basta con conectar los equipos a la fuente de alimentación, por una parte, y al conmutador Ethernet que les permitirá comunicarse, por otra. A la hora de configurar el software, por el contrario, sí es necesario tener en cuenta algunos detalles importantes.</p>
+
+<h5>Configuración del sistema operativo</h5>
+<p>No voy a entrar aquí en el proceso de instalación de Ubuntu en los ordenadores, es realmente sencillo y en la web hay disponible infinidad de información al respecto. Sí es importante, como indiqué antes, que se instale la misma versión y para la misma arquitectura (x86 o x64) en todas los nodos para así evitar posteriores problemas de configuración. En cuanto a la configuración IP, aunque podría usarse DHCP aconsejo que se asigne a cada máquina una dirección IP fija y que se utilice el mismo archivo <code>/etc/hosts</code> en todas ellas para facilitar la comunicación.</p>
+
+<p>De los nodos que componen el cluster uno ha de operar como coordinador (<i>maestro</i>), supervisando la carga de trabajo de los demás y decidiendo cómo se distribuye la cola de tareas pendientes. Esta máquina será también la que ofrezca el almacenamiento compartido en disco del cluster, haciendo así posible que todas las máquinas operen con el mismo programa y sobre los mismos datos sin necesidad de copiarlos en cada una de ellas. Si este nodo maestro es una máquina poco potente y con escasa memoria puede dedicarse exclusivamente a esta tarea, pero de lo contrario puede tener una personalidad dual: actuando como nodo maestro del cluster pero también como nodo de ejecución. El resto de las máquinas del cluster serán únicamente nodos de ejecución.</p>
+
+<p>En el nodo maestro crearemos el directorio que alojará los programas y datos a usar en el cluster. Para que el resto de nodos tengan acceso a ellos habremos de dar los pasos siguientes:</p>
+<ul class="enumeracion">
+<li>Instalar <code>nfs-kernel-server</code> y <code>portmap</code> en el nodo maestro. Agregar al archivo <code>/etc/exports</code> el directorio creado antes y ejecutar <code>exportfs -a</code>
+<img src="imagenes/20120919.1.png" title="Contenido del archivo /etc/exports en el nodo maestro">
+</li><li>Instalar en los demás nodos <code>nfs-common</code>, crear el directorio donde queremos montar el espacio compartido y montarlo con <code>sudo mount IP_maestro:/directorio_compartido directorio_montaje</code>. En la captura inferior aparte de montar el espacio compartido se ha hecho una prueba, comprobando que estaba vacío, a continuación creando un archivo de texto desde un nodo y comprobando desde otro que podía accederse al mismo.
+<img src="imagenes/20120919.2.png" title="Montamos el espacio compartido en los nodos de ejecución">
+</li><li>Para evitar tener que ejecutar los comandos de exportación (nodo maestro) y montaje (nodos de ejecución) tras cada reinicio podemos actualizar el archivo <code>/etc/fstab</code> de cada máquina.
+</li></ul>
+
+
+<h5>Instalación y configuración de SGE</h5>
+<p>Completada la configuración del sistema llega el momento de instalar SGE, el software que se encargará de la gestión y administración de colas de trabajo en el cluster. En el nodo maestro ejecutaremos <code>sudo apt-get install gridengine-master gridengine-qmon gridengine-common  gridengine-client gridengine-exec</code>, en el resto de nodos el comando a usar será <code>sudo apt-get install gridengine-client gridengine-exec</code>. Durante la instalación aparecerán cuadros de diálogo como el de la imagen siguiente solicitando algunos datos. Dejamos los valores propuestos por defecto salvo para el nombre de la máquina maestra que, como es lógico, será el del nodo configurado con ese perfil.</p>
+
+<p style="text-align:center"><img src="imagenes/20120919.3.png" title="Instalación del software SGE"></p>
+
+<p>Tras reiniciar las máquinas, a fin de poner en marcha los demonios encargados de los servicios de SGE, llega el momento de configurar el cluster desde un punto de vista lógico. Para ello, en el nodo maestro, ejecutaremos <code>sudo qmon</code> y usaremos las siguientes opciones de este programa:</p>
+
+<ul class="enumeracion">
+<li><b>Host Configuration</b>: Para establecer el nombre del nodo maestro y los nodos de ejecución.
+</li><li><b>User Configuration</b>: Definiendo los usuarios que podrán enviar trabajos al cluster.
+</li><li><b>Queue Control</b>: Estableciendo las colas de trabajo que existirán y las máquinas asociadas.
+</li></ul>
+
+<p style="text-align:center"><img src="imagenes/20120919.4.png" title="La utilidad de configuración qmon"></p>
+
+<p>En un cluster pequeño, como el propuesto, lo normal es que tengamos una sola cola y que estén vinculadas a ella todos los nodos. De esta manera los usuarios podrán enviar sus ejecuciones a dicha cola y SGE se encargará de distribuir el trabajo entre todas las máquinas. Cuando se trabaja con un cluster de mayor tamaño es habitual contar con varias colas, por ejemplo dependiendo de la cantidad de memoria o la potencia de proceso de las máquinas, agrupándolas de forma que los trabajos se envíen a los nodos más adecuados a cada necesidad.</p>
+
+<p>La guía de usuario de Grid Engine de Oracle <a href="http://docs.oracle.com/cd/E19080-01/n1.grid.eng6/817-6117/chp1-1/index.html">ofrece una introducción</a> al uso de este software y detalla el uso de <code>qmon</code> y otras utilidades.
+
+</p><h5>Ejecución de tareas</h5>
+<p>Una vez que el cluster esté en funcionamiento llega el momento de aprovecharlo. Los trabajos se lanzarán siempre desde el nodo maestro, indicándole mediante un <i>script</i> el nombre del trabajo, la cola a que debe enviarse y el programa que es necesario ejecutar. Dicho guión se facilita a SGE mediante el comando <code>qsub</code>. Un ejemplo de guión podría ser el siguiente:</p>
+
+<textarea cols="70" rows="15" readonly="readonly">#!/bin/bash
+#$ -S /bin/bash
+#$ -N NombreTarea
+#$ -cwd
+#$ -o SalidaEstandar.txt
+#$ -e SalidaErrores.err
+#$ -q ColaDestino
+export PATH="$SGE_O_PATH"
+DIR=/directorio/area/compartida
+
+
+cd $DIR
+app/MyApp parámetros
+
+</textarea>
+
+<p>Podemos crear tantos <i>script</i> como necesitemos y enviarlos uno tras otro con <code>qsub</code> a la cola de ejecución. También existe la posibilidad de que un mismo guión genere una lista o <i>array</i> de tareas. En cualquier caso, tras enviar los trabajos podemos comprobar su estado mediante el comando <code>qstat</code> que, entre otras cosas, mostrará cuáles de nuestras tareas están ejecutándose, indicando en qué máquinas, y cuáles están aun en espera. Con el comando <code>qhost</code> se obtiene información sobre el estado de los nodos: carga de trabajo de cada una, memoria en uso y disponible, etc. En la <a href="http://biowiki.org/HowToUseSunGridEngine">wiki How to Use Sun Grid Engine</a> podemos encontrar información sobre esos y otros muchos comandos de SGE. Obviamente también podemos consultar la documentación que se instala con dicho software.</p>
+
+<p style="text-align:center"><img src="imagenes/20120919.5.png" title="Cada utiildad de SGE cuenta con su páqina man"></p>
+
+<p>Lógicamente SGE cuenta con muchos otros comandos, hay más parámetros de configuración y multitud de detalles relativos a la preparación de <i>scripts</i> de ejecución de tareas, pero sobre todo ello es fácil encontrar información en la web una vez que se sabe qué es lo que hay que buscar. La finalidad de este artículo ha sido esbozar el procedimiento general y facilitar algunas referencias útiles que permitan a cualquiera montar su propio cluster.</p>
