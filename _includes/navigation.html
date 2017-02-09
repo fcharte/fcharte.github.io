@@ -1,0 +1,5 @@
+<nav class="main-navigation">
+  {% for nav in site.data.navigation[include.nav] %}
+  <a href="{{ nav.url }}">{{ nav.title }}</a>
+  {% endfor %}
+</nav>

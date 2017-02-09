@@ -1,0 +1,13 @@
+---
+layout: index
+permalink: /tutorials/
+title: Tutoriales
+---
+
+{% for tutorial in site.tutorials %}
+<article>
+<h2><a href="{{ tutorial.url }}">{{ tutorial.title }}</a></h2>
+{{ tutorial.content | strip_html | truncatewords: 50 }}
+<a href="{{ tutorial.url }}">Seguir leyendo</a>
+</article>
+{% endfor %}

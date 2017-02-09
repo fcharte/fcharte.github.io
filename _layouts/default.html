@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="{{ site.locale }}">
+  <head>
+    {% include head.html %}
+  </head>
+  <body class="layout-{{ page.layout | default: layout.layout }}{% if page.classes or layout.classes %}{{ page.classes | default: layout.classes | join: ' ' | prepend: ' ' }}{% endif %}">
+    {% include header.html %}
+    <div class="main-content">
+      {{ content }}
+    </div>
+  </body>
+</html>

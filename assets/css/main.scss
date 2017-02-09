@@ -1,0 +1,73 @@
+---
+---
+
+$accent-light: #ffe4c4;
+$accent: darken($accent-light, 50%);
+$foreground: #202020;
+$background: #ffffff;
+$site-width: 60rem;
+
+body {
+    font-size: 18px;
+    line-height: 1.8;
+    color: $foreground;
+    background: $background;
+    font-family: Helvetica Neue, Arial, Open Sans, sans-serif;
+}
+
+a {
+    color: $accent;
+}
+
+header {
+    border-bottom: 1px solid $accent-light;
+    
+    .header-inner {
+        max-width: $site-width;
+        margin: 0 auto;
+        padding: 0 1rem;
+        
+        a {
+            color: lighten($foreground, 20%);
+            display: inline-block;
+            padding: 0.5rem 0 0rem 0;
+            border-bottom: 0.3rem solid transparent;
+            margin: 0.5rem 2rem 0.7rem 0;
+            text-decoration: none;
+
+            &:hover {
+                border-bottom-color: $accent-light;
+            }
+
+            &.header-title {
+                font-weight: bold;
+            }   
+        }
+        nav {
+            display: inline-block;
+        }
+    }
+}
+
+.main-content {
+    max-width: $site-width;
+    margin: 2rem auto 0;
+    padding: 0 1rem;
+}
+
+.layout-home {
+    .main-content {
+        max-width: 45rem;
+        margin-top: 6rem;
+
+        .main-navigation {
+            margin-top: 2rem;
+            
+            a {
+                display: inline-block;
+                margin: 0 2rem 0 0;
+                text-decoration: none;
+            }
+        }
+    }
+}
