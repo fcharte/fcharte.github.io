@@ -16,8 +16,9 @@
 title: Torre de Babel
 name: Francisco Charte
 email: francisco@fcharte.com
-description: > # this means to ignore newlines until "baseurl:"
-  El sitio web de Francisco Charte
+description: > # `>` ignores newlines
+  Aprendiz, lector compulsivo, profesor, escritor, desarrollador.
+  Doctor en Tecnologías de la información y la comunicación por la Universidad de Granada.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://fcharte.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: fcharte
@@ -26,9 +27,15 @@ github_username:  fcharte
 # Metadata
 locale: "es"
 
+permalink: pretty
+
+collections:
+  tutorials:
+    output: true
+
 # Build settings
 markdown: kramdown
-theme: minimal-mistakes-jekyll
+
 gems:
   - jekyll-feed
 exclude:
