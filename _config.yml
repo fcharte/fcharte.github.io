@@ -20,7 +20,7 @@ description: > # `>` ignores newlines
   Aprendiz, lector compulsivo, profesor, escritor, desarrollador.
   Doctor en Tecnologías de la información y la comunicación por la Universidad de Granada.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://fcharte.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: fcharte
 github_username:  fcharte
 
