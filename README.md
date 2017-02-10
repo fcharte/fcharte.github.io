@@ -19,13 +19,14 @@ title: "El título del tutorial"
 
 Para añadir una colección llamada "publicaciones" hay que seguir estos pasos:
 
-1. Añadir la colección a `_config.yml`:  
+#### 1. Añadir la colección a `_config.yml`
 ~~~ yml
 collections:
   publicaciones:
     output: true
 ~~~
-2. Añadir el índice de la colección, `publicaciones.html`:
+
+#### 2. Añadir el índice de la colección, `publicaciones.html`
 ~~~ yml
 ---
 layout: index
@@ -39,5 +40,7 @@ title: Publicaciones
 </article>
 {% endfor %}
 ~~~
-3. Añadir un enlace a la colección en `_data/navigation.yml` (sección `site`)
-4. Crear un directorio `_publicaciones` y agregar documentos
+
+#### 3. Añadir un enlace a la colección en `_data/navigation.yml` (sección `site`)
+
+#### 4. Crear un directorio `_publicaciones` y agregar documentos
