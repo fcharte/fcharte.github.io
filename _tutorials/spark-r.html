@@ -36,7 +36,7 @@ sudo apt-get -y install sbt
 
 <p>Terminada esta última parte del proceso, ya tenemos todos los prerrequisitos necesarios para proceder a instalar Spark en nuestra máquina.
 
-</p><h5>Instalación de Spark</h5>
+</p><h2>Instalación de Spark</h2>
 <p>En la web de <a href="http://spark.apache.org/downloads.html">Apache Spark</a> podemos encontrar versiones precompiladas preparadas para funcionar sobre distintas versiones de Hadoop y otras plataformas software para procesamiento distribuido. En mi opinión lo recomendable (es lo que yo he hecho) es descargar el paquete de código fuente, configurar las variables necesarias para indicar cuál es nuestra versión de Hadoop y compilar Spark, obteniendo una versión a medida para nuestro sistema.</p>
 
 <img src="http://fcharte.com/imagenes/spark3.png" width="800px">
@@ -51,19 +51,19 @@ sudo apt-get -y install sbt
 
 <p>En este momento estaríamos usando la máquina local, en la que acabamos de hacer la instalación, como maestro del cluster. Por ahora es la única máquina en la que tenemos instalado Spark, pero no tendríamos más que clonar la máquina actual en otras, o repetir en cada una todo el procedimiento de instalación descrito hasta ahora, para tener múltiples máquinas con Spark, una actuando como maestro y el resto como esclavos. Antes de proceder a clonar, sin embargo, debemos completar la instalación y configuración de R y SparkR, de forma que ya estén en funcionamiento en los nodos esclavos.
 
-</p><h5>Instalación de R y SparkR</h5>
+</p><h2>Instalación de R y SparkR</h2>
 <p>Para instalar R en Ubuntu no tenemos más que ejecutar <code>sudo apt-get install r-base r-base-dev</code> desde la línea de comandos y esperar a que se descargue e instale el software. Tras esto debemos poder acceder a la consola de R simplemente escribiendo <code>R</code> en la línea de comandos de Bash. Una vez en la consola de R, procederemos a instalar el paquete <code>rJava</code>, necesario para poder instalar SparkR. Con este fin usaremos la orden <code>install.packages("rJava")</code>, tal y como se aprecia en la imagen inferior.</p>
 
 <img src="http://fcharte.com/imagenes/spark6.png" width="800px">
 
 <p>Tras salir de la consola de R (con la orden <code>quit()</code>), procedemos a descargar el <a href="https://github.com/amplab-extras/SparkR-pkg">paquete SparkR</a> y a desempaquetarlo en un directorio. Entramos en él y ejecutamos <code>./install-dev.sh</code> para lanzar la generación e instalación del paquete. Este consta de dos partes: un paquete R y un paquete Scala. Gracias a ellos, que actúan como pasarela, podremos acceder desde R a los servicios de SparkR. Terminado el proceso podemos usar la orden <code>./sparkR</code> a fin de comprobar que podemos acceder a la consola de R con un contexto Spark ya disponible.</p>
 
-<h5>Gestionar los nodos del cluster</h5>
+<h2>Gestionar los nodos del cluster</h2>
 Finalizado todo el proceso de instalación y configuración del software, ahora sí estamos en disposición de clonar la máquina en el resto de equipos o bien repetir todo el proceso en cada una de ellas. La máquina cuya IP indique la variable <code>MASTER</code> actuará como maestra y todas las demás como esclavas. Si no se establece la mencionada variable, lo habitual es que el nodo maestro sea aquél desde el que gestionamos el cluster, máquina desde la que usaremos los <i>scripts</i> <code>start-master.sh, start-slaves.sh, stop-master.sh</code> y <code>stop-slaves.sh</code> descritos en <a href="http://spark.apache.org/docs/latest/spark-standalone.html">la documentación de Spark</a> para poner en marcha o detener tanto el maestro como los esclavos.<p></p>
 
 <p>Para que el nodo maestro pueda conectar con los esclavos y lanzar trabajos es imprescindible que todos ellos sean accesibles mediante SSH desde el nodo maestro, usando una clave privada y sin contraseña. Las direcciones IP de los esclavos se facilitarán en el archivo <code>conf/slaves</code>. En caso de que necesitemos configurar aspectos como los puertos, la memoria a usar en cada nodo, etc., editaremos el archivo de configuración <code>conf/spark-env.sh</code>. En ambos casos <code>conf</code> es un subdirectorio que encontraremos en el directorio donde hayamos instalado Spark.</p>
 
-<h5>Trabajar con SparkR</h5>
+<h2>Trabajar con SparkR</h2>
 <p>Finalmente, tras todo el trabajo anterior, ya estamos en disposición de trabajar desde R sobre un cluster de máquinas, aprovechando todos sus recursos combinados desde una línea de comandos interactiva que, desde el principio, era mi objetivo, ya que esto me abre las puertas a trabajar con cantidades de datos mucho mayores sin necesidad recurrir a Java sobre Hadoop que, hasta el momento, es la combinación más usual.</p>
 
 <p>Una vez que desde R hemos obtenido un contexto Spark, mediante la función <code>sparkR.init</code>, podemos usar la API RDD (<i>Resilient Distributed Dataset</i>) de Spark como si fuesen listas distribuidas en R. Además de extender la funcionalidad de construcciones habituales de R, como la función <code>lapply</code>, el paquete SparkR aporta un importante número de nuevas funciones como podemos ver en la ayuda electrónica.</p>
