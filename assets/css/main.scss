@@ -21,6 +21,8 @@ a {
     color: $accent;
 }
 
+
+/* Layout */
 .inner {
     max-width: $site-width;
     margin: 0 auto;
@@ -101,6 +103,33 @@ footer {
                 margin-left: 1rem;
             }
         }
+    }
+}
+
+/* Other styles */
+pre, code {
+    font-family: Inconsolata, monospace;
+
+    /* Inverse Monokai colors */
+    background-color: #f8f8f2;
+    color: #272822;
+}
+
+figure.highlight {
+    margin: 0;
+}
+pre {
+    padding: 0.6rem 1rem;
+    line-height: 1.3;
+    overflow-x: auto;
+    
+    /* Monokai colors */
+    background-color: #272822;
+    color: #f8f8f2;
+
+    code {
+        background-color: transparent;
+        color: inherit;
     }
 }
 
