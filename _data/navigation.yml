@@ -2,7 +2,7 @@ site:
   - title: Sobre mí
     url: "/about/"
   - title: Tutoriales
-    url: "/tutorials/"
+    url: "/tutoriales/"
 
 social:
   - title: ResearchGate
