@@ -1,5 +1,0 @@
-<nav class="main-navigation">
-  {% for nav in site.data.navigation[include.nav] %}
-  <a href="{% unless nav.url contains '://' %}{{ site.baseurl | prepend: site.url }}{% endunless %}{{ nav.url }}">{{ nav.title }}</a>
-  {% endfor %}
-</nav>

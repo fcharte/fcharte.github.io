@@ -1,16 +1,50 @@
----
-layout: post
-title: "Spark + R = analítica de datos interactiva y distribuida"
-toc: true
----
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<p>R es una magnífica herramienta para llevar a cabo todo tipo de tareas de análisis exploratorio de datos de manera interactiva, desde una consola en la que introducimos órdenes más o menos simples y obtenemos resultados, en forma de tablas, indicadores estadísticos o gráficas, de manera inmediata. El enorme número de paquetes disponibles simplifica nuestro trabajo, y cualquier secuencia de operaciones puede convertirse fácilmente en un <i>script</i> que permite reproducir los experimentos tantas veces como sea necesario sobre distintos conjuntos de datos.</p>
+<title>Spark + R = analítica de datos interactiva y distribuida - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="/about/">Sobre mí</a>
+  
+  <a href="/tutorials/">Tutoriales</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Spark + R = analítica de datos interactiva y distribuida</h1>
+
+<ul class="section-nav">
+<li class="toc-entry toc-h5"><a href="#instalación-de-prerrequisitos">Instalación de prerrequisitos</a></li>
+<li class="toc-entry toc-h5"><a href="#instalación-de-spark">Instalación de Spark</a></li>
+<li class="toc-entry toc-h5"><a href="#instalación-de-r-y-sparkr">Instalación de R y SparkR</a></li>
+<li class="toc-entry toc-h5"><a href="#gestionar-los-nodos-del-cluster">Gestionar los nodos del cluster</a></li>
+<li class="toc-entry toc-h5"><a href="#trabajar-con-sparkr">Trabajar con SparkR</a></li>
+</ul><p>R es una magnífica herramienta para llevar a cabo todo tipo de tareas de análisis exploratorio de datos de manera interactiva, desde una consola en la que introducimos órdenes más o menos simples y obtenemos resultados, en forma de tablas, indicadores estadísticos o gráficas, de manera inmediata. El enorme número de paquetes disponibles simplifica nuestro trabajo, y cualquier secuencia de operaciones puede convertirse fácilmente en un <i>script</i> que permite reproducir los experimentos tantas veces como sea necesario sobre distintos conjuntos de datos.</p>
 <p>La mayor limitación de R es que solamente podremos usar los recursos (potencia de proceso y memoria) de la máquina en la que estamos trabajando, algo que dificulta el trabajo con grandes volúmenes de datos (el repetido hasta la extenuación <i>big data</i>). En el artículo <a href="http://fcharte.com/Default.asp?noticias=2&amp;a=2012&amp;m=9&amp;d=19">Configuración de un cluster con Ubuntu y SGE</a> expliqué cómo configurar un cluster de máquinas GNU/Linux y un sistema de gestión de colas. Con dicha configuración es posible distribuir un lote de tareas, escritas como <i>scripts</i> R, entre las distintas máquinas del cluster, reduciendo el tiempo global. No obstante, cada tarea estará limitada por los recursos de la máquina en que se ejecuta, además de ser un enfoque no adecuado para el uso interactivo sino la ejecución de trabajos por lotes.</p>
 <p>Una alternativa al uso de colas, ejecutando tareas independientes en cada una de las máquinas del cluster, es el uso de plataformas como <a href="http://hadoop.apache.org/">Apache Hadoop</a>, que implementan un sistema de archivos distribuido (HDFS) y un mecanismo de procesamiento en paralelo (Map/Reduce) capaz de dividir una tarea en tantas porciones como sea necesario, distribuirlas entre las máquinas del cluster y después componer el resultado final a partir de los resultados parciales que van obteniéndose. El paradigma Map/Reduce no deja de ser un enfoque de bajo nivel a un problema, el aprovechamiento de los recursos distribuidos, y desde luego no resulta lo más adecuado para un uso interactivo. Además el esquema de funcionamiento depende fuertemente de la escritura en disco de porciones de datos y resultados parciales, lo cual conlleva un cierto nivel de carga sobre el sistema de entrada/salida de las máquinas, ralentizando la consecución del objetivo final.</p>
 <p>Frente a Hadoop, <a href="http://spark.apache.org/">Apache Spark</a> representa una alternativa de más alto nivel para computación distribuida, pasando del enfoque Map/Reduce al uso de estructuras de paralelismo que resultan más naturales para el desarrollador. Spark no requiere escritura en disco de porciones de datos y resultados parciales, potenciando en su lugar el mayor uso de la memoria disponible en cada máquina del cluster. El resultado es que una misma solución puede ejecutarse hasta 100 veces más rápido sobre Spark que sobre Hadoop. Además Spark ofrece una línea de comandos, en principio para los lenguajes <b>Scala</b> y <b>Python</b>, que permite operar sobre el cluster de manera interactiva.</p>
 <p>Aunque durante un tiempo utilicé Python como lenguaje para el análisis exploratorio de datos y algunas tareas de minería de datos, desde hace años R es mi herramienta fundamental para estas tareas. Gracias al paquete <a href="https://github.com/amplab-extras/SparkR-pkg">SparkR</a>, que actúa como puente entre Spark y R, es posible trabajar de manera interactiva aprovechando los recursos de un cluster sin abandonar la comodidad de la línea de comandos de R. En el resto de este artículo cuento cuáles son los pasos que he seguido para poder trabajar desde R sobre un cluster con Spark, partiendo de que tengo un conjunto de máquinas conectadas en red, tal y como explicaba en <a href="http://fcharte.com/Default.asp?noticias=2&amp;a=2012&amp;m=9&amp;d=19">Configuración de un cluster con Ubuntu y SGE</a>, y almacenamiento compartido NFS (otra alternativa será instalar Spark sobre Hadoop).</p>
 
-<h5>Instalación de prerrequisitos</h5>
+<h5>
+<a id="instalación-de-prerrequisitos" class="anchor" href="#instalaci%C3%B3n-de-prerrequisitos" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instalación de prerrequisitos</h5>
 Partiendo de una instalación de Ubuntu 14.04LTS, el primer paso ha sido instalar los prerrequisitos que necesita Spark para su funcionamiento. Entre estos se encuentran Java 7, Scala, Scala sbt y Python. El primer paso será añadir el repositorio desde el que instalaremos Java y la actualización de la base de datos. En Ubuntu recurriremos a <code>add-apt-repository</code> y <code>apt-get</code>, en otras distribuciones, como CentOS, usaríamos <code>yum</code>, pero el procedimiento sería similar.<p></p>
 
 <img src="http://fcharte.com/imagenes/spark1.png" width="800px">
@@ -36,7 +70,8 @@ sudo apt-get -y install sbt
 
 <p>Terminada esta última parte del proceso, ya tenemos todos los prerrequisitos necesarios para proceder a instalar Spark en nuestra máquina.
 
-</p><h5>Instalación de Spark</h5>
+</p><h5>
+<a id="instalación-de-spark" class="anchor" href="#instalaci%C3%B3n-de-spark" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instalación de Spark</h5>
 <p>En la web de <a href="http://spark.apache.org/downloads.html">Apache Spark</a> podemos encontrar versiones precompiladas preparadas para funcionar sobre distintas versiones de Hadoop y otras plataformas software para procesamiento distribuido. En mi opinión lo recomendable (es lo que yo he hecho) es descargar el paquete de código fuente, configurar las variables necesarias para indicar cuál es nuestra versión de Hadoop y compilar Spark, obteniendo una versión a medida para nuestro sistema.</p>
 
 <img src="http://fcharte.com/imagenes/spark3.png" width="800px">
@@ -51,19 +86,22 @@ sudo apt-get -y install sbt
 
 <p>En este momento estaríamos usando la máquina local, en la que acabamos de hacer la instalación, como maestro del cluster. Por ahora es la única máquina en la que tenemos instalado Spark, pero no tendríamos más que clonar la máquina actual en otras, o repetir en cada una todo el procedimiento de instalación descrito hasta ahora, para tener múltiples máquinas con Spark, una actuando como maestro y el resto como esclavos. Antes de proceder a clonar, sin embargo, debemos completar la instalación y configuración de R y SparkR, de forma que ya estén en funcionamiento en los nodos esclavos.
 
-</p><h5>Instalación de R y SparkR</h5>
+</p><h5>
+<a id="instalación-de-r-y-sparkr" class="anchor" href="#instalaci%C3%B3n-de-r-y-sparkr" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instalación de R y SparkR</h5>
 <p>Para instalar R en Ubuntu no tenemos más que ejecutar <code>sudo apt-get install r-base r-base-dev</code> desde la línea de comandos y esperar a que se descargue e instale el software. Tras esto debemos poder acceder a la consola de R simplemente escribiendo <code>R</code> en la línea de comandos de Bash. Una vez en la consola de R, procederemos a instalar el paquete <code>rJava</code>, necesario para poder instalar SparkR. Con este fin usaremos la orden <code>install.packages("rJava")</code>, tal y como se aprecia en la imagen inferior.</p>
 
 <img src="http://fcharte.com/imagenes/spark6.png" width="800px">
 
 <p>Tras salir de la consola de R (con la orden <code>quit()</code>), procedemos a descargar el <a href="https://github.com/amplab-extras/SparkR-pkg">paquete SparkR</a> y a desempaquetarlo en un directorio. Entramos en él y ejecutamos <code>./install-dev.sh</code> para lanzar la generación e instalación del paquete. Este consta de dos partes: un paquete R y un paquete Scala. Gracias a ellos, que actúan como pasarela, podremos acceder desde R a los servicios de SparkR. Terminado el proceso podemos usar la orden <code>./sparkR</code> a fin de comprobar que podemos acceder a la consola de R con un contexto Spark ya disponible.</p>
 
-<h5>Gestionar los nodos del cluster</h5>
+<h5>
+<a id="gestionar-los-nodos-del-cluster" class="anchor" href="#gestionar-los-nodos-del-cluster" aria-hidden="true"><span class="octicon octicon-link"></span></a>Gestionar los nodos del cluster</h5>
 Finalizado todo el proceso de instalación y configuración del software, ahora sí estamos en disposición de clonar la máquina en el resto de equipos o bien repetir todo el proceso en cada una de ellas. La máquina cuya IP indique la variable <code>MASTER</code> actuará como maestra y todas las demás como esclavas. Si no se establece la mencionada variable, lo habitual es que el nodo maestro sea aquél desde el que gestionamos el cluster, máquina desde la que usaremos los <i>scripts</i> <code>start-master.sh, start-slaves.sh, stop-master.sh</code> y <code>stop-slaves.sh</code> descritos en <a href="http://spark.apache.org/docs/latest/spark-standalone.html">la documentación de Spark</a> para poner en marcha o detener tanto el maestro como los esclavos.<p></p>
 
 <p>Para que el nodo maestro pueda conectar con los esclavos y lanzar trabajos es imprescindible que todos ellos sean accesibles mediante SSH desde el nodo maestro, usando una clave privada y sin contraseña. Las direcciones IP de los esclavos se facilitarán en el archivo <code>conf/slaves</code>. En caso de que necesitemos configurar aspectos como los puertos, la memoria a usar en cada nodo, etc., editaremos el archivo de configuración <code>conf/spark-env.sh</code>. En ambos casos <code>conf</code> es un subdirectorio que encontraremos en el directorio donde hayamos instalado Spark.</p>
 
-<h5>Trabajar con SparkR</h5>
+<h5>
+<a id="trabajar-con-sparkr" class="anchor" href="#trabajar-con-sparkr" aria-hidden="true"><span class="octicon octicon-link"></span></a>Trabajar con SparkR</h5>
 <p>Finalmente, tras todo el trabajo anterior, ya estamos en disposición de trabajar desde R sobre un cluster de máquinas, aprovechando todos sus recursos combinados desde una línea de comandos interactiva que, desde el principio, era mi objetivo, ya que esto me abre las puertas a trabajar con cantidades de datos mucho mayores sin necesidad recurrir a Java sobre Hadoop que, hasta el momento, es la combinación más usual.</p>
 
 <p>Una vez que desde R hemos obtenido un contexto Spark, mediante la función <code>sparkR.init</code>, podemos usar la API RDD (<i>Resilient Distributed Dataset</i>) de Spark como si fuesen listas distribuidas en R. Además de extender la funcionalidad de construcciones habituales de R, como la función <code>lapply</code>, el paquete SparkR aporta un importante número de nuevas funciones como podemos ver en la ayuda electrónica.</p>
@@ -79,3 +117,32 @@ Finalizado todo el proceso de instalación y configuración del software, ahora 
 <img src="http://fcharte.com/imagenes/spark9.png" width="800px">
 
 <p>SparkR se encuentra aun en una fase muy preliminar. Es de esperar que en el futuro vayan extendiéndose sus capacidades y permita aprovechar todavía más las funciones de Spark, quizá incluyendo el acceso a librerías de <i>machine learning</i> <a href="https://spark.apache.org/docs/1.1.0/mllib-guide.html">como MLib</a>. Queda mucho trabajo por delante.</p>
+
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
