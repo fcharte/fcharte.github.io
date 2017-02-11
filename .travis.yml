@@ -1,0 +1,27 @@
+language: ruby
+
+rvm:
+ - 2.3.1
+
+# Adapted from https://github.com/iblancasa/blog_files/blob/master/.travis.yml
+before_install:
+  - git config --global user.email "francisco@fcharte.com"
+  - git config --global user.name "Francisco Charte"
+  - git clone -b master https://${GITHUB_TOKEN}@github.com/fcharte/fcharte.github.io.git _site
+  - rm -rf _site/*
+
+script:
+  - bundle exec jekyll build
+
+after_success:
+  - cd _site/
+  - touch .nojekyll
+  - git ls-files --deleted -z | xargs -0 git rm
+  - git add *
+  - git add .
+  - git commit -am "Update blog at `date` [ci skip]"
+  - git push origin master --quiet
+
+branches:
+  only:
+  - jekyll-site
