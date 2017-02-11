@@ -63,6 +63,19 @@ footer {
       margin-left: 1rem; }
 
 /* Other styles */
+ul.section-nav {
+  border: 1px solid #ffe4c4;
+  display: inline-block;
+  padding: 0.6rem 1rem; }
+  ul.section-nav:before {
+    content: "Tabla de contenidos";
+    font-weight: bold;
+    color: #6d6d6d; }
+  ul.section-nav .toc-h3 {
+    margin-left: 2rem; }
+  ul.section-nav .toc-h4 {
+    margin-left: 4rem; }
+
 pre, code {
   font-family: Inconsolata, monospace;
   /* Inverse Monokai colors */
