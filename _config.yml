@@ -30,7 +30,7 @@ locale: "es"
 permalink: pretty
 
 collections:
-  tutorials:
+  tutoriales:
     output: true
 
 # Build settings
