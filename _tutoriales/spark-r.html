@@ -2,6 +2,7 @@
 layout: post
 title: "Spark + R = analítica de datos interactiva y distribuida"
 toc: true
+numbersections: true
 ---
 
 <p>R es una magnífica herramienta para llevar a cabo todo tipo de tareas de análisis exploratorio de datos de manera interactiva, desde una consola en la que introducimos órdenes más o menos simples y obtenemos resultados, en forma de tablas, indicadores estadísticos o gráficas, de manera inmediata. El enorme número de paquetes disponibles simplifica nuestro trabajo, y cualquier secuencia de operaciones puede convertirse fácilmente en un <i>script</i> que permite reproducir los experimentos tantas veces como sea necesario sobre distintos conjuntos de datos.</p>
@@ -10,7 +11,7 @@ toc: true
 <p>Frente a Hadoop, <a href="http://spark.apache.org/">Apache Spark</a> representa una alternativa de más alto nivel para computación distribuida, pasando del enfoque Map/Reduce al uso de estructuras de paralelismo que resultan más naturales para el desarrollador. Spark no requiere escritura en disco de porciones de datos y resultados parciales, potenciando en su lugar el mayor uso de la memoria disponible en cada máquina del cluster. El resultado es que una misma solución puede ejecutarse hasta 100 veces más rápido sobre Spark que sobre Hadoop. Además Spark ofrece una línea de comandos, en principio para los lenguajes <b>Scala</b> y <b>Python</b>, que permite operar sobre el cluster de manera interactiva.</p>
 <p>Aunque durante un tiempo utilicé Python como lenguaje para el análisis exploratorio de datos y algunas tareas de minería de datos, desde hace años R es mi herramienta fundamental para estas tareas. Gracias al paquete <a href="https://github.com/amplab-extras/SparkR-pkg">SparkR</a>, que actúa como puente entre Spark y R, es posible trabajar de manera interactiva aprovechando los recursos de un cluster sin abandonar la comodidad de la línea de comandos de R. En el resto de este artículo cuento cuáles son los pasos que he seguido para poder trabajar desde R sobre un cluster con Spark, partiendo de que tengo un conjunto de máquinas conectadas en red, tal y como explicaba en <a href="http://fcharte.com.butters.globenet.cz/Default.asp?noticias=2&amp;a=2012&amp;m=9&amp;d=19">Configuración de un cluster con Ubuntu y SGE</a>, y almacenamiento compartido NFS (otra alternativa será instalar Spark sobre Hadoop).</p>
 
-<h5>Instalación de prerrequisitos</h5>
+<h2>Instalación de prerrequisitos</h2>
 Partiendo de una instalación de Ubuntu 14.04LTS, el primer paso ha sido instalar los prerrequisitos que necesita Spark para su funcionamiento. Entre estos se encuentran Java 7, Scala, Scala sbt y Python. El primer paso será añadir el repositorio desde el que instalaremos Java y la actualización de la base de datos. En Ubuntu recurriremos a <code>add-apt-repository</code> y <code>apt-get</code>, en otras distribuciones, como CentOS, usaríamos <code>yum</code>, pero el procedimiento sería similar.<p></p>
 
 <img src="http://fcharte.com.butters.globenet.cz/imagenes/spark1.png" width="800px">

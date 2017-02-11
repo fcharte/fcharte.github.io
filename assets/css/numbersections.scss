@@ -1,0 +1,38 @@
+---
+---
+
+h1 { counter-reset: section; }
+h2 { counter-reset: subsection; }
+h3 { counter-reset: subsubsection; }
+h2:before {
+    content: counter(section) ".\0000a0\0000a0";
+    counter-increment: section;
+}
+h3:before {
+    content: counter(section) "." counter(subsection) ".\0000a0\0000a0";
+    counter-increment: subsection;
+}
+h4:before {
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) ".\0000a0\0000a0";
+    counter-increment: subsubsection;
+}
+
+
+ul.section-nav {
+    list-style-type: none;
+    counter-reset: toc2;
+}
+.toc-h2 { counter-reset: toc3; }
+.toc-h3 { counter-reset: toc4; }
+.toc-h2 a:before {
+    content: counter(toc2) ".\0000a0\0000a0";
+    counter-increment: toc2;
+}
+.toc-h3 a:before {
+    content: counter(toc2) "." counter(toc3) ".\0000a0\0000a0";
+    counter-increment: toc3;
+}
+.toc-h4 a:before {
+    content: counter(toc2) "." counter(toc3) "." counter(toc4) ".\0000a0\0000a0";
+    counter-increment: toc4;
+}

@@ -107,6 +107,25 @@ footer {
 }
 
 /* Other styles */
+ul.section-nav {
+    border: 1px solid $accent-light;
+    display: inline-block;
+    padding: 0.6rem 1rem;
+
+    &:before {
+        content: "Tabla de contenidos";
+        font-weight: bold;
+        color: $foreground2;
+    }
+
+    .toc-h3 {
+        margin-left: 2rem;
+    }
+    .toc-h4 {
+        margin-left: 4rem;
+    }
+}
+
 pre, code {
     font-family: Inconsolata, monospace;
 
