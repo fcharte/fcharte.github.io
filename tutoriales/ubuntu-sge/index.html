@@ -41,7 +41,9 @@
 <li class="toc-entry toc-h5"><a href="#configuración-del-sistema-operativo">Configuración del sistema operativo</a></li>
 <li class="toc-entry toc-h5"><a href="#instalación-y-configuración-de-sge">Instalación y configuración de SGE</a></li>
 <li class="toc-entry toc-h5"><a href="#ejecución-de-tareas">Ejecución de tareas</a></li>
-</ul><p>Los centros de cálculo utilizados por corporaciones empresariales, centros de investigación e instituciones similares utilizan desde hace años la configuración en <i><a href="http://es.wikipedia.org/wiki/Cluster_(inform%C3%A1tica)">cluster</a></i> como alternativa al más tradicional <i><a href="http://es.wikipedia.org/wiki/Mainframe">mainframe</a></i>, conectando un gran número de nodos entre sí para poder ofrecer así una potencia de cálculo igual o superior a la que se tendría con un <i><a href="http://en.wikipedia.org/wiki/Big_iron_(computing)">big iron</a></i>. Las personas que necesitan trabajar con este tipo de configuraciones lo hacen normalmente de forma remota o bien a través de un nodo que actúa como cabecera del cluster, facilitando las operaciones de supervisión y administración.</p>
+</ul><p class="author">by Francisco Charte</p><p>
+  
+</p><p>Los centros de cálculo utilizados por corporaciones empresariales, centros de investigación e instituciones similares utilizan desde hace años la configuración en <i><a href="http://es.wikipedia.org/wiki/Cluster_(inform%C3%A1tica)">cluster</a></i> como alternativa al más tradicional <i><a href="http://es.wikipedia.org/wiki/Mainframe">mainframe</a></i>, conectando un gran número de nodos entre sí para poder ofrecer así una potencia de cálculo igual o superior a la que se tendría con un <i><a href="http://en.wikipedia.org/wiki/Big_iron_(computing)">big iron</a></i>. Las personas que necesitan trabajar con este tipo de configuraciones lo hacen normalmente de forma remota o bien a través de un nodo que actúa como cabecera del cluster, facilitando las operaciones de supervisión y administración.</p>
 
 <p>Actualmente cualquier persona con unos conocimientos algo por encima de lo que podría considerar "básico" puede montarse su propio cluster en casa, aunque personalmente creo que esta posibilidad tiene especial interés para los programadores. Seguramente muchos preguntarán "¿para qué quiero yo un cluster en casa?". Cualquiera que necesite ejecutar tareas con una alta demanda de potencia de proceso, programas que pueden emplear horas, días o semanas trabajando con unos datos para generar resultados, pueden beneficiarse de este tipo de configuración dividiendo la tarea original en otras más pequeñas (siguiendo la máxima del <a href="http://es.wikipedia.org/wiki/Divide_y_vencer%C3%A1s">divide y vencerás</a>) que pueden ser ejecutadas en paralelo en varias máquinas. Más allá de la utilidad práctica e inmediata, no obstante, para los que siempre buscamos aprender y experimentar sencillamente no es necesario buscar una respuesta a la anterior pregunta. <b>Si puedo hacerlo, ¿por qué no voy a hacerlo?</b> 8-)</p>
 
@@ -80,10 +82,10 @@
 <p>En el nodo maestro crearemos el directorio que alojará los programas y datos a usar en el cluster. Para que el resto de nodos tengan acceso a ellos habremos de dar los pasos siguientes:</p>
 <ul class="enumeracion">
 <li>Instalar <code>nfs-kernel-server</code> y <code>portmap</code> en el nodo maestro. Agregar al archivo <code>/etc/exports</code> el directorio creado antes y ejecutar <code>exportfs -a</code>
-<img src="imagenes/20120919.1.png" title="Contenido del archivo /etc/exports en el nodo maestro">
+<img src="http://www.fcharte.com/imagenes/20120919.1.png" title="Contenido del archivo /etc/exports en el nodo maestro">
 </li>
 <li>Instalar en los demás nodos <code>nfs-common</code>, crear el directorio donde queremos montar el espacio compartido y montarlo con <code>sudo mount IP_maestro:/directorio_compartido directorio_montaje</code>. En la captura inferior aparte de montar el espacio compartido se ha hecho una prueba, comprobando que estaba vacío, a continuación creando un archivo de texto desde un nodo y comprobando desde otro que podía accederse al mismo.
-<img src="imagenes/20120919.2.png" title="Montamos el espacio compartido en los nodos de ejecución">
+<img src="http://www.fcharte.com/imagenes/20120919.2.png" title="Montamos el espacio compartido en los nodos de ejecución">
 </li>
 <li>Para evitar tener que ejecutar los comandos de exportación (nodo maestro) y montaje (nodos de ejecución) tras cada reinicio podemos actualizar el archivo <code>/etc/fstab</code> de cada máquina.
 </li>
@@ -94,7 +96,7 @@
 <a id="instalación-y-configuración-de-sge" class="anchor" href="#instalaci%C3%B3n-y-configuraci%C3%B3n-de-sge" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instalación y configuración de SGE</h5>
 <p>Completada la configuración del sistema llega el momento de instalar SGE, el software que se encargará de la gestión y administración de colas de trabajo en el cluster. En el nodo maestro ejecutaremos <code>sudo apt-get install gridengine-master gridengine-qmon gridengine-common  gridengine-client gridengine-exec</code>, en el resto de nodos el comando a usar será <code>sudo apt-get install gridengine-client gridengine-exec</code>. Durante la instalación aparecerán cuadros de diálogo como el de la imagen siguiente solicitando algunos datos. Dejamos los valores propuestos por defecto salvo para el nombre de la máquina maestra que, como es lógico, será el del nodo configurado con ese perfil.</p>
 
-<p style="text-align:center"><img src="imagenes/20120919.3.png" title="Instalación del software SGE"></p>
+<img src="http://www.fcharte.com/imagenes/20120919.3.png" title="Instalación del software SGE">
 
 <p>Tras reiniciar las máquinas, a fin de poner en marcha los demonios encargados de los servicios de SGE, llega el momento de configurar el cluster desde un punto de vista lógico. Para ello, en el nodo maestro, ejecutaremos <code>sudo qmon</code> y usaremos las siguientes opciones de este programa:</p>
 
@@ -110,7 +112,7 @@
 </li>
 </ul>
 
-<p style="text-align:center"><img src="imagenes/20120919.4.png" title="La utilidad de configuración qmon"></p>
+<img src="http://www.fcharte.com/imagenes/20120919.4.png" title="La utilidad de configuración qmon">
 
 <p>En un cluster pequeño, como el propuesto, lo normal es que tengamos una sola cola y que estén vinculadas a ella todos los nodos. De esta manera los usuarios podrán enviar sus ejecuciones a dicha cola y SGE se encargará de distribuir el trabajo entre todas las máquinas. Cuando se trabaja con un cluster de mayor tamaño es habitual contar con varias colas, por ejemplo dependiendo de la cantidad de memoria o la potencia de proceso de las máquinas, agrupándolas de forma que los trabajos se envíen a los nodos más adecuados a cada necesidad.</p>
 
@@ -138,7 +140,7 @@ app/MyApp parámetros
 
 <p>Podemos crear tantos <i>script</i> como necesitemos y enviarlos uno tras otro con <code>qsub</code> a la cola de ejecución. También existe la posibilidad de que un mismo guión genere una lista o <i>array</i> de tareas. En cualquier caso, tras enviar los trabajos podemos comprobar su estado mediante el comando <code>qstat</code> que, entre otras cosas, mostrará cuáles de nuestras tareas están ejecutándose, indicando en qué máquinas, y cuáles están aun en espera. Con el comando <code>qhost</code> se obtiene información sobre el estado de los nodos: carga de trabajo de cada una, memoria en uso y disponible, etc. En la <a href="http://biowiki.org/HowToUseSunGridEngine">wiki How to Use Sun Grid Engine</a> podemos encontrar información sobre esos y otros muchos comandos de SGE. Obviamente también podemos consultar la documentación que se instala con dicho software.</p>
 
-<p style="text-align:center"><img src="imagenes/20120919.5.png" title="Cada utiildad de SGE cuenta con su páqina man"></p>
+<img src="http://www.fcharte.com/imagenes/20120919.5.png" title="Cada utiildad de SGE cuenta con su páqina man">
 
 <p>Lógicamente SGE cuenta con muchos otros comandos, hay más parámetros de configuración y multitud de detalles relativos a la preparación de <i>scripts</i> de ejecución de tareas, pero sobre todo ello es fácil encontrar información en la web una vez que se sabe qué es lo que hay que buscar. La finalidad de este artículo ha sido esbozar el procedimiento general y facilitar algunas referencias útiles que permitan a cualquiera montar su propio cluster.</p>
 
