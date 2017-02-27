@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo configurar una base de datos independiente en SQL Server 2012&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo configurar una base de datos independiente en SQL Server 2012<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+</ul><p>Como muchos otros RDBMS, Microsoft SQL Server cuenta con una base de datos <i>de sistema</i> en el que almacena parámetros generales no asociados a una base de datos concreta sino al propio servidor de datos: el idioma predeterminado, las cuentas de usuario, la meta-información que describe los objetos de cada base de datos, etc.</p>
+
+<p>Esa configuración compartida crea una dependencia en las bases de datos respecto del servidor en que han sido generadas, lo cual añade algunas dificultades para su traslado a otro servidor. Es algo a lo que nos enfrentamos habitualmente cuando se quiere mover una solución desde el servidor en el que ha estado desarrollándose al que se utilizará definitivamente en explotación. En muchos casos se escoge la vía de regenerar en el nuevo servidor todos los objetos de la base de datos original mediante la ejecución de un guión (<i>script</i>).</p>
+
+<p>Entre las novedades que incorpora <b>SQL Server 2012</b> encontramos una que, al menos en parte, facilita esa operación de traslación entre servidores. Su nombre: <b>bases de datos parcialmente independientes</b>. La idea básica: almacenar en la propia base de datos la información de configuración que le afecta, en lugar de llevarla a la base de datos del sistema. Concretamente se conservarán en la base de datos la meta-información que describe su estructura, un conjunto de parámetros de configuración asociados al idioma y también los usuarios que pueden trabajar con ella.</p>
+
+<p>Por defecto las bases de datos parcialmente independientes están deshabilitadas en una nueva instalación de SQL Server 2012. Para activar su uso tendremos que:</p>
+
+<ul class="enumeracion">
+<li>Abrir el <b>Management Studio</b>, la herramienta de administración fundamental de SQL Server 2012.
+</li>
+<li>Seleccionar el nodo asociado al servidor y hacer clic sobre él con el botón secundario del ratón.
+</li>
+<li>Elegir la opción <b>Propiedades</b> para abrir una ventana con ese mismo nombre.
+</li>
+<li>Abrir la página <b>Avanzado</b> y localizar la sección <b>Contención</b>.
+</li>
+<li>Desplegar la lista asociada a la opción <b>Habilitar bases de datos independientes</b> y cambiar su valor de <code>False</code> a <code>True</code>.
+</li>
+</ul>
+
+<image width="800px" src="http://www.fcharte.com/imagenes/20120815.1.png" title="Habilitamos el uso de bases de datos independientes"></image>
+
+<p>Estando habilitada esta característica, cada vez que creemos una nueva base de datos podremos elegir en la opción <b>Tipo de contención</b> de su página <b>Opciones</b> el elemento <b>Parcial</b>. Esto creará una base de datos parcialmente independiente conteniendo, como se ha indicado antes, la información que la describe y otros parámetros asociados. Parte de ellos podrán personalizarse en la sección <b>Contención</b> de esa misma página de parámetros.</p>
+
+<image width="800px" src="http://www.fcharte.com/imagenes/20120815.2.png" title="Habilitamos el uso de bases de datos independientes"></image>
+
+<p>El paso siguiente sería crear las cuentas de los usuarios con acceso a la nueva base de datos. En lugar de emplear las cuentas integradas de Windows, lo cual haría depender la base de datos de la máquina en que está ejecutándose en ese momento, optaremos por crear cuentas de tipo <b>Usuario SQL con contraseña</b>, facilitando un nombre y una contraseña en lugar de simplemente escoger entre las cuentas existentes en el sistema.</p>
+
+<p>Al conectar con una base de datos independiente será necesario cambiar el tipo de autenticación por defecto en la página <b>Inicio de sesión</b> del Management Studio, eligiendo <b>Autenticación de SQL Server</b>. Esto nos permitirá introducir las credenciales de una de las cuentas creadas en el paso previo, almacenadas en la base de datos, en lugar de usar una cuenta de usuario de Windows. El resultado será que podremos trabajar con la base de datos incluso después de haberla llevado a un nuevo servidor, a pesar de que en éste no existan las mismas cuentas de usuario y la configuración de idioma sea distinta.</p>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
