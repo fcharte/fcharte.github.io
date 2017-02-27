@@ -1,11 +1,9 @@
 ---
 layout: post
-title: "Spark + R = analítica de datos interactiva y distribuida"
+title: "Spark + R = analítica de datos interactiva y distribuida"<br/><p class="author">by Francisco Charte.</p>
 toc: true
 numbersections: true
 ---
-<p class="author">by Francisco Charte.</p><br />
-
   
 <p>R es una magnífica herramienta para llevar a cabo todo tipo de tareas de análisis exploratorio de datos de manera interactiva, desde una consola en la que introducimos órdenes más o menos simples y obtenemos resultados, en forma de tablas, indicadores estadísticos o gráficas, de manera inmediata. El enorme número de paquetes disponibles simplifica nuestro trabajo, y cualquier secuencia de operaciones puede convertirse fácilmente en un <i>script</i> que permite reproducir los experimentos tantas veces como sea necesario sobre distintos conjuntos de datos.</p>
 <p>La mayor limitación de R es que solamente podremos usar los recursos (potencia de proceso y memoria) de la máquina en la que estamos trabajando, algo que dificulta el trabajo con grandes volúmenes de datos (el repetido hasta la extenuación <i>big data</i>). En el artículo <a href="http://fcharte.com.butters.globenet.cz/Default.asp?noticias=2&amp;a=2012&amp;m=9&amp;d=19">Configuración de un cluster con Ubuntu y SGE</a> expliqué cómo configurar un cluster de máquinas GNU/Linux y un sistema de gestión de colas. Con dicha configuración es posible distribuir un lote de tareas, escritas como <i>scripts</i> R, entre las distintas máquinas del cluster, reduciendo el tiempo global. No obstante, cada tarea estará limitada por los recursos de la máquina en que se ejecuta, además de ser un enfoque no adecuado para el uso interactivo sino la ejecución de trabajos por lotes.</p>
