@@ -11,6 +11,8 @@
 <link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
 <link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
 
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
 <link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
 
   </head>
@@ -82,11 +84,11 @@
 <p>En el nodo maestro crearemos el directorio que alojará los programas y datos a usar en el cluster. Para que el resto de nodos tengan acceso a ellos habremos de dar los pasos siguientes:</p>
 <ul class="enumeracion">
 <li>Instalar <code>nfs-kernel-server</code> y <code>portmap</code> en el nodo maestro. Agregar al archivo <code>/etc/exports</code> el directorio creado antes y ejecutar <code>exportfs -a</code>
+</li>
 <img src="http://www.fcharte.com/imagenes/20120919.1.png" title="Contenido del archivo /etc/exports en el nodo maestro">
-</li>
 <li>Instalar en los demás nodos <code>nfs-common</code>, crear el directorio donde queremos montar el espacio compartido y montarlo con <code>sudo mount IP_maestro:/directorio_compartido directorio_montaje</code>. En la captura inferior aparte de montar el espacio compartido se ha hecho una prueba, comprobando que estaba vacío, a continuación creando un archivo de texto desde un nodo y comprobando desde otro que podía accederse al mismo.
-<img src="http://www.fcharte.com/imagenes/20120919.2.png" title="Montamos el espacio compartido en los nodos de ejecución">
 </li>
+<img src="http://www.fcharte.com/imagenes/20120919.2.png" title="Montamos el espacio compartido en los nodos de ejecución">
 <li>Para evitar tener que ejecutar los comandos de exportación (nodo maestro) y montaje (nodos de ejecución) tras cada reinicio podemos actualizar el archivo <code>/etc/fstab</code> de cada máquina.
 </li>
 </ul>
