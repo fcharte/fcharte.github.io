@@ -9,11 +9,15 @@ numbersections: true
 
 <image width="800px" src="http://www.fcharte.com/imagenes/Funcwebexcel.png" title="Nuevas funciones web en Excel 2013" />
 
+<h2>La función <code>SERVICIOWEB</code></h2>
 <p>La función <code>SERVICIOWEB</code> permite recuperar en una celdilla información ofrecida por un servicio web. Toma como único parámetro el URL completo, incluyendo los parámetros que pudiesen necesitarse, y al calcularse lo que hace es ponerse en contacto con el servicio, enviando la solicitud facilitada, y almacenar en la celdilla la respuesta que se obtenga. En la imagen inferior puede verse parte del resultado obtenido cuando se usa esta función para acceder a la lista de últimos artículos publicados en el conocido sitio <a href="http://slashdot.org">Slashdot</a>.</p>
 
 <image  width="800px" src="http://www.fcharte.com/imagenes/20130215.1.png" title="Información obtenida con SERVICIOWEB" />
 
-<p>En principio esto podría no parecer excesivamente interesante para un usuario de Excel. Alojar un documento XML completo en una celdilla no es precisamente la vía más cómoda para interpretar la información que contiene. Aquí es donde entra en escena la función <code>FILTROXML</code>, también nueva en Excel 2013. Su objetivo es tomar un documento XML, haya sido obtenido con <code>SERVICIOWEB</code> o no, y extraer la información obtenida a partir de una consulta XPath. XPath es un sencillo lenguaje de consulta. Puedes encontrar una introducción rápida al mismo en <a href="http://www.w3schools.com/xpath/default.asp">W3Schools.com</a>.</p>
+<p>En principio esto podría no parecer excesivamente interesante para un usuario de Excel. Alojar un documento XML completo en una celdilla no es precisamente la vía más cómoda para interpretar la información que contiene.</p>
+
+<h2>La función <code>FILTROXML</code></h2>
+<p>Aquí es donde entra en escena la función <code>FILTROXML</code>, también nueva en Excel 2013. Su objetivo es tomar un documento XML, haya sido obtenido con <code>SERVICIOWEB</code> o no, y extraer la información obtenida a partir de una consulta XPath. XPath es un sencillo lenguaje de consulta. Puedes encontrar una introducción rápida al mismo en <a href="http://www.w3schools.com/xpath/default.asp">W3Schools.com</a>.</p>
 
 <p><code>FILTROXML</code> es una función de tipo matricial. Esto significa que no devuelve un único resultado sino un conjunto de resultados. Por ello no se introduce individualmente en una celdilla, sino en un rango de celdillas que es preciso seleccionar de antemano. Una vez marcado el rango, escribimos la fórmula y pulsamos <strong>Control-Mayúsculas-Intro</strong> para introducir cada uno de los resultados en una celdilla del rango.</p>
 
