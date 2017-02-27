@@ -102,4 +102,5 @@ pre {
 .author {
   text-decoration: underline;
   text-decoration-style: dashed;
-  font-style: oblique; }
+  font-style: oblique;
+  font-size: small; }
