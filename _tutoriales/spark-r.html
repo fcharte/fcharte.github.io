@@ -28,7 +28,7 @@ python-pandas python-sympy python-nose
 
 <p>A continuación iremos al <a href="http://www.scala-lang.org/files/archive">repositorio de Scala</a>, descargaremos el paquete <code>.deb</code> más reciente, lo abriremos con el gestor de paquetes y procederemos a instalarlo, tal y como se aprecia en la siguiente imagen:</p>
 
-<img src="http://fcharte.com.butters.globenet.cz/imagenes/spark2.png" width="800px">
+<img src="http://www.fcharte.com/imagenes/spark2.png" width="800px">
 
 <p>El siguiente software a instalar es <a href="http://www.scala-sbt.org/">Scala sbt</a>, una herramienta que nos permitirá construir Spark a partir de su código fuente. Podemos descargarlo e instalarlo con el gestor de paquetes o bien hacerlo desde la línea de comandos, de la siguiente forma:</p>
 
@@ -44,22 +44,22 @@ sudo apt-get -y install sbt
 </p><h2>Instalación de Spark</h2>
 <p>En la web de <a href="http://spark.apache.org/downloads.html">Apache Spark</a> podemos encontrar versiones precompiladas preparadas para funcionar sobre distintas versiones de Hadoop y otras plataformas software para procesamiento distribuido. En mi opinión lo recomendable (es lo que yo he hecho) es descargar el paquete de código fuente, configurar las variables necesarias para indicar cuál es nuestra versión de Hadoop y compilar Spark, obteniendo una versión a medida para nuestro sistema.</p>
 
-<img src="http://fcharte.com.butters.globenet.cz/imagenes/spark3.png" width="800px">
+<img src="http://www.fcharte.com/imagenes/spark3.png" width="800px">
 
 <p>Una vez descargado el paquete que contiene el código fuente, procedemos a desempaquetarlo, entramos en el directorio donde se ha desempaquetado y procedemos a su compilación, pasos que quedan reflejados en la siguiente imagen. En caso de que necesitemos ajustar la versión de Hadoop, lo haríamos antes de proceder a compilar Spark con la última orden, siendo las indicaciones <a href="http://spark.apache.org/docs/latest/index.html#building">de la documentación oficial</a>. También es posible instalar Spark sobre un cluster de ordenadores básico, sin Hadoop ni otro software de procesamiento distribuido. Es lo que yo he hecho, usando una unidad NFS como almacenamiento compartido en lugar del almacenamiento distribuido de Hadoop.</p>
 
-<img src="http://fcharte.com.butters.globenet.cz/imagenes/spark4.png" width="800px">
+<img src="http://www.fcharte.com/imagenes/spark4.png" width="800px">
 
 <p>Finalizada la compilación de Spark, podemos comprobar que funciona adecuadamente iniciando su línea de comandos. Para ello usaremos la orden <code>./bin/spark-shell --master local</code>. Tras el proceso de inicialización, durante el que se ponen en marcha distintos servicios incluido un servidor HTTP, deberíamos encontrarnos con una línea de comandos como la que aparece en la siguiente imagen.</p>
 
-<img src="http://fcharte.com.butters.globenet.cz/imagenes/spark5.png" width="800px">
+<img src="http://www.fcharte.com/imagenes/spark5.png" width="800px">
 
 <p>En este momento estaríamos usando la máquina local, en la que acabamos de hacer la instalación, como maestro del cluster. Por ahora es la única máquina en la que tenemos instalado Spark, pero no tendríamos más que clonar la máquina actual en otras, o repetir en cada una todo el procedimiento de instalación descrito hasta ahora, para tener múltiples máquinas con Spark, una actuando como maestro y el resto como esclavos. Antes de proceder a clonar, sin embargo, debemos completar la instalación y configuración de R y SparkR, de forma que ya estén en funcionamiento en los nodos esclavos.
 
 </p><h2>Instalación de R y SparkR</h2>
 <p>Para instalar R en Ubuntu no tenemos más que ejecutar <code>sudo apt-get install r-base r-base-dev</code> desde la línea de comandos y esperar a que se descargue e instale el software. Tras esto debemos poder acceder a la consola de R simplemente escribiendo <code>R</code> en la línea de comandos de Bash. Una vez en la consola de R, procederemos a instalar el paquete <code>rJava</code>, necesario para poder instalar SparkR. Con este fin usaremos la orden <code>install.packages("rJava")</code>, tal y como se aprecia en la imagen inferior.</p>
 
-<img src="http://fcharte.com.butters.globenet.cz/imagenes/spark6.png" width="800px">
+<img src="http://www.fcharte.com/imagenes/spark6.png" width="800px">
 
 <p>Tras salir de la consola de R (con la orden <code>quit()</code>), procedemos a descargar el <a href="https://github.com/amplab-extras/SparkR-pkg">paquete SparkR</a> y a desempaquetarlo en un directorio. Entramos en él y ejecutamos <code>./install-dev.sh</code> para lanzar la generación e instalación del paquete. Este consta de dos partes: un paquete R y un paquete Scala. Gracias a ellos, que actúan como pasarela, podremos acceder desde R a los servicios de SparkR. Terminado el proceso podemos usar la orden <code>./sparkR</code> a fin de comprobar que podemos acceder a la consola de R con un contexto Spark ya disponible.</p>
 
@@ -73,14 +73,14 @@ Finalizado todo el proceso de instalación y configuración del software, ahora 
 
 <p>Una vez que desde R hemos obtenido un contexto Spark, mediante la función <code>sparkR.init</code>, podemos usar la API RDD (<i>Resilient Distributed Dataset</i>) de Spark como si fuesen listas distribuidas en R. Además de extender la funcionalidad de construcciones habituales de R, como la función <code>lapply</code>, el paquete SparkR aporta un importante número de nuevas funciones como podemos ver en la ayuda electrónica.</p>
 
-<img src="http://fcharte.com.butters.globenet.cz/imagenes/spark8.png" width="800px">
+<img src="http://www.fcharte.com/imagenes/spark8.png" width="800px">
 
 <p>También tenemos a nuestra disposición múltiples ejemplos en el directorio <code>examples</code> del paquete SparkR, listos para ser cargados y ejecutados tal y como se puede ver en la imagen inferior.</p>
 
-<img src="http://fcharte.com.butters.globenet.cz/imagenes/spark7.png" width="800px">
+<img src="http://www.fcharte.com/imagenes/spark7.png" width="800px">
 
 <p>En cualquier momento podemos abrir el navegador y acceder a la consola de Spark que nos permite comprobar los trabajos que hay en curso y terminados, los recursos que se están utilizando en cada una de las máquinas, etc.</p>
 
-<img src="http://fcharte.com.butters.globenet.cz/imagenes/spark9.png" width="800px">
+<img src="http://www.fcharte.com/imagenes/spark9.png" width="800px">
 
 <p>SparkR se encuentra aun en una fase muy preliminar. Es de esperar que en el futuro vayan extendiéndose sus capacidades y permita aprovechar todavía más las funciones de Spark, quizá incluyendo el acceso a librerías de <i>machine learning</i> <a href="https://spark.apache.org/docs/1.1.0/mllib-guide.html">como MLib</a>. Queda mucho trabajo por delante.</p>
