@@ -1,0 +1,37 @@
+---
+layout: post
+title: "Intercambio de datos entre Excel y R"
+toc: true
+numbersections: true
+---
+<p class="author">by Francisco Charte</p><p>
+
+<p><a href="http://es.wikipedia.org/wiki/Microsoft_Excel">Microsoft Excel</a> es una de las herramientas más usadas por parte de los denominados <i>power users</i> (usuarios con conocimientos por encima del usuario medio) a la hora de resumir, analizar y representar gráficamente todo tipo de datos, generalmente con el objetivo de extraer información útil a partir de ellos. Personalmente es una aplicación que comencé a usar en la versión 95, después de haber trabajado durante años en DOS con Paradox, las hojas de cálculo de Open Access y Symphony y el mítico Lotus 1,2,3. Desde la versión 2000 hasta la 2013 he escrito una docena de <a href="http://www.fcharte.com/Default.asp?libros">libros sobre Excel</a>, siendo una herramienta que uso prácticamente a diario para distintas tareas.</p>
+
+<p>A pesar de la potencia de Excel, que incluye la posibilidad de definir nuevas funciones escritas en lenguaje VBA y el desarrollo de aplicaciones sobre esta herramienta desde Visual Studio, hay ocasiones en las ciertas tareas sencillamente resultan demasiado arduas. Aquí es donde entra en escena <a href="http://www.r-project.org/">el lenguaje R</a>, empleado por miles de usuarios, especialmente estudiantes de ciencias, investigadores y científicos de múltiples ramas. R es un lenguaje funcional e interpretado que, de manera interactiva, permite operar sobre listas, vectores y matrices de datos de manera extremadamente sencilla. Gran parte de su versatilidad estriba en la inmediatez para aplicar cualquier operación sobre todos los elementos de una de esas estructuras (o partes de ellas) en un solo paso, así como en la extensa <a href="http://cran.r-project.org/">biblioteca de paquetes (CRAN)</a> disponibles para resolver prácticamente cualquier problema que se nos ocurra (obviamente siempre circunscrito al campo del análisis de datos).</p>
+
+<h2>El portapapeles</h2>
+<p>Son muchos los casos en que tengo información en Excel que me sería más fácil procesar con R y, en ocasiones, ocurre lo contrario. Imagino que no seré la única persona que tenga la necesidad de exportar datos desde Excel a R, o viceversa, y por ello voy a compartir aquí los métodos que he venido utilizando hasta ahora, comenzando por el portapapeles que fue el primero que usé aunque ahora ya no lo haga.</p>
+
+<p>Si ejecutamos R y Excel en la misma máquina uno de los recursos más inmediatos para compartir información es el portapapeles. Copiar un rango de celdillas desde Excel al portapapeles, o pegarlo, es una acción simple: basta con seleccionarlo y usar los habituales atajos de teclado <b>Control+C</b> y <b>Control+V</b>, respectivamente. En R podemos pegar en la consola los datos copiados desde Excel, pero esto no los almacenará en ninguna variable. Aunque existe una función <code>readClipboard</code> para la lectura genérica de datos del portapapeles (introducir <code>?readClipboard</code> en la consola para obtener ayuda sobre la misma), en este caso no nos resultaría de utilidad porque Excel por defecto copia los datos al portapapeles como líneas de texto, separando el contenido de cada celdilla con un tabulador. Lo que necesitamos, por tanto, es una función que tenga en cuenta que los datos están delimitados por un separador, en este caso el tabulador, y que además diferencie entre la primera fila, que suele contener títulos de las columnas, y el resto, que contendrán los datos propiamente dichos. Esa función es <code>read.delim</code> y el único parámetro que necesita es la cadena <code>"clipboard"</code>.</p>
+
+<p>El procedimiento a seguir para llevar datos desde Excel a R mediante el portapapeles consta de dos pasos:</p>
+<ol>
+<li>Seleccionamos en Excel los datos, incluyendo títulos, y los copiamos al portapapeles.
+<li>Introducimos en la consola de R el comando <code>rango <- read.delim("clipboard")</code>, asumiendo que deseemos guardar los datos en la variable <code>rango</code>. Esta será un data.frame, basta con escribir su nombre para obtener el contenido.
+</ol>
+<p>Las dos imágenes siguientes muestran el procedimiento descrito.</p>
+
+<image src="http://www.fcharte.com/imagenes/20130326-1.png" title="Copiamos los datos desde Excel al portapapeles"  width="800px"/>
+
+<image src="http://www.fcharte.com/imagenes/20130326-2.png" title="Obtenemos los datos desde R, almacenándolos en un data.frame"  width="800px"/>
+
+<p>En este momento podríamos trabajar con los datos desde R, realizando el procesamiento que necesitemos.</p>
+
+<p>La transferencia de datos en sentido inverso, desde un data.frame de R a una hoja de Excel, se completa con los dos pasos siguientes:</p>
+<ol>
+<li>Copiamos el contenido del data.frame de R al portapapeles, usando para ello la función <code>write.table(variable, "clipboard", sep="\t", row.names=F)</code>. A diferencia de <code>read.delim</code>, que asume por defecto que el separador de datos usado es el tabulador, la función <code>write.table</code> no aplica separador alguno, por ello es necesario indicarlo explícitamente con el parámetro <code>sep</code>. En cuanto al parámetro <code>row.names</code>, al que asignamos el valor <code>FALSE</code>, comunica a la función si debe o no incluir los nombres de fila del data.frame (en la imagen anterior pueden verse en la primera columna, como una secuencia de números generada automáticamente).
+<li>Desde Excel obtenemos los datos sencillamente colocándonos en la celdilla de destino y pegando desde el portapapeles.
+</ol>
+
+<p>La ventaja de usar el portapapeles para intercambiar información entre Excel y R es que no es necesario usar archivos intermedios ni tampoco la instalación de paquetes adicionales en R. La principal desventaja, aparte del hecho de que requiere que las dos aplicaciones se ejecuten simultáneamente en la misma máquina, estriba en que no es un medio cómodo cuando el volumen de los datos es considerable. Imaginemos las veces que tendríamos que repetir los pasos anteriores para copiar el contenido de una decena de hojas de un libro Excel a una lista de data.frames (además en la práctica podría no ser posible, ya que la cantidad de información que puede copiarse en el portapapeles es limitada). En posteriores entradas explicaré otros métodos más eficientes en este sentido.</p>
