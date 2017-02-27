@@ -122,21 +122,19 @@
 <a id="ejecución-de-tareas" class="anchor" href="#ejecuci%C3%B3n-de-tareas" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ejecución de tareas</h5>
 <p>Una vez que el cluster esté en funcionamiento llega el momento de aprovecharlo. Los trabajos se lanzarán siempre desde el nodo maestro, indicándole mediante un <i>script</i> el nombre del trabajo, la cola a que debe enviarse y el programa que es necesario ejecutar. Dicho guión se facilita a SGE mediante el comando <code>qsub</code>. Un ejemplo de guión podría ser el siguiente:</p>
 
-<textarea cols="70" rows="15" readonly>#!/bin/bash
-#$ -S /bin/bash
-#$ -N NombreTarea
-#$ -cwd
-#$ -o SalidaEstandar.txt
-#$ -e SalidaErrores.err
-#$ -q ColaDestino
-export PATH="$SGE_O_PATH"
-DIR=/directorio/area/compartida
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="c">#!/bin/bash</span>
+<span class="c">#$ -S /bin/bash</span>
+<span class="c">#$ -N NombreTarea</span>
+<span class="c">#$ -cwd</span>
+<span class="c">#$ -o SalidaEstandar.txt</span>
+<span class="c">#$ -e SalidaErrores.err</span>
+<span class="c">#$ -q ColaDestino</span>
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$SGE_O_PATH</span><span class="s2">"</span>
+<span class="nv">DIR</span><span class="o">=</span>/directorio/area/compartida
 
 
-cd $DIR
-app/MyApp parámetros
-
-</textarea>
+<span class="nb">cd</span> <span class="nv">$DIR</span>
+app/MyApp parámetros</code></pre></figure>
 
 <p>Podemos crear tantos <i>script</i> como necesitemos y enviarlos uno tras otro con <code>qsub</code> a la cola de ejecución. También existe la posibilidad de que un mismo guión genere una lista o <i>array</i> de tareas. En cualquier caso, tras enviar los trabajos podemos comprobar su estado mediante el comando <code>qstat</code> que, entre otras cosas, mostrará cuáles de nuestras tareas están ejecutándose, indicando en qué máquinas, y cuáles están aun en espera. Con el comando <code>qhost</code> se obtiene información sobre el estado de los nodos: carga de trabajo de cada una, memoria en uso y disponible, etc. En la <a href="http://biowiki.org/HowToUseSunGridEngine">wiki How to Use Sun Grid Engine</a> podemos encontrar información sobre esos y otros muchos comandos de SGE. Obviamente también podemos consultar la documentación que se instala con dicho software.</p>
 
