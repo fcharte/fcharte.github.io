@@ -34,4 +34,128 @@ numbersections: true
 <li>Desde Excel obtenemos los datos sencillamente colocándonos en la celdilla de destino y pegando desde el portapapeles.
 </ol>
 
-<p>La ventaja de usar el portapapeles para intercambiar información entre Excel y R es que no es necesario usar archivos intermedios ni tampoco la instalación de paquetes adicionales en R. La principal desventaja, aparte del hecho de que requiere que las dos aplicaciones se ejecuten simultáneamente en la misma máquina, estriba en que no es un medio cómodo cuando el volumen de los datos es considerable. Imaginemos las veces que tendríamos que repetir los pasos anteriores para copiar el contenido de una decena de hojas de un libro Excel a una lista de data.frames (además en la práctica podría no ser posible, ya que la cantidad de información que puede copiarse en el portapapeles es limitada). En posteriores entradas explicaré otros métodos más eficientes en este sentido.</p>
+<p>La ventaja de usar el portapapeles para intercambiar información entre Excel y R es que no es necesario usar archivos intermedios ni tampoco la instalación de paquetes adicionales en R. La principal desventaja, aparte del hecho de que requiere que las dos aplicaciones se ejecuten simultáneamente en la misma máquina, estriba en que no es un medio cómodo cuando el volumen de los datos es considerable. Imaginemos las veces que tendríamos que repetir los pasos anteriores para copiar el contenido de una decena de hojas de un libro Excel a una lista de data.frames (además en la práctica podría no ser posible, ya que la cantidad de información que puede copiarse en el portapapeles es limitada). En las secciones siguientes explico otros métodos más eficientes en este sentido.</p>
+  
+<h2>Formatos CSV y DIF<h2>
+<p>Cuando R y Excel no se ejecutan en la misma máquina, o el volumen de datos es demasiado grande como para usar el portapapeles con comodidad, una vía alternativa para intercambiar datos consiste en recurrir a formatos de archivo cuya finalidad es precisamente esa: facilitar el intercambio de información entre aplicaciones. Entre dichos formatos, dos de los más conocidos son <a href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV (<i>Comma-Separated Values</i>)</a> y <a href="http://en.wikipedia.org/wiki/Data_Interchange_Format">DIF (<i>Data Interchange Format</i>)</a>.</p>
+
+<p>El formato CSV, como su propio nombre indica, utiliza comas para separar los valores y se estructura como una serie de filas (registros) con columnas de longitud variable. Los valores no numéricos pueden ir o no entrecomillados y en los numéricos el separador decimal es el punto. En algunos países europeos se usa la coma como separador decimal y el punto y como para separar unos valores de otros. Es importante destacar que <b>Excel utiliza el punto y coma como separador</b> incluso cuando su configuración establece que el separador decimal es el punto y, por tanto, podría usarse la coma según dicta el formato estándar CSV. Asumiendo que trabajamos con los mismos datos mostrados en la entrada anterior a esta, el archivo CSV generado por Excel tendría el siguiente contenido:</p>
+
+{% highlight %}
+;Mean;Desv;Mean;Desv;Mean;Desv;Mean;Desv;Mean;Desv
+Method 1;0.0168;0.0002;0.9764;0.0059;347.1082;2.3381;0.7448;0.006;0.0245;0.0033
+Method 2;0.0167;0.0002;0.977;0.0059;347.192;1.5445;0.7451;0.0065;0.0245;0.0045
+Method 3;0.0167;0.0003;0.9748;0.0075;346.793;2.4845;0.7434;0.0109;0.0264;0.0057
+Method 4;0.0167;0.0002;0.9764;0.0069;347.2316;2.337;0.746;0.008;0.0236;0.0038
+Method 5;0.0167;0.0002;0.973;0.0068;347.1902;2.1718;0.7452;0.009;0.0263;0.0041
+Method 6;0.0167;0.0003;0.9726;0.0084;347.0992;2.6537;0.7436;0.01;0.0268;0.0056
+Method 7;0.0168;0.0003;0.9736;0.0084;347.3674;1.4827;0.7451;0.0056;0.0253;0.0036
+Method 8;0.0167;0.0001;0.9752;0.0096;347.6234;2.6344;0.7457;0.012;0.025;0.0067
+Method 9;0.0167;0.0002;0.974;0.0078;347.8062;1.8226;0.7443;0.006;0.0254;0.0039
+Method 10;0.0167;0.0002;0.9754;0.0049;347.6574;2.1976;0.7459;0.0083;0.0242;0.0032
+Method 11;0.0167;0.0002;0.9732;0.0109;348.0798;1.3106;0.7461;0.0053;0.0243;0.004
+Method 12;0.0166;0.0002;0.9696;0.0085;347.2472;1.6961;0.7441;0.0085;0.0271;0.0039
+Method 13;0.0166;0.0002;0.97;0.0071;347.1204;1.9556;0.7441;0.0066;0.0271;0.0043
+Method 14;0.0166;0.0002;0.971;0.0068;347.6144;1.7622;0.7462;0.0065;0.0254;0.0036
+Method 15;0.0166;0.0002;0.9686;0.0077;347.8932;1.779;0.7444;0.0072;0.0271;0.0037
+{% endhighlight %}
+
+<p>El formato DIF fue diseñado a principios de la década de los 80 del siglo pasado expresamente para facilitar el intercambio de datos entre hojas de cálculo, usándose por entonces en Visicalc y Lotus 1, 2, 3 y habiendo llegado hasta Excel y FreeOffice Calc. Se trata de un formato más descriptivo y, en consecuencia, menos compacto que CSV. A continuación se muestra parte del mismo contenido anterior pero en formato DIF:
+
+{% highlight %}
+TABLE
+0,1
+"EXCEL"
+VECTORS
+0,16
+""
+TUPLES
+0,11
+""
+DATA
+0,0
+""
+-1,0
+BOT
+1,0
+""
+1,0
+"Mean"
+1,0
+"Desv"
+1,0
+"Mean"
+1,0
+"Desv"
+1,0
+"Mean"
+1,0
+"Desv"
+1,0
+"Mean"
+1,0
+"Desv"
+1,0
+"Mean"
+1,0
+"Desv"
+-1,0
+BOT
+1,0
+"Method 1"
+0,0.0168
+V
+0,0.0002
+V
+0,0.9764
+V
+0,0.0059
+V
+0,347.1082
+V
+0,2.3381
+...
+{% endhighlight %}
+
+<p>Lo interesante es que ambos formatos pueden ser utilizados a la hora de intercambiar datos entre Excel y R, que es el objeto de esta entrada. Partamos del supuesto en el que los datos están en Excel, posiblemente en el ordenador del usuario que los ha generado, y queremos transferirlos a otra máquina en la que trabajamos en R. El primer usuario debe guardar los datos en formato CSV o DIF y enviarnos el archivo resultante, para ello debe dar los pasos siguientes:</p>
+
+<ol>
+ <li>Crear un nuevo libro Excel, en blanco, o en su defecto una nueva hoja en el libro actual.
+ <li>Copiar en el nuevo libro/hoja los datos que desea enviar.
+ <li>Utilizar la opción <b>Guardar</b> (o <b>Guardar como</b> si hemos creado una nueva hoja en lugar de un nuevo libro) para abrir el cuadro de diálogo del mismo nombre.
+ <li>Desplegar la lista <b>Tipo</b> y elegir el formato deseado: CSV o DIF, tal y como se muestra en la imagen siguiente.
+ <li>Pulsar los botones <b>Aceptar</b> y <b>Sí</b> de los dos cuadros de diálogo que aparecerán a continuación, confirmando que deseamos guardar únicamente el contenido de la hoja actual y que deseamos mantener el formato elegido a pesar de que se pierdan características del libro.
+</ol>
+
+<image src="http://www.fcharte.com/imagenes/20130330-1.png" title="Guardamos los datos desde Excel a CSV/DIF" width="800px" />
+
+<p>Al guardar en cualquiera de estos dos formato Excel escribirá en el archivo de destino todo el contenido de la hoja actual, no la selección que tuviésemos hecha. Por ello es preciso el paso previo en que se crea una hoja auxiliar (o un nuevo libro) y se copia en ella la información a exportar. Esa hoja, lógicamente, puede ser eliminada al final. Si esta operación vamos a realizarla a menudo lo más cómodo es registrar una macro de Excel con todos los pasos, partiendo desde la copia al portapapeles de la selección actual e incluyendo la inserción de la nueva hoja, pegado de los datos, selección de la opción <b>Guardar como</b> y establecimiento del formato de exportación. De esta forma en adelante solo habrá que ejecutar la macro, que puede ser asignada a una cierta combinación de teclas, tras haber marcado el rango de celdillas a exportar.</p>
+
+<p>Una vez que tenemos la información en el archivo CSV/DIF llega el momento de importarla a R. Para leer un CSV tenemos a nuestra disposición múltiples funciones: <code>read.csv</code>, <code>read.csv2</code>, <code>read.delim</code> y la más genérica <code>read.table</code>. Vamos a concentrarnos en las dos primeras que son las que más se ajustan a lo que necesitamos en este momento. Ambas precisan como parámetro indispensable el nombre del archivo a leer y por defecto asumen que habrá una primera línea con los encabezados: los títulos de las columnas. La diferencia fundamental es que la primera asume que el formato sigue el estándar CSV: se usa el punto para decimales y la coma como separador de valores, mientras que la segunda está preconfigurada para el formato que suele usarse en algunos países europeos: coma para decimales y punto y coma como separador de valores. Si el formato que tenemos que leer no es ninguno de estos dos, como ocurre en nuestro caso que utiliza el punto para los decimales pero separa los valores con punto y coma, podemos usar cualquiera de las dos incluyendo los parámetros <code>dec</code> y/o <code>sep</code> para indicarlo. En la imagen siguiente puede verse cómo se ha usado <code>read.csv</code> para obtener el contenido del archivo en un data.frame.
+
+<image src="http://www.fcharte.com/imagenes/20130330-2.png" title="Importamos el archivo CSV desde R" width="800px" />
+
+<p>Para importar en R el contenido de un archivo en formato DIF recurriemos a la función <code>read.DIF</code>. Si la estructura del archivo se ajusta estrictamente al estándar, solamente habrá que facilitar el nombre del archivo y se obtendrá como resultado un data.frame con los datos. En el caso de Excel, no obstante, hay una diferencia importante: el orden en que se entregan filas y columnas está invertido, siendo necesario agregar el parámetro <code>transpose</code> dándole el valor <code>TRUE</code> (por defecto es <code>FALSE</code>) tal y como se aprecia en la siguiente imagen.</p>
+
+<image src="http://www.fcharte.com/imagenes/20130330-3.png" title="Importamos el archivo DIF desde R" width="800px" />
+
+<p>Supongamos ahora que el sentido de transferencia de la información se invierte: tenemos un data.frame en R con datos que necesitamos enviar a alguien que los tratará con Excel. Para ello lo primero que haremos será generar el archivo CSV, sencillamente usando la función <code>write.csv</code> con dos parámetros: el data.frame que contiene los datos y el argumento <code>file</code> indicando el nombre del archivo de destino. También podemos usar <code>write.csv2</code> para cambiar los separadores de decimales y valores, o bien incluir los parámetros <code>dec</code> y <code>sep</code> indicados anteriormente. El resultado será un archivo CSV que enviaremos al destinatario.</p>
+
+<p>Excel puede abrir directamente archivos CSV, de hecho suele ser la aplicación establecida por defecto para abrir ese tipo de archivos en sistemas Windows. El contenido del archivo se llevará a una nueva hoja en un nuevo libro, a partir de la celdilla <code>A1</code>. Sin embargo, a menos que los separadores sean los que espera Excel, puede ocurrir que lo que obtengamos sean unas líneas de texto en lugar de los datos debidamente almacenados en sus celdillas con el formato que corresponda. Además, es probable que no queramos los datos en un nuevo libro sino que nos interese agregarlos en una hoja ya existente. En estos casos reproduciremos los pasos siguientes:</p>
+
+<ol>
+ <li>Colocamos el cursor en la posición de la hoja a partir de la cual deseemos colocar los datos que van a importarse (la esquina superior izquierda del rango resultante).
+ <li>Abrimos la pestaña <b>Datos</b> de la Cinta de opciones y hacemos clic en la opción <b>Obtener datos externos -> Desde texto</b>.
+ <li>En el cuadro de diálogo que se abre seleccionamos el archivo CSV que contiene los datos a exportar.
+ <li>Se pone en marcha el <b>Asistente para importar texto</b>, cuyo primer paso nos permite elegir entre datos delimitados (con un separdor) o de ancho fijo. La opción marcada por defecto será la primera, por lo que hacemos clic en <b>Siguiente</b>.
+ <li>En el segundo paso es donde tendremos que configurar el separador de valores, desmarcando el que aparece por defecto (<b>Tabulación</b> normalmente) y marcando <b>Coma</b> o <b>Punto y coma</b> según el caso. En la parte inferior de la ventana podremos apreciar cuál es el resultado que se obtendría según la configuración establecida actualmente.
+
+<image width="800px"  src="http://www.fcharte.com/imagenes/20130330-4.png" title="Configuramos el separador de valores al importar en Excel" />
+
+ <li>En el tercer paso del asistente podemos configurar el formato aplicado a cada una de las columnas de valores. En caso de que el separador de decimales no sea el adecuado, según la configuración que se haya establecido en Excel, usaremos el botón <b>Avanzadas</b> para abrir un pequeño cuadro de diálogo en el que podremos indicar explícitamente cuál es el separador decimal.
+</ol>
+<image width="800px" src="http://www.fcharte.com/imagenes/20130330-5.png" title="Configuramos el separador decimal al importar en Excel" />
+
+<p>Una vez llegado al última paso del asistente podremos elegir el destino de los datos, por defecto será la posición actual en la hoja, y completar el proceso de importación. Ya tenemos el contenido del data.frame de R en la hoja de cálculo.
+
+<p>Un último apunte en relación a la importación/exportación usando archivos CSV/DIF, especialmente si se utilizan ordenadores distintos y sistemas distintos: en caso de que haya columnas con textos es importante que la codificación de caracteres empleada sea la misma al importar que al exportar. Todas las funciones R mencionadas aceptan el parámetro <code>fileEncoding</code>, con el que podemos indicar la codificación al leer o escribir. En Excel al importar datos, con el procedimiento descrito antes, el primer paso del asistente permite elegir la codificación en la lista <b>Origen del archivo</b>.</p>
