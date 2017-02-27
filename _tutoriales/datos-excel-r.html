@@ -41,7 +41,7 @@ numbersections: true
 
 <p>El formato CSV, como su propio nombre indica, utiliza comas para separar los valores y se estructura como una serie de filas (registros) con columnas de longitud variable. Los valores no numéricos pueden ir o no entrecomillados y en los numéricos el separador decimal es el punto. En algunos países europeos se usa la coma como separador decimal y el punto y como para separar unos valores de otros. Es importante destacar que <b>Excel utiliza el punto y coma como separador</b> incluso cuando su configuración establece que el separador decimal es el punto y, por tanto, podría usarse la coma según dicta el formato estándar CSV. Asumiendo que trabajamos con los mismos datos mostrados en la entrada anterior a esta, el archivo CSV generado por Excel tendría el siguiente contenido:</p>
 
-{% highlight %}
+{% highlight conf %}
 ;Mean;Desv;Mean;Desv;Mean;Desv;Mean;Desv;Mean;Desv
 Method 1;0.0168;0.0002;0.9764;0.0059;347.1082;2.3381;0.7448;0.006;0.0245;0.0033
 Method 2;0.0167;0.0002;0.977;0.0059;347.192;1.5445;0.7451;0.0065;0.0245;0.0045
@@ -62,7 +62,7 @@ Method 15;0.0166;0.0002;0.9686;0.0077;347.8932;1.779;0.7444;0.0072;0.0271;0.0037
 
 <p>El formato DIF fue diseñado a principios de la década de los 80 del siglo pasado expresamente para facilitar el intercambio de datos entre hojas de cálculo, usándose por entonces en Visicalc y Lotus 1, 2, 3 y habiendo llegado hasta Excel y FreeOffice Calc. Se trata de un formato más descriptivo y, en consecuencia, menos compacto que CSV. A continuación se muestra parte del mismo contenido anterior pero en formato DIF:
 
-{% highlight %}
+{% highlight conf %}
 TABLE
 0,1
 "EXCEL"
