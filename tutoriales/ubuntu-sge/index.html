@@ -38,9 +38,9 @@
 
 <article>
 <ul class="section-nav">
-<li class="toc-entry toc-h5"><a href="#configuración-del-sistema-operativo">Configuración del sistema operativo</a></li>
-<li class="toc-entry toc-h5"><a href="#instalación-y-configuración-de-sge">Instalación y configuración de SGE</a></li>
-<li class="toc-entry toc-h5"><a href="#ejecución-de-tareas">Ejecución de tareas</a></li>
+<li class="toc-entry toc-h2"><a href="#configuración-del-sistema-operativo">Configuración del sistema operativo</a></li>
+<li class="toc-entry toc-h2"><a href="#instalación-y-configuración-de-sge">Instalación y configuración de SGE</a></li>
+<li class="toc-entry toc-h2"><a href="#ejecución-de-tareas">Ejecución de tareas</a></li>
 </ul><p class="author">by Francisco Charte</p><p>
   
 </p><p>Los centros de cálculo utilizados por corporaciones empresariales, centros de investigación e instituciones similares utilizan desde hace años la configuración en <i><a href="http://es.wikipedia.org/wiki/Cluster_(inform%C3%A1tica)">cluster</a></i> como alternativa al más tradicional <i><a href="http://es.wikipedia.org/wiki/Mainframe">mainframe</a></i>, conectando un gran número de nodos entre sí para poder ofrecer así una potencia de cálculo igual o superior a la que se tendría con un <i><a href="http://en.wikipedia.org/wiki/Big_iron_(computing)">big iron</a></i>. Las personas que necesitan trabajar con este tipo de configuraciones lo hacen normalmente de forma remota o bien a través de un nodo que actúa como cabecera del cluster, facilitando las operaciones de supervisión y administración.</p>
@@ -73,8 +73,8 @@
 
 <p>La instalación del hardware no requiere ningún comentario adicional: basta con conectar los equipos a la fuente de alimentación, por una parte, y al conmutador Ethernet que les permitirá comunicarse, por otra. A la hora de configurar el software, por el contrario, sí es necesario tener en cuenta algunos detalles importantes.</p>
 
-<h5>
-<a id="configuración-del-sistema-operativo" class="anchor" href="#configuraci%C3%B3n-del-sistema-operativo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuración del sistema operativo</h5>
+<h2>
+<a id="configuración-del-sistema-operativo" class="anchor" href="#configuraci%C3%B3n-del-sistema-operativo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuración del sistema operativo</h2>
 <p>No voy a entrar aquí en el proceso de instalación de Ubuntu en los ordenadores, es realmente sencillo y en la web hay disponible infinidad de información al respecto. Sí es importante, como indiqué antes, que se instale la misma versión y para la misma arquitectura (x86 o x64) en todas los nodos para así evitar posteriores problemas de configuración. En cuanto a la configuración IP, aunque podría usarse DHCP aconsejo que se asigne a cada máquina una dirección IP fija y que se utilice el mismo archivo <code>/etc/hosts</code> en todas ellas para facilitar la comunicación.</p>
 
 <p>De los nodos que componen el cluster uno ha de operar como coordinador (<i>maestro</i>), supervisando la carga de trabajo de los demás y decidiendo cómo se distribuye la cola de tareas pendientes. Esta máquina será también la que ofrezca el almacenamiento compartido en disco del cluster, haciendo así posible que todas las máquinas operen con el mismo programa y sobre los mismos datos sin necesidad de copiarlos en cada una de ellas. Si este nodo maestro es una máquina poco potente y con escasa memoria puede dedicarse exclusivamente a esta tarea, pero de lo contrario puede tener una personalidad dual: actuando como nodo maestro del cluster pero también como nodo de ejecución. El resto de las máquinas del cluster serán únicamente nodos de ejecución.</p>
@@ -92,8 +92,8 @@
 </ul>
 
 
-<h5>
-<a id="instalación-y-configuración-de-sge" class="anchor" href="#instalaci%C3%B3n-y-configuraci%C3%B3n-de-sge" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instalación y configuración de SGE</h5>
+<h2>
+<a id="instalación-y-configuración-de-sge" class="anchor" href="#instalaci%C3%B3n-y-configuraci%C3%B3n-de-sge" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instalación y configuración de SGE</h2>
 <p>Completada la configuración del sistema llega el momento de instalar SGE, el software que se encargará de la gestión y administración de colas de trabajo en el cluster. En el nodo maestro ejecutaremos <code>sudo apt-get install gridengine-master gridengine-qmon gridengine-common  gridengine-client gridengine-exec</code>, en el resto de nodos el comando a usar será <code>sudo apt-get install gridengine-client gridengine-exec</code>. Durante la instalación aparecerán cuadros de diálogo como el de la imagen siguiente solicitando algunos datos. Dejamos los valores propuestos por defecto salvo para el nombre de la máquina maestra que, como es lógico, será el del nodo configurado con ese perfil.</p>
 
 <img src="http://www.fcharte.com/imagenes/20120919.3.png" title="Instalación del software SGE">
@@ -118,8 +118,8 @@
 
 <p>La guía de usuario de Grid Engine de Oracle <a href="http://docs.oracle.com/cd/E19080-01/n1.grid.eng6/817-6117/chp1-1/index.html">ofrece una introducción</a> al uso de este software y detalla el uso de <code>qmon</code> y otras utilidades.
 
-</p><h5>
-<a id="ejecución-de-tareas" class="anchor" href="#ejecuci%C3%B3n-de-tareas" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ejecución de tareas</h5>
+</p><h2>
+<a id="ejecución-de-tareas" class="anchor" href="#ejecuci%C3%B3n-de-tareas" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ejecución de tareas</h2>
 <p>Una vez que el cluster esté en funcionamiento llega el momento de aprovecharlo. Los trabajos se lanzarán siempre desde el nodo maestro, indicándole mediante un <i>script</i> el nombre del trabajo, la cola a que debe enviarse y el programa que es necesario ejecutar. Dicho guión se facilita a SGE mediante el comando <code>qsub</code>. Un ejemplo de guión podría ser el siguiente:</p>
 
 <figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="c">#!/bin/bash</span>
