@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Configuración de un &lt;i&gt;cluster&lt;/i&gt; con Ubuntu y SGE - Torre de Babel</title>
+<title>Configuración de un &lt;i&gt;cluster&lt;/i&gt; con Ubuntu y SGE&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
@@ -36,16 +36,14 @@
 
     <div class="main">
       <div class="inner main-inner">
-        <h1>Configuración de un <i>cluster</i> con Ubuntu y SGE</h1>
+        <h1>Configuración de un <i>cluster</i> con Ubuntu y SGE<br/><p class="author">by Francisco Charte.</p></h1>
 
 <article>
 <ul class="section-nav">
 <li class="toc-entry toc-h2"><a href="#configuración-del-sistema-operativo">Configuración del sistema operativo</a></li>
 <li class="toc-entry toc-h2"><a href="#instalación-y-configuración-de-sge">Instalación y configuración de SGE</a></li>
 <li class="toc-entry toc-h2"><a href="#ejecución-de-tareas">Ejecución de tareas</a></li>
-</ul><p class="author">by Francisco Charte</p><p>
-  
-</p><p>Los centros de cálculo utilizados por corporaciones empresariales, centros de investigación e instituciones similares utilizan desde hace años la configuración en <i><a href="http://es.wikipedia.org/wiki/Cluster_(inform%C3%A1tica)">cluster</a></i> como alternativa al más tradicional <i><a href="http://es.wikipedia.org/wiki/Mainframe">mainframe</a></i>, conectando un gran número de nodos entre sí para poder ofrecer así una potencia de cálculo igual o superior a la que se tendría con un <i><a href="http://en.wikipedia.org/wiki/Big_iron_(computing)">big iron</a></i>. Las personas que necesitan trabajar con este tipo de configuraciones lo hacen normalmente de forma remota o bien a través de un nodo que actúa como cabecera del cluster, facilitando las operaciones de supervisión y administración.</p>
+</ul><p>Los centros de cálculo utilizados por corporaciones empresariales, centros de investigación e instituciones similares utilizan desde hace años la configuración en <i><a href="http://es.wikipedia.org/wiki/Cluster_(inform%C3%A1tica)">cluster</a></i> como alternativa al más tradicional <i><a href="http://es.wikipedia.org/wiki/Mainframe">mainframe</a></i>, conectando un gran número de nodos entre sí para poder ofrecer así una potencia de cálculo igual o superior a la que se tendría con un <i><a href="http://en.wikipedia.org/wiki/Big_iron_(computing)">big iron</a></i>. Las personas que necesitan trabajar con este tipo de configuraciones lo hacen normalmente de forma remota o bien a través de un nodo que actúa como cabecera del cluster, facilitando las operaciones de supervisión y administración.</p>
 
 <p>Actualmente cualquier persona con unos conocimientos algo por encima de lo que podría considerar "básico" puede montarse su propio cluster en casa, aunque personalmente creo que esta posibilidad tiene especial interés para los programadores. Seguramente muchos preguntarán "¿para qué quiero yo un cluster en casa?". Cualquiera que necesite ejecutar tareas con una alta demanda de potencia de proceso, programas que pueden emplear horas, días o semanas trabajando con unos datos para generar resultados, pueden beneficiarse de este tipo de configuración dividiendo la tarea original en otras más pequeñas (siguiendo la máxima del <a href="http://es.wikipedia.org/wiki/Divide_y_vencer%C3%A1s">divide y vencerás</a>) que pueden ser ejecutadas en paralelo en varias máquinas. Más allá de la utilidad práctica e inmediata, no obstante, para los que siempre buscamos aprender y experimentar sencillamente no es necesario buscar una respuesta a la anterior pregunta. <b>Si puedo hacerlo, ¿por qué no voy a hacerlo?</b> 8-)</p>
 
