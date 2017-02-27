@@ -1,8 +1,54 @@
-<p><a href="http://es.wikipedia.org/wiki/Microsoft_Excel">Microsoft Excel</a> es una de las herramientas más usadas por parte de los denominados <i>power users</i> (usuarios con conocimientos por encima del usuario medio) a la hora de resumir, analizar y representar gráficamente todo tipo de datos, generalmente con el objetivo de extraer información útil a partir de ellos. Personalmente es una aplicación que comencé a usar en la versión 95, después de haber trabajado durante años en DOS con Paradox, las hojas de cálculo de Open Access y Symphony y el mítico Lotus 1,2,3. Desde la versión 2000 hasta la 2013 he escrito una docena de <a href="http://www.fcharte.com/Default.asp?libros">libros sobre Excel</a>, siendo una herramienta que uso prácticamente a diario para distintas tareas.</p>
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Intercambio de datos entre Excel y R&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Intercambio de datos entre Excel y R<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#el-portapapeles">El portapapeles</a></li>
+<li class="toc-entry toc-h2"><a href="#formatos-csv-y-dif">Formatos CSV y DIF</a></li>
+<li class="toc-entry toc-h2"><a href="#el-paquete-xlsx">El paquete xlsx</a></li>
+</ul><p><a href="http://es.wikipedia.org/wiki/Microsoft_Excel">Microsoft Excel</a> es una de las herramientas más usadas por parte de los denominados <i>power users</i> (usuarios con conocimientos por encima del usuario medio) a la hora de resumir, analizar y representar gráficamente todo tipo de datos, generalmente con el objetivo de extraer información útil a partir de ellos. Personalmente es una aplicación que comencé a usar en la versión 95, después de haber trabajado durante años en DOS con Paradox, las hojas de cálculo de Open Access y Symphony y el mítico Lotus 1,2,3. Desde la versión 2000 hasta la 2013 he escrito una docena de <a href="http://www.fcharte.com/Default.asp?libros">libros sobre Excel</a>, siendo una herramienta que uso prácticamente a diario para distintas tareas.</p>
 
 <p>A pesar de la potencia de Excel, que incluye la posibilidad de definir nuevas funciones escritas en lenguaje VBA y el desarrollo de aplicaciones sobre esta herramienta desde Visual Studio, hay ocasiones en las ciertas tareas sencillamente resultan demasiado arduas. Aquí es donde entra en escena <a href="http://www.r-project.org/">el lenguaje R</a>, empleado por miles de usuarios, especialmente estudiantes de ciencias, investigadores y científicos de múltiples ramas. R es un lenguaje funcional e interpretado que, de manera interactiva, permite operar sobre listas, vectores y matrices de datos de manera extremadamente sencilla. Gran parte de su versatilidad estriba en la inmediatez para aplicar cualquier operación sobre todos los elementos de una de esas estructuras (o partes de ellas) en un solo paso, así como en la extensa <a href="http://cran.r-project.org/">biblioteca de paquetes (CRAN)</a> disponibles para resolver prácticamente cualquier problema que se nos ocurra (obviamente siempre circunscrito al campo del análisis de datos).</p>
 
-<h2>El portapapeles</h2>
+<h2>
+<a id="el-portapapeles" class="anchor" href="#el-portapapeles" aria-hidden="true"><span class="octicon octicon-link"></span></a>El portapapeles</h2>
 <p>Son muchos los casos en que tengo información en Excel que me sería más fácil procesar con R y, en ocasiones, ocurre lo contrario. Imagino que no seré la única persona que tenga la necesidad de exportar datos desde Excel a R, o viceversa, y por ello voy a compartir aquí los métodos que he venido utilizando hasta ahora, comenzando por el portapapeles que fue el primero que usé aunque ahora ya no lo haga.</p>
 
 <p>Si ejecutamos R y Excel en la misma máquina uno de los recursos más inmediatos para compartir información es el portapapeles. Copiar un rango de celdillas desde Excel al portapapeles, o pegarlo, es una acción simple: basta con seleccionarlo y usar los habituales atajos de teclado <b>Control+C</b> y <b>Control+V</b>, respectivamente. En R podemos pegar en la consola los datos copiados desde Excel, pero esto no los almacenará en ninguna variable. Aunque existe una función <code>readClipboard</code> para la lectura genérica de datos del portapapeles (introducir <code>?readClipboard</code> en la consola para obtener ayuda sobre la misma), en este caso no nos resultaría de utilidad porque Excel por defecto copia los datos al portapapeles como líneas de texto, separando el contenido de cada celdilla con un tabulador. Lo que necesitamos, por tanto, es una función que tenga en cuenta que los datos están delimitados por un separador, en este caso el tabulador, y que además diferencie entre la primera fila, que suele contener títulos de las columnas, y el resto, que contendrán los datos propiamente dichos. Esa función es <code>read.delim</code> y el único parámetro que necesita es la cadena <code>"clipboard"</code>.</p>
@@ -10,25 +56,30 @@
 <p>El procedimiento a seguir para llevar datos desde Excel a R mediante el portapapeles consta de dos pasos:</p>
 <ol>
 <li>Seleccionamos en Excel los datos, incluyendo títulos, y los copiamos al portapapeles.
+</li>
 <li>Introducimos en la consola de R el comando <code>rango &lt;- read.delim("clipboard")</code>, asumiendo que deseemos guardar los datos en la variable <code>rango</code>. Esta será un data.frame, basta con escribir su nombre para obtener el contenido.
+</li>
 </ol>
 <p>Las dos imágenes siguientes muestran el procedimiento descrito.</p>
 
-<image src="http://www.fcharte.com/imagenes/20130326-1.png" title="Copiamos los datos desde Excel al portapapeles"  width="800px"/>
+<image src="http://www.fcharte.com/imagenes/20130326-1.png" title="Copiamos los datos desde Excel al portapapeles" width="800px"></image>
 
-<image src="http://www.fcharte.com/imagenes/20130326-2.png" title="Obtenemos los datos desde R, almacenándolos en un data.frame"  width="800px"/>
+<image src="http://www.fcharte.com/imagenes/20130326-2.png" title="Obtenemos los datos desde R, almacenándolos en un data.frame" width="800px"></image>
 
 <p>En este momento podríamos trabajar con los datos desde R, realizando el procesamiento que necesitemos.</p>
 
 <p>La transferencia de datos en sentido inverso, desde un data.frame de R a una hoja de Excel, se completa con los dos pasos siguientes:</p>
 <ol>
 <li>Copiamos el contenido del data.frame de R al portapapeles, usando para ello la función <code>write.table(variable, "clipboard", sep="\t", row.names=F)</code>. A diferencia de <code>read.delim</code>, que asume por defecto que el separador de datos usado es el tabulador, la función <code>write.table</code> no aplica separador alguno, por ello es necesario indicarlo explícitamente con el parámetro <code>sep</code>. En cuanto al parámetro <code>row.names</code>, al que asignamos el valor <code>FALSE</code>, comunica a la función si debe o no incluir los nombres de fila del data.frame (en la imagen anterior pueden verse en la primera columna, como una secuencia de números generada automáticamente).
+</li>
 <li>Desde Excel obtenemos los datos sencillamente colocándonos en la celdilla de destino y pegando desde el portapapeles.
+</li>
 </ol>
 
 <p>La ventaja de usar el portapapeles para intercambiar información entre Excel y R es que no es necesario usar archivos intermedios ni tampoco la instalación de paquetes adicionales en R. La principal desventaja, aparte del hecho de que requiere que las dos aplicaciones se ejecuten simultáneamente en la misma máquina, estriba en que no es un medio cómodo cuando el volumen de los datos es considerable. Imaginemos las veces que tendríamos que repetir los pasos anteriores para copiar el contenido de una decena de hojas de un libro Excel a una lista de data.frames (además en la práctica podría no ser posible, ya que la cantidad de información que puede copiarse en el portapapeles es limitada). En las secciones siguientes explico otros métodos más eficientes en este sentido.</p>
   
-<h2>Formatos CSV y DIF</h2>
+<h2>
+<a id="formatos-csv-y-dif" class="anchor" href="#formatos-csv-y-dif" aria-hidden="true"><span class="octicon octicon-link"></span></a>Formatos CSV y DIF</h2>
 <p>Cuando R y Excel no se ejecutan en la misma máquina, o el volumen de datos es demasiado grande como para usar el portapapeles con comodidad, una vía alternativa para intercambiar datos consiste en recurrir a formatos de archivo cuya finalidad es precisamente esa: facilitar el intercambio de información entre aplicaciones. Entre dichos formatos, dos de los más conocidos son <a href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV (<i>Comma-Separated Values</i>)</a> y <a href="http://en.wikipedia.org/wiki/Data_Interchange_Format">DIF (<i>Data Interchange Format</i>)</a>.</p>
 
 <p>El formato CSV, como su propio nombre indica, utiliza comas para separar los valores y se estructura como una serie de filas (registros) con columnas de longitud variable. Los valores no numéricos pueden ir o no entrecomillados y en los numéricos el separador decimal es el punto. En algunos países europeos se usa la coma como separador decimal y el punto y como para separar unos valores de otros. Es importante destacar que <b>Excel utiliza el punto y coma como separador</b> incluso cuando su configuración establece que el separador decimal es el punto y, por tanto, podría usarse la coma según dicta el formato estándar CSV. Asumiendo que trabajamos con los mismos datos mostrados en la entrada anterior a esta, el archivo CSV generado por Excel tendría el siguiente contenido:</p>
@@ -105,27 +156,32 @@
 <span class="m">0</span>,<span class="m">2</span>.<span class="m">3381</span>
 ...</code></pre></figure>
 
-<p>Lo interesante es que ambos formatos pueden ser utilizados a la hora de intercambiar datos entre Excel y R, que es el objeto de esta entrada. Partamos del supuesto en el que los datos están en Excel, posiblemente en el ordenador del usuario que los ha generado, y queremos transferirlos a otra máquina en la que trabajamos en R. El primer usuario debe guardar los datos en formato CSV o DIF y enviarnos el archivo resultante, para ello debe dar los pasos siguientes:</p>
+</p><p>Lo interesante es que ambos formatos pueden ser utilizados a la hora de intercambiar datos entre Excel y R, que es el objeto de esta entrada. Partamos del supuesto en el que los datos están en Excel, posiblemente en el ordenador del usuario que los ha generado, y queremos transferirlos a otra máquina en la que trabajamos en R. El primer usuario debe guardar los datos en formato CSV o DIF y enviarnos el archivo resultante, para ello debe dar los pasos siguientes:</p>
 
 <ol>
  <li>Crear un nuevo libro Excel, en blanco, o en su defecto una nueva hoja en el libro actual.
- <li>Copiar en el nuevo libro/hoja los datos que desea enviar.
- <li>Utilizar la opción <b>Guardar</b> (o <b>Guardar como</b> si hemos creado una nueva hoja en lugar de un nuevo libro) para abrir el cuadro de diálogo del mismo nombre.
- <li>Desplegar la lista <b>Tipo</b> y elegir el formato deseado: CSV o DIF, tal y como se muestra en la imagen siguiente.
- <li>Pulsar los botones <b>Aceptar</b> y <b>Sí</b> de los dos cuadros de diálogo que aparecerán a continuación, confirmando que deseamos guardar únicamente el contenido de la hoja actual y que deseamos mantener el formato elegido a pesar de que se pierdan características del libro.
+ </li>
+<li>Copiar en el nuevo libro/hoja los datos que desea enviar.
+ </li>
+<li>Utilizar la opción <b>Guardar</b> (o <b>Guardar como</b> si hemos creado una nueva hoja en lugar de un nuevo libro) para abrir el cuadro de diálogo del mismo nombre.
+ </li>
+<li>Desplegar la lista <b>Tipo</b> y elegir el formato deseado: CSV o DIF, tal y como se muestra en la imagen siguiente.
+ </li>
+<li>Pulsar los botones <b>Aceptar</b> y <b>Sí</b> de los dos cuadros de diálogo que aparecerán a continuación, confirmando que deseamos guardar únicamente el contenido de la hoja actual y que deseamos mantener el formato elegido a pesar de que se pierdan características del libro.
+</li>
 </ol>
 
-<image src="http://www.fcharte.com/imagenes/20130330-1.png" title="Guardamos los datos desde Excel a CSV/DIF" width="800px" />
+<image src="http://www.fcharte.com/imagenes/20130330-1.png" title="Guardamos los datos desde Excel a CSV/DIF" width="800px"></image>
 
 <p>Al guardar en cualquiera de estos dos formato Excel escribirá en el archivo de destino todo el contenido de la hoja actual, no la selección que tuviésemos hecha. Por ello es preciso el paso previo en que se crea una hoja auxiliar (o un nuevo libro) y se copia en ella la información a exportar. Esa hoja, lógicamente, puede ser eliminada al final. Si esta operación vamos a realizarla a menudo lo más cómodo es registrar una macro de Excel con todos los pasos, partiendo desde la copia al portapapeles de la selección actual e incluyendo la inserción de la nueva hoja, pegado de los datos, selección de la opción <b>Guardar como</b> y establecimiento del formato de exportación. De esta forma en adelante solo habrá que ejecutar la macro, que puede ser asignada a una cierta combinación de teclas, tras haber marcado el rango de celdillas a exportar.</p>
 
 <p>Una vez que tenemos la información en el archivo CSV/DIF llega el momento de importarla a R. Para leer un CSV tenemos a nuestra disposición múltiples funciones: <code>read.csv</code>, <code>read.csv2</code>, <code>read.delim</code> y la más genérica <code>read.table</code>. Vamos a concentrarnos en las dos primeras que son las que más se ajustan a lo que necesitamos en este momento. Ambas precisan como parámetro indispensable el nombre del archivo a leer y por defecto asumen que habrá una primera línea con los encabezados: los títulos de las columnas. La diferencia fundamental es que la primera asume que el formato sigue el estándar CSV: se usa el punto para decimales y la coma como separador de valores, mientras que la segunda está preconfigurada para el formato que suele usarse en algunos países europeos: coma para decimales y punto y coma como separador de valores. Si el formato que tenemos que leer no es ninguno de estos dos, como ocurre en nuestro caso que utiliza el punto para los decimales pero separa los valores con punto y coma, podemos usar cualquiera de las dos incluyendo los parámetros <code>dec</code> y/o <code>sep</code> para indicarlo. En la imagen siguiente puede verse cómo se ha usado <code>read.csv</code> para obtener el contenido del archivo en un data.frame.</p>
 
-<image src="http://www.fcharte.com/imagenes/20130330-2.png" title="Importamos el archivo CSV desde R" width="800px" />
+<image src="http://www.fcharte.com/imagenes/20130330-2.png" title="Importamos el archivo CSV desde R" width="800px"></image>
 
 <p>Para importar en R el contenido de un archivo en formato DIF recurriemos a la función <code>read.DIF</code>. Si la estructura del archivo se ajusta estrictamente al estándar, solamente habrá que facilitar el nombre del archivo y se obtendrá como resultado un data.frame con los datos. En el caso de Excel, no obstante, hay una diferencia importante: el orden en que se entregan filas y columnas está invertido, siendo necesario agregar el parámetro <code>transpose</code> dándole el valor <code>TRUE</code> (por defecto es <code>FALSE</code>) tal y como se aprecia en la siguiente imagen.</p>
 
-<image src="http://www.fcharte.com/imagenes/20130330-3.png" title="Importamos el archivo DIF desde R" width="800px" />
+<image src="http://www.fcharte.com/imagenes/20130330-3.png" title="Importamos el archivo DIF desde R" width="800px"></image>
 
 <p>Supongamos ahora que el sentido de transferencia de la información se invierte: tenemos un data.frame en R con datos que necesitamos enviar a alguien que los tratará con Excel. Para ello lo primero que haremos será generar el archivo CSV, sencillamente usando la función <code>write.csv</code> con dos parámetros: el data.frame que contiene los datos y el argumento <code>file</code> indicando el nombre del archivo de destino. También podemos usar <code>write.csv2</code> para cambiar los separadores de decimales y valores, o bien incluir los parámetros <code>dec</code> y <code>sep</code> indicados anteriormente. El resultado será un archivo CSV que enviaremos al destinatario.</p>
 
@@ -133,23 +189,30 @@
 
 <ol>
  <li>Colocamos el cursor en la posición de la hoja a partir de la cual deseemos colocar los datos que van a importarse (la esquina superior izquierda del rango resultante).
- <li>Abrimos la pestaña <b>Datos</b> de la Cinta de opciones y hacemos clic en la opción <b>Obtener datos externos -> Desde texto</b>.
- <li>En el cuadro de diálogo que se abre seleccionamos el archivo CSV que contiene los datos a exportar.
- <li>Se pone en marcha el <b>Asistente para importar texto</b>, cuyo primer paso nos permite elegir entre datos delimitados (con un separdor) o de ancho fijo. La opción marcada por defecto será la primera, por lo que hacemos clic en <b>Siguiente</b>.
- <li>En el segundo paso es donde tendremos que configurar el separador de valores, desmarcando el que aparece por defecto (<b>Tabulación</b> normalmente) y marcando <b>Coma</b> o <b>Punto y coma</b> según el caso. En la parte inferior de la ventana podremos apreciar cuál es el resultado que se obtendría según la configuración establecida actualmente.</li>
+ </li>
+<li>Abrimos la pestaña <b>Datos</b> de la Cinta de opciones y hacemos clic en la opción <b>Obtener datos externos -&gt; Desde texto</b>.
+ </li>
+<li>En el cuadro de diálogo que se abre seleccionamos el archivo CSV que contiene los datos a exportar.
+ </li>
+<li>Se pone en marcha el <b>Asistente para importar texto</b>, cuyo primer paso nos permite elegir entre datos delimitados (con un separdor) o de ancho fijo. La opción marcada por defecto será la primera, por lo que hacemos clic en <b>Siguiente</b>.
+ </li>
+<li>En el segundo paso es donde tendremos que configurar el separador de valores, desmarcando el que aparece por defecto (<b>Tabulación</b> normalmente) y marcando <b>Coma</b> o <b>Punto y coma</b> según el caso. En la parte inferior de la ventana podremos apreciar cuál es el resultado que se obtendría según la configuración establecida actualmente.</li>
 
-<image width="800px"  src="http://www.fcharte.com/imagenes/20130330-4.png" title="Configuramos el separador de valores al importar en Excel" />
+<image width="800px" src="http://www.fcharte.com/imagenes/20130330-4.png" title="Configuramos el separador de valores al importar en Excel"></image>
 
  <li>En el tercer paso del asistente podemos configurar el formato aplicado a cada una de las columnas de valores. En caso de que el separador de decimales no sea el adecuado, según la configuración que se haya establecido en Excel, usaremos el botón <b>Avanzadas</b> para abrir un pequeño cuadro de diálogo en el que podremos indicar explícitamente cuál es el separador decimal.
+</li>
 </ol>
   
-<image width="800px" src="http://www.fcharte.com/imagenes/20130330-5.png" title="Configuramos el separador decimal al importar en Excel" />
+<image width="800px" src="http://www.fcharte.com/imagenes/20130330-5.png" title="Configuramos el separador decimal al importar en Excel"></image>
 
 <p>Una vez llegado al última paso del asistente podremos elegir el destino de los datos, por defecto será la posición actual en la hoja, y completar el proceso de importación. Ya tenemos el contenido del data.frame de R en la hoja de cálculo.
 
-<p>Un último apunte en relación a la importación/exportación usando archivos CSV/DIF, especialmente si se utilizan ordenadores distintos y sistemas distintos: en caso de que haya columnas con textos es importante que la codificación de caracteres empleada sea la misma al importar que al exportar. Todas las funciones R mencionadas aceptan el parámetro <code>fileEncoding</code>, con el que podemos indicar la codificación al leer o escribir. En Excel al importar datos, con el procedimiento descrito antes, el primer paso del asistente permite elegir la codificación en la lista <b>Origen del archivo</b>.</p>
+</p><p>Un último apunte en relación a la importación/exportación usando archivos CSV/DIF, especialmente si se utilizan ordenadores distintos y sistemas distintos: en caso de que haya columnas con textos es importante que la codificación de caracteres empleada sea la misma al importar que al exportar. Todas las funciones R mencionadas aceptan el parámetro <code>fileEncoding</code>, con el que podemos indicar la codificación al leer o escribir. En Excel al importar datos, con el procedimiento descrito antes, el primer paso del asistente permite elegir la codificación en la lista <b>Origen del archivo</b>.</p>
 
-  <h2>El paquete <code>xlsx</code></h2>
+  <h2>
+<a id="el-paquete-xlsx" class="anchor" href="#el-paquete-xlsx" aria-hidden="true"><span class="octicon octicon-link"></span></a>El paquete <code>xlsx</code>
+</h2>
   <p>En las dos secciones anteriores se han descrito procedimientos dirigidos a intercambiar información entre Excel y R, en el primer caso usando el portapapeles y en el segundo mediante archivos CSV/DIF como intermediarios. El primer enfoque es adecuado cuando el usuario de R y Excel es la misma persona y usa ambas aplicaciones en el mismo equipo, mientras que el segundo permite compartir información entre distintos equipos y usuarios, por ejemplo enviando los archivos a un servidor compartido o por correo electrónico.</p>
 
 <p>A pesar de la sencillez del proceso, descrito en la segunda sección, no todos los usuarios de Excel están preparados (o dispuestos) a exportar sus datos a CSV para enviárselos a un tercero o a importar datos de un archivo cuyo formato no conoce y que, a priori, podría darle problemas, por ejemplo si la configuración regional de Excel altera los separadores de decimales y miles. Afortunadamente R, como herramienta de código abierto que es, dispone de infinidad de paquetes para todo tipo de tareas, entre ellas la lectura y escritura directa de hojas de cálculo en formato XLSX (el usado por Excel desde las versión 2007).</p>
@@ -159,19 +222,55 @@
 <p>Si la tarea a realizar consiste en enviar a una hoja de cálculo Excel la información que tenemos almacenada en un data.frame de R (u otra estructura de datos), la función a usar es <code>write.xlsx</code>. Los parámetros imprescindibles son dos: el conjunto de datos a escribir y el nombre del archivo en que reside la hoja de cálculo (argumento <code>filename</code>. Además también son de uso habitual los parámetros siguientes:</p>
 
 <ul class="enumeracion">
- <li><code>sheetName</code>: Nombre de la hoja del libro en que se introducirán los datos. Ha de ser un nombre único, no debe haber otra hoja con ese nombre en el libro Excel en caso de que estén añadiéndose datos a un libro existente. Por defecto toma el valor <code>Sheet1</code>.
- <li><code>append</code>: Por defecto toma el valor <code>FALSE</code>, provocando que la función cree un libro con el nombre indicado por <code>filename</code> eliminándolo si ya existiese. Si es <code>TRUE</code> el libro debe existir y al mismo se añadirá una hoja con los nuevos datos.
- <li><code>col.names</code> y <code>row.names</code>: Determinan si se escribirán en la hoja los nombres asociados a las columnas y las filas del data.frame. Por defecto ambos parámetros toman el valor <code>TRUE</code>.
+ <li>
+<code>sheetName</code>: Nombre de la hoja del libro en que se introducirán los datos. Ha de ser un nombre único, no debe haber otra hoja con ese nombre en el libro Excel en caso de que estén añadiéndose datos a un libro existente. Por defecto toma el valor <code>Sheet1</code>.
+ </li>
+<li>
+<code>append</code>: Por defecto toma el valor <code>FALSE</code>, provocando que la función cree un libro con el nombre indicado por <code>filename</code> eliminándolo si ya existiese. Si es <code>TRUE</code> el libro debe existir y al mismo se añadirá una hoja con los nuevos datos.
+ </li>
+<li>
+<code>col.names</code> y <code>row.names</code>: Determinan si se escribirán en la hoja los nombres asociados a las columnas y las filas del data.frame. Por defecto ambos parámetros toman el valor <code>TRUE</code>.
+</li>
 </ul>
 
 <p>En la imagen siguiente puede verse un ejemplo de uso de esta función. En él se agregan a un libro existente tres nuevas hojas, con los nombres de tres meses, y datos hipotéticamente correspondientes a las ventas diarias. En la imagen de más abajo puede verse el libro tras abrirlo en Excel.</p>
 
-<image width="800px" src="http://www.fcharte.com/imagenes/20130407-1.png" title="Agregamos hojas con datos a un libro Excel desde R" />
+<image width="800px" src="http://www.fcharte.com/imagenes/20130407-1.png" title="Agregamos hojas con datos a un libro Excel desde R"></image>
 
-<image width="800px" src="http://www.fcharte.com/imagenes/20130407-2.png" title="El libro abierto en Excel" />
+<image width="800px" src="http://www.fcharte.com/imagenes/20130407-2.png" title="El libro abierto en Excel"></image>
 
 <p>La función complementaria a la anterior, mediante la que podemos leer desde R información almacenada en un libro Excel sin necesidad de tener instalada esta aplicación, es <code>read.xlsx</code>. El primer argumento será en este caso el nombre del archivo donde está almacenada la información, siendo obligatorio indicar un número de hoja con el parámetro <code>sheetIndex</code> o bien su nombre con el parámetro <code>sheetName</code>. Sin más parámetros la función leerá todo el contenido de la hoja indicada, generará un data.frame incluyendo títulos de columnas y lo devolverá. En caso de que nos interese leer un conjunto concreto de celdillas, no la hoja completa, recurriremos a los parámetros <code>colIndex</code> y <code>rowIndex</code> para especificar qué columnas y qué filas han de recuperarse. Estas no tienen necesariamente que ser contiguas. En el ejemplo de la imagen siguiente se recupera la primera fila y las filas 23 a 32.</p>
 
-<image width="800px" src="http://www.fcharte.com/imagenes/20130407-3.png" title="Recuperamos un rango de datos de una hoja Excel" />
+<image width="800px" src="http://www.fcharte.com/imagenes/20130407-3.png" title="Recuperamos un rango de datos de una hoja Excel"></image>
 
 <p>Por defecto la función <code>read.xlsx</code> evaluará las fórmulas que pudieran existir en la hoja de cálculo, almacenando en el data.frame el resultado que produzcan. Dando el valor <code>TRUE</code> al parámetro <code>keepFormulas</code> se anulará la evaluación, obteniendo en su lugar el texto de la fórmula.</p>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
