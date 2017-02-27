@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Configuración avanzada de la apariencia en Windows 8&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Configuración avanzada de la apariencia en Windows 8<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#configuración-de-apariencia-en-windows-7">Configuración de apariencia en Windows 7</a></li>
+<li class="toc-entry toc-h2"><a href="#configuración-de-apariencia-en-windows-8">Configuración de apariencia en Windows 8</a></li>
+<li class="toc-entry toc-h2"><a href="#recurriendo-al-registro-de-windows">Recurriendo al registro de Windows</a></li>
+<li class="toc-entry toc-h2"><a href="#intentando-forzar-el-sistema">Intentando forzar el sistema</a></li>
+</ul><p>A pesar de que en Windows Vista y Windows 7 la introducción de los denominados <i>Temas visuales</i> ha permitido a los usuarios ajustar la apariciencia del sistema según sus preferencias, somos muchos los que, habiendo utilizado el sistema operativo de Microsoft desde hace muchos años, seguimos recurriendo a la opción <b>Configuración avanzada de la apariencia...</b> para ajustar manualmente los atributos de cada elemento individual de la interfaz.</p>
+
+<h2>
+<a id="configuración-de-apariencia-en-windows-7" class="anchor" href="#configuraci%C3%B3n-de-apariencia-en-windows-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuración de apariencia en Windows 7</h2>
+<p>En Windows 7 encontramos dicha opción en la ventana <b>Color y apariencia de las ventanas</b> (véase imagen inferior) y da paso a un cuadro de diálogo (siguiente imagen debajo de la anterior) que prácticamente no ha cambiado en la última década y que los más experimentados reconocerán de inmediato.</p>
+
+<image width="800px" src="http://www.fcharte.com/imagenes/20120726.1.png" title="Ventana de personalización de colores en Windows 7"></image>
+
+<image width="800px" src="http://www.fcharte.com/imagenes/20120726.2.png" title="Cuadro de diálogo de configuración avanzada de la apariencia en Windows 7"></image>
+
+<p>
+
+</p><h2>
+<a id="configuración-de-apariencia-en-windows-8" class="anchor" href="#configuraci%C3%B3n-de-apariencia-en-windows-8" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuración de apariencia en Windows 8</h2>
+<p>La interfaz de Windows 8 pone el acento en la simplicidad y sencillez de uso. Hay una nueva aplicación Metro con el título <b>Configuración</b>, se abre con la opción <b>Configuración&gt;Cambiar configuración de PC</b> del panel de accesos o <i>Charms</i> (anclado al margen derecho de la pantalla), que centraliza los parámetros de ajuste más usuales y con la que poco podemos cambiar de la apariencia, más allá de las imágenes de fondo. El <b>Panel de control</b> <i>de toda la vida</i> sigue estando ahí, por lo que podemos abrirlo y seguir cambiando los parámetros que necesitemos.</p>
+
+<p>En realidad la anterior es una verdad a medias en algunos casos. En la imagen inferior puede verse cómo la ventana <b>Color y apariencia de las ventanas</b> se ha simplificado al extremo, no existiendo opción alguna que nos permita acceder al cuadro de diálogo mencionado anteriormente. Esto es algo que descubrí ayer a raíz de una consulta que me realizaron por Twitter.</p>
+
+<image width="800px" src="http://www.fcharte.com/imagenes/20120726.3.png" title="Ventana de personalización de colores en Windows 8"></image>
+
+<h2>
+<a id="recurriendo-al-registro-de-windows" class="anchor" href="#recurriendo-al-registro-de-windows" aria-hidden="true"><span class="octicon octicon-link"></span></a>Recurriendo al registro de Windows</h2>
+<p>La primera solución que se me ocurrió fue abrir el registro y buscar la sección en la que se almacenan estos parámetros avanzados de apariencia en Windows 7. La respuesta: <code>HKCU\Control Panel\Desktop\WindowMetrics</code>. El contenido de esta clave es prácticamente idéntico en Windows 7 y Windows 8 Release Preview, por lo que es fácil suponer que los parámetros avanzados siguen utilizándose a pesar de que no haya un cuadro de diálogo como el de Windows 7 que permita modificarlos fácilmente.</p>
+
+<image width="800px" src="http://www.fcharte.com/imagenes/20120726.4.png" title="Valores de la entrada del registro donde se almacenan los parámetros de apariencia"></image>
+
+<p>La interpretación de los valores no resulta sencilla a menos que uno esté acostumbrado a trabajar con números hexadecimales, algo habitual entre los programadores. No obstante, cualquier usuario de Windows 7 puede tomar la configuración que tenga en su sistema actual exportando esa clave del registro a un archivo y, a continuación, importándola en el nuevo Windows 8. Es un método que funciona, pero cabe preguntarse si hay alguna vía más fácil.</p>
+
+<h2>
+<a id="intentando-forzar-el-sistema" class="anchor" href="#intentando-forzar-el-sistema" aria-hidden="true"><span class="octicon octicon-link"></span></a>Intentando forzar el sistema</h2>
+<p>Dado que lo que tenemos en este momento es una <i>Release Preview</i> de Windows 8, podría pensarse que el cuadro de diálogo de marras sigue estando en el sistema pero, sencillamente, Microsoft por el momento no ofrece opción alguna para abrirlo. ¿Seguirá estando en el mismo sitio que en Windows 7? Cuando en esta versión del sistema utilizamos la opción <b>Configuración avanzada de la apariencia…</b> lo que hace Windows es ejecutar lo siguiente:</p>
+
+<textarea cols="70" rows="1" readonly>Rundll32.exe Shell32.dll,Control_RunDLL Desk.cpl,advanced,@advanced</textarea>
+
+<p>Incluso en sistemas de 64 bits se utilizan <code>Rundll32</code> para abrir la DLL <code>Shell32.dll</code>, encargada de ejecutar el código de <code>Desk.cpl</code>, una aplicación del <b>Panel de control</b>, con los parámetros que indican que ha de abrirse el modo avanzado del cuadro de diálogo.</p>
+
+<p>Si en Windows 8 ejecutamos ese mismo comando sencillamente se abre la ventana de personalización de colores mostrada más arriba. Esto me hace sospechar que realmente el cuadro de diálogo de ajustes avanzados ha desaparecido en esta <i>Release Preview</i>, no está sencillamente oculto. En mi opinión esto reduce las probabilidades de que en la versión final de Windows 8 dicha opción esté presente, por lo que habría que quedarse con la manipulación del registro como única alternativa. Cuando podamos probar la RTM saldremos de dudas.</p>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
