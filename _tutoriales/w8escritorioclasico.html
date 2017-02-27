@@ -1,0 +1,36 @@
+---
+layout: post
+title: Cómo iniciar Windows 8 en el escritorio clásico en lugar de la pantalla de inicio<br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>Windows 8 aun no está disponible para el público en general, pero en las últimas dos semanas ya han podido probar la versión definitiva del nuevo sistema operativo de Microsoft los suscriptores a TechNet, MSDN y <a href="https://twitter.com/fcharte/status/238543916327137280">DreamSpark</a>, entre otros. Incluso hay una <a href="https://twitter.com/fcharte/status/235819371975548928">versión de evaluación</a> que nos permite probar la edición <i>Enterprise</i> durante 90 días.</p>
+
+<p>En este breve periodo de tiempo son muchos los usuarios que se muestran descontentos con la nueva interfaz de usuario y, sobre todo, el hecho de que al iniciar sesión nos encontremos con la denominada pantalla <b>Inicio</b> en lugar del escritorio clásico. Tanto es así que han comenzado a proliferar pequeños programas que fuerzan a Windows 8 a iniciarse en el escritorio, así como <a href="http://t.co/2mS2iYCB">ciertos trucos</a>, algo rebuscados y con condicionantes, que persiguen el mismo efecto.</p>
+
+<p>Personalmente no me desagrada que al iniciar Windows 8 aparezca la mencionada pantalla <b>Inicio</b>, si bien es cierto que la mayoría del software que utilizo a diario en la actualidad se ejecuta sobre el escritorio clásico. Basta con usar el atajo <b>Win+D</b> y ahí está el escritorio, hay pocas cosas más simples. No obstante he buscado la manera de automatizar esa operación. Generalmente en cuanto cambio al escritorio lo primero que hago es abrir el <b>Explorador de archivos</b>, ¿por qué no ejecutar automáticamente ese programa al iniciar sesión?</p>
+
+<p>Estando en la pantalla <b>Inicio</b> escribo <code>programar tarea</code> y elijo la única opción que aparece como resultado de la búsqueda para abrir el <b>Programador de tareas</b>. En una rama en la que tengo mis tareas programadas abro el menú contextual y elijo <b>Crear tarea básica</b>:</p>
+
+<image width="800px" src="http:www.fcharte.com/imagenes/20120828.1.png" title="Procedo a crear una nueva tarea programada" />
+
+<p>Tras asignar un nombre a la tarea (y una descripción si se quiere) llego al paso en el que hay que elegir el desencadenador que ejecutará la tarea. Elijo <b>Al iniciar sesión</b>:</p>
+
+<image  width="800px" src="http:www.fcharte.com/imagenes/20120828.2.png" title="La tarea se ejecutará al iniciar sesión en el sistema" />
+
+<p>En el paso siguiente del asistente se elige la tarea a realizar cuando se detecte el evento desencadenante. En este caso la opción será <b>Iniciar un programa</b>:</p>
+
+<image  width="800px" src="http:www.fcharte.com/imagenes/20120828.3.png" title="La tarea ejecutará un programa" />
+
+<p>Podemos ejecutar cualquier programa o <i>script</i>, estableciendo la carpeta en la que deberá iniciarse y los parámetros adicionales. En este caso basta con introducir <code>explorer.exe</code>:</p>
+
+<image  width="800px" src="http:www.fcharte.com/imagenes/20120828.4.png" title="explorer.exe es el ejecutable del Explorador de archivos" />
+
+<p>En el último paso del asistente revisamos que todos los parámetros sean correctos y creamos la tarea haciendo clic en <b>Finalizar</b>.</p>
+
+<image  width="800px" src="http:www.fcharte.com/imagenes/20120828.5.png" title="Finalizamos la creación de la tarea" />
+
+<p>He probado este método en dos máquinas distintas, cerrando e iniciando sesión varias veces, y el resultado siempre es el mismo: la pantalla <b>Inicio</b> no llega a aparecer, en su lugar se muestra en primer plano el <b>Explorador de archivos</b> sobre un fondo uniforme y, pasado 1 ó 2 segundos (supongo que dependerá de la velocidad de cada sistema), aparece el fondo del escritorio y la barra de tareas.</p>
+
+<p>El programador de tareas es un componente básico de Windows que siempre está en funcionamiento, teóricamente no es posible desactivarlo, por lo que la tarea definida debería ejecutarse en cada inicio de sesión. En cualquier caso, tras realizar estas pruebas, eliminaré esta tarea programada para seguir accediendo a la pantalla <b>Inicio</b>. Sobre gustos …</p>
