@@ -1,0 +1,32 @@
+---
+layout: post
+title: Cómo configurar una base de datos independiente en SQL Server 2012<br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>Como muchos otros RDBMS, Microsoft SQL Server cuenta con una base de datos <i>de sistema</i> en el que almacena parámetros generales no asociados a una base de datos concreta sino al propio servidor de datos: el idioma predeterminado, las cuentas de usuario, la meta-información que describe los objetos de cada base de datos, etc.</p>
+
+<p>Esa configuración compartida crea una dependencia en las bases de datos respecto del servidor en que han sido generadas, lo cual añade algunas dificultades para su traslado a otro servidor. Es algo a lo que nos enfrentamos habitualmente cuando se quiere mover una solución desde el servidor en el que ha estado desarrollándose al que se utilizará definitivamente en explotación. En muchos casos se escoge la vía de regenerar en el nuevo servidor todos los objetos de la base de datos original mediante la ejecución de un guión (<i>script</i>).</p>
+
+<p>Entre las novedades que incorpora <b>SQL Server 2012</b> encontramos una que, al menos en parte, facilita esa operación de traslación entre servidores. Su nombre: <b>bases de datos parcialmente independientes</b>. La idea básica: almacenar en la propia base de datos la información de configuración que le afecta, en lugar de llevarla a la base de datos del sistema. Concretamente se conservarán en la base de datos la meta-información que describe su estructura, un conjunto de parámetros de configuración asociados al idioma y también los usuarios que pueden trabajar con ella.</p>
+
+<p>Por defecto las bases de datos parcialmente independientes están deshabilitadas en una nueva instalación de SQL Server 2012. Para activar su uso tendremos que:</p>
+
+<ul class="enumeracion">
+<li>Abrir el <b>Management Studio</b>, la herramienta de administración fundamental de SQL Server 2012.
+<li>Seleccionar el nodo asociado al servidor y hacer clic sobre él con el botón secundario del ratón.
+<li>Elegir la opción <b>Propiedades</b> para abrir una ventana con ese mismo nombre.
+<li>Abrir la página <b>Avanzado</b> y localizar la sección <b>Contención</b>.
+<li>Desplegar la lista asociada a la opción <b>Habilitar bases de datos independientes</b> y cambiar su valor de <code>False</code> a <code>True</code>.
+</ul>
+
+<image width="800px" src="http://www.fcharte.com/imagenes/20120815.1.png" title="Habilitamos el uso de bases de datos independientes" /></p>
+
+<p>Estando habilitada esta característica, cada vez que creemos una nueva base de datos podremos elegir en la opción <b>Tipo de contención</b> de su página <b>Opciones</b> el elemento <b>Parcial</b>. Esto creará una base de datos parcialmente independiente conteniendo, como se ha indicado antes, la información que la describe y otros parámetros asociados. Parte de ellos podrán personalizarse en la sección <b>Contención</b> de esa misma página de parámetros.</p>
+
+<image  width="800px" src="http://www.fcharte.com/imagenes/20120815.2.png" title="Habilitamos el uso de bases de datos independientes" /></p>
+
+<p>El paso siguiente sería crear las cuentas de los usuarios con acceso a la nueva base de datos. En lugar de emplear las cuentas integradas de Windows, lo cual haría depender la base de datos de la máquina en que está ejecutándose en ese momento, optaremos por crear cuentas de tipo <b>Usuario SQL con contraseña</b>, facilitando un nombre y una contraseña en lugar de simplemente escoger entre las cuentas existentes en el sistema.</p>
+
+<p>Al conectar con una base de datos independiente será necesario cambiar el tipo de autenticación por defecto en la página <b>Inicio de sesión</b> del Management Studio, eligiendo <b>Autenticación de SQL Server</b>. Esto nos permitirá introducir las credenciales de una de las cuentas creadas en el paso previo, almacenadas en la base de datos, en lugar de usar una cuenta de usuario de Windows. El resultado será que podremos trabajar con la base de datos incluso después de haberla llevado a un nuevo servidor, a pesar de que en éste no existan las mismas cuentas de usuario y la configuración de idioma sea distinta.</p>
