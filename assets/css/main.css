@@ -99,6 +99,3 @@ pre {
 @media screen and (max-width: 800px) {
   body {
     font-size: 16px; } }
-h1::after {
-  content: "by Francisco Charte";
-  color: "silver"; }
