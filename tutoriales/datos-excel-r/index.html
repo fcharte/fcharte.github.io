@@ -41,6 +41,10 @@
 <article>
 <ul class="section-nav">
 <li class="toc-entry toc-h2"><a href="#el-portapapeles">El portapapeles</a></li>
+<li class="toc-entry toc-h2"><a href="#formatos-csv-y-dif">Formatos CSV y DIF
+</a></li>
+<li class="toc-entry toc-h2"><a href="#">
+</a></li>
 </ul><p class="author">by Francisco Charte</p><p>
 
 </p><p><a href="http://es.wikipedia.org/wiki/Microsoft_Excel">Microsoft Excel</a> es una de las herramientas más usadas por parte de los denominados <i>power users</i> (usuarios con conocimientos por encima del usuario medio) a la hora de resumir, analizar y representar gráficamente todo tipo de datos, generalmente con el objetivo de extraer información útil a partir de ellos. Personalmente es una aplicación que comencé a usar en la versión 95, después de haber trabajado durante años en DOS con Paradox, las hojas de cálculo de Open Access y Symphony y el mítico Lotus 1,2,3. Desde la versión 2000 hasta la 2013 he escrito una docena de <a href="http://www.fcharte.com/Default.asp?libros">libros sobre Excel</a>, siendo una herramienta que uso prácticamente a diario para distintas tareas.</p>
@@ -77,7 +81,141 @@
 </li>
 </ol>
 
-<p>La ventaja de usar el portapapeles para intercambiar información entre Excel y R es que no es necesario usar archivos intermedios ni tampoco la instalación de paquetes adicionales en R. La principal desventaja, aparte del hecho de que requiere que las dos aplicaciones se ejecuten simultáneamente en la misma máquina, estriba en que no es un medio cómodo cuando el volumen de los datos es considerable. Imaginemos las veces que tendríamos que repetir los pasos anteriores para copiar el contenido de una decena de hojas de un libro Excel a una lista de data.frames (además en la práctica podría no ser posible, ya que la cantidad de información que puede copiarse en el portapapeles es limitada). En posteriores entradas explicaré otros métodos más eficientes en este sentido.</p>
+<p>La ventaja de usar el portapapeles para intercambiar información entre Excel y R es que no es necesario usar archivos intermedios ni tampoco la instalación de paquetes adicionales en R. La principal desventaja, aparte del hecho de que requiere que las dos aplicaciones se ejecuten simultáneamente en la misma máquina, estriba en que no es un medio cómodo cuando el volumen de los datos es considerable. Imaginemos las veces que tendríamos que repetir los pasos anteriores para copiar el contenido de una decena de hojas de un libro Excel a una lista de data.frames (además en la práctica podría no ser posible, ya que la cantidad de información que puede copiarse en el portapapeles es limitada). En las secciones siguientes explico otros métodos más eficientes en este sentido.</p>
+  
+<h2>
+<a id="formatos-csv-y-dif" class="anchor" href="#formatos-csv-y-dif" aria-hidden="true"><span class="octicon octicon-link"></span></a>Formatos CSV y DIF<h2>
+<a id="" class="anchor" href="#" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+</h2>
+</h2><p>Cuando R y Excel no se ejecutan en la misma máquina, o el volumen de datos es demasiado grande como para usar el portapapeles con comodidad, una vía alternativa para intercambiar datos consiste en recurrir a formatos de archivo cuya finalidad es precisamente esa: facilitar el intercambio de información entre aplicaciones. Entre dichos formatos, dos de los más conocidos son <a href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV (<i>Comma-Separated Values</i>)</a> y <a href="http://en.wikipedia.org/wiki/Data_Interchange_Format">DIF (<i>Data Interchange Format</i>)</a>.</p>
+
+<p>El formato CSV, como su propio nombre indica, utiliza comas para separar los valores y se estructura como una serie de filas (registros) con columnas de longitud variable. Los valores no numéricos pueden ir o no entrecomillados y en los numéricos el separador decimal es el punto. En algunos países europeos se usa la coma como separador decimal y el punto y como para separar unos valores de otros. Es importante destacar que <b>Excel utiliza el punto y coma como separador</b> incluso cuando su configuración establece que el separador decimal es el punto y, por tanto, podría usarse la coma según dicta el formato estándar CSV. Asumiendo que trabajamos con los mismos datos mostrados en la entrada anterior a esta, el archivo CSV generado por Excel tendría el siguiente contenido:</p>
+
+<figure class="highlight"><pre><code class="language-conf" data-lang="conf">;<span class="n">Mean</span>;<span class="n">Desv</span>;<span class="n">Mean</span>;<span class="n">Desv</span>;<span class="n">Mean</span>;<span class="n">Desv</span>;<span class="n">Mean</span>;<span class="n">Desv</span>;<span class="n">Mean</span>;<span class="n">Desv</span>
+<span class="n">Method</span> <span class="m">1</span>;<span class="m">0</span>.<span class="m">0168</span>;<span class="m">0</span>.<span class="m">0002</span>;<span class="m">0</span>.<span class="m">9764</span>;<span class="m">0</span>.<span class="m">0059</span>;<span class="m">347</span>.<span class="m">1082</span>;<span class="m">2</span>.<span class="m">3381</span>;<span class="m">0</span>.<span class="m">7448</span>;<span class="m">0</span>.<span class="m">006</span>;<span class="m">0</span>.<span class="m">0245</span>;<span class="m">0</span>.<span class="m">0033</span>
+<span class="n">Method</span> <span class="m">2</span>;<span class="m">0</span>.<span class="m">0167</span>;<span class="m">0</span>.<span class="m">0002</span>;<span class="m">0</span>.<span class="m">977</span>;<span class="m">0</span>.<span class="m">0059</span>;<span class="m">347</span>.<span class="m">192</span>;<span class="m">1</span>.<span class="m">5445</span>;<span class="m">0</span>.<span class="m">7451</span>;<span class="m">0</span>.<span class="m">0065</span>;<span class="m">0</span>.<span class="m">0245</span>;<span class="m">0</span>.<span class="m">0045</span>
+<span class="n">Method</span> <span class="m">3</span>;<span class="m">0</span>.<span class="m">0167</span>;<span class="m">0</span>.<span class="m">0003</span>;<span class="m">0</span>.<span class="m">9748</span>;<span class="m">0</span>.<span class="m">0075</span>;<span class="m">346</span>.<span class="m">793</span>;<span class="m">2</span>.<span class="m">4845</span>;<span class="m">0</span>.<span class="m">7434</span>;<span class="m">0</span>.<span class="m">0109</span>;<span class="m">0</span>.<span class="m">0264</span>;<span class="m">0</span>.<span class="m">0057</span>
+<span class="n">Method</span> <span class="m">4</span>;<span class="m">0</span>.<span class="m">0167</span>;<span class="m">0</span>.<span class="m">0002</span>;<span class="m">0</span>.<span class="m">9764</span>;<span class="m">0</span>.<span class="m">0069</span>;<span class="m">347</span>.<span class="m">2316</span>;<span class="m">2</span>.<span class="m">337</span>;<span class="m">0</span>.<span class="m">746</span>;<span class="m">0</span>.<span class="m">008</span>;<span class="m">0</span>.<span class="m">0236</span>;<span class="m">0</span>.<span class="m">0038</span>
+<span class="n">Method</span> <span class="m">5</span>;<span class="m">0</span>.<span class="m">0167</span>;<span class="m">0</span>.<span class="m">0002</span>;<span class="m">0</span>.<span class="m">973</span>;<span class="m">0</span>.<span class="m">0068</span>;<span class="m">347</span>.<span class="m">1902</span>;<span class="m">2</span>.<span class="m">1718</span>;<span class="m">0</span>.<span class="m">7452</span>;<span class="m">0</span>.<span class="m">009</span>;<span class="m">0</span>.<span class="m">0263</span>;<span class="m">0</span>.<span class="m">0041</span>
+<span class="n">Method</span> <span class="m">6</span>;<span class="m">0</span>.<span class="m">0167</span>;<span class="m">0</span>.<span class="m">0003</span>;<span class="m">0</span>.<span class="m">9726</span>;<span class="m">0</span>.<span class="m">0084</span>;<span class="m">347</span>.<span class="m">0992</span>;<span class="m">2</span>.<span class="m">6537</span>;<span class="m">0</span>.<span class="m">7436</span>;<span class="m">0</span>.<span class="m">01</span>;<span class="m">0</span>.<span class="m">0268</span>;<span class="m">0</span>.<span class="m">0056</span>
+<span class="n">Method</span> <span class="m">7</span>;<span class="m">0</span>.<span class="m">0168</span>;<span class="m">0</span>.<span class="m">0003</span>;<span class="m">0</span>.<span class="m">9736</span>;<span class="m">0</span>.<span class="m">0084</span>;<span class="m">347</span>.<span class="m">3674</span>;<span class="m">1</span>.<span class="m">4827</span>;<span class="m">0</span>.<span class="m">7451</span>;<span class="m">0</span>.<span class="m">0056</span>;<span class="m">0</span>.<span class="m">0253</span>;<span class="m">0</span>.<span class="m">0036</span>
+<span class="n">Method</span> <span class="m">8</span>;<span class="m">0</span>.<span class="m">0167</span>;<span class="m">0</span>.<span class="m">0001</span>;<span class="m">0</span>.<span class="m">9752</span>;<span class="m">0</span>.<span class="m">0096</span>;<span class="m">347</span>.<span class="m">6234</span>;<span class="m">2</span>.<span class="m">6344</span>;<span class="m">0</span>.<span class="m">7457</span>;<span class="m">0</span>.<span class="m">012</span>;<span class="m">0</span>.<span class="m">025</span>;<span class="m">0</span>.<span class="m">0067</span>
+<span class="n">Method</span> <span class="m">9</span>;<span class="m">0</span>.<span class="m">0167</span>;<span class="m">0</span>.<span class="m">0002</span>;<span class="m">0</span>.<span class="m">974</span>;<span class="m">0</span>.<span class="m">0078</span>;<span class="m">347</span>.<span class="m">8062</span>;<span class="m">1</span>.<span class="m">8226</span>;<span class="m">0</span>.<span class="m">7443</span>;<span class="m">0</span>.<span class="m">006</span>;<span class="m">0</span>.<span class="m">0254</span>;<span class="m">0</span>.<span class="m">0039</span>
+<span class="n">Method</span> <span class="m">10</span>;<span class="m">0</span>.<span class="m">0167</span>;<span class="m">0</span>.<span class="m">0002</span>;<span class="m">0</span>.<span class="m">9754</span>;<span class="m">0</span>.<span class="m">0049</span>;<span class="m">347</span>.<span class="m">6574</span>;<span class="m">2</span>.<span class="m">1976</span>;<span class="m">0</span>.<span class="m">7459</span>;<span class="m">0</span>.<span class="m">0083</span>;<span class="m">0</span>.<span class="m">0242</span>;<span class="m">0</span>.<span class="m">0032</span>
+<span class="n">Method</span> <span class="m">11</span>;<span class="m">0</span>.<span class="m">0167</span>;<span class="m">0</span>.<span class="m">0002</span>;<span class="m">0</span>.<span class="m">9732</span>;<span class="m">0</span>.<span class="m">0109</span>;<span class="m">348</span>.<span class="m">0798</span>;<span class="m">1</span>.<span class="m">3106</span>;<span class="m">0</span>.<span class="m">7461</span>;<span class="m">0</span>.<span class="m">0053</span>;<span class="m">0</span>.<span class="m">0243</span>;<span class="m">0</span>.<span class="m">004</span>
+<span class="n">Method</span> <span class="m">12</span>;<span class="m">0</span>.<span class="m">0166</span>;<span class="m">0</span>.<span class="m">0002</span>;<span class="m">0</span>.<span class="m">9696</span>;<span class="m">0</span>.<span class="m">0085</span>;<span class="m">347</span>.<span class="m">2472</span>;<span class="m">1</span>.<span class="m">6961</span>;<span class="m">0</span>.<span class="m">7441</span>;<span class="m">0</span>.<span class="m">0085</span>;<span class="m">0</span>.<span class="m">0271</span>;<span class="m">0</span>.<span class="m">0039</span>
+<span class="n">Method</span> <span class="m">13</span>;<span class="m">0</span>.<span class="m">0166</span>;<span class="m">0</span>.<span class="m">0002</span>;<span class="m">0</span>.<span class="m">97</span>;<span class="m">0</span>.<span class="m">0071</span>;<span class="m">347</span>.<span class="m">1204</span>;<span class="m">1</span>.<span class="m">9556</span>;<span class="m">0</span>.<span class="m">7441</span>;<span class="m">0</span>.<span class="m">0066</span>;<span class="m">0</span>.<span class="m">0271</span>;<span class="m">0</span>.<span class="m">0043</span>
+<span class="n">Method</span> <span class="m">14</span>;<span class="m">0</span>.<span class="m">0166</span>;<span class="m">0</span>.<span class="m">0002</span>;<span class="m">0</span>.<span class="m">971</span>;<span class="m">0</span>.<span class="m">0068</span>;<span class="m">347</span>.<span class="m">6144</span>;<span class="m">1</span>.<span class="m">7622</span>;<span class="m">0</span>.<span class="m">7462</span>;<span class="m">0</span>.<span class="m">0065</span>;<span class="m">0</span>.<span class="m">0254</span>;<span class="m">0</span>.<span class="m">0036</span>
+<span class="n">Method</span> <span class="m">15</span>;<span class="m">0</span>.<span class="m">0166</span>;<span class="m">0</span>.<span class="m">0002</span>;<span class="m">0</span>.<span class="m">9686</span>;<span class="m">0</span>.<span class="m">0077</span>;<span class="m">347</span>.<span class="m">8932</span>;<span class="m">1</span>.<span class="m">779</span>;<span class="m">0</span>.<span class="m">7444</span>;<span class="m">0</span>.<span class="m">0072</span>;<span class="m">0</span>.<span class="m">0271</span>;<span class="m">0</span>.<span class="m">0037</span></code></pre></figure>
+
+<p>El formato DIF fue diseñado a principios de la década de los 80 del siglo pasado expresamente para facilitar el intercambio de datos entre hojas de cálculo, usándose por entonces en Visicalc y Lotus 1, 2, 3 y habiendo llegado hasta Excel y FreeOffice Calc. Se trata de un formato más descriptivo y, en consecuencia, menos compacto que CSV. A continuación se muestra parte del mismo contenido anterior pero en formato DIF:
+
+<figure class="highlight"><pre><code class="language-conf" data-lang="conf"><span class="n">TABLE</span>
+<span class="m">0</span>,<span class="m">1</span>
+<span class="s2">"EXCEL"</span>
+<span class="n">VECTORS</span>
+<span class="m">0</span>,<span class="m">16</span>
+<span class="s2">""</span>
+<span class="n">TUPLES</span>
+<span class="m">0</span>,<span class="m">11</span>
+<span class="s2">""</span>
+<span class="n">DATA</span>
+<span class="m">0</span>,<span class="m">0</span>
+<span class="s2">""</span>
+-<span class="m">1</span>,<span class="m">0</span>
+<span class="n">BOT</span>
+<span class="m">1</span>,<span class="m">0</span>
+<span class="s2">""</span>
+<span class="m">1</span>,<span class="m">0</span>
+<span class="s2">"Mean"</span>
+<span class="m">1</span>,<span class="m">0</span>
+<span class="s2">"Desv"</span>
+<span class="m">1</span>,<span class="m">0</span>
+<span class="s2">"Mean"</span>
+<span class="m">1</span>,<span class="m">0</span>
+<span class="s2">"Desv"</span>
+<span class="m">1</span>,<span class="m">0</span>
+<span class="s2">"Mean"</span>
+<span class="m">1</span>,<span class="m">0</span>
+<span class="s2">"Desv"</span>
+<span class="m">1</span>,<span class="m">0</span>
+<span class="s2">"Mean"</span>
+<span class="m">1</span>,<span class="m">0</span>
+<span class="s2">"Desv"</span>
+<span class="m">1</span>,<span class="m">0</span>
+<span class="s2">"Mean"</span>
+<span class="m">1</span>,<span class="m">0</span>
+<span class="s2">"Desv"</span>
+-<span class="m">1</span>,<span class="m">0</span>
+<span class="n">BOT</span>
+<span class="m">1</span>,<span class="m">0</span>
+<span class="s2">"Method 1"</span>
+<span class="m">0</span>,<span class="m">0</span>.<span class="m">0168</span>
+<span class="n">V</span>
+<span class="m">0</span>,<span class="m">0</span>.<span class="m">0002</span>
+<span class="n">V</span>
+<span class="m">0</span>,<span class="m">0</span>.<span class="m">9764</span>
+<span class="n">V</span>
+<span class="m">0</span>,<span class="m">0</span>.<span class="m">0059</span>
+<span class="n">V</span>
+<span class="m">0</span>,<span class="m">347</span>.<span class="m">1082</span>
+<span class="n">V</span>
+<span class="m">0</span>,<span class="m">2</span>.<span class="m">3381</span>
+...</code></pre></figure>
+
+</p><p>Lo interesante es que ambos formatos pueden ser utilizados a la hora de intercambiar datos entre Excel y R, que es el objeto de esta entrada. Partamos del supuesto en el que los datos están en Excel, posiblemente en el ordenador del usuario que los ha generado, y queremos transferirlos a otra máquina en la que trabajamos en R. El primer usuario debe guardar los datos en formato CSV o DIF y enviarnos el archivo resultante, para ello debe dar los pasos siguientes:</p>
+
+<ol>
+ <li>Crear un nuevo libro Excel, en blanco, o en su defecto una nueva hoja en el libro actual.
+ </li>
+<li>Copiar en el nuevo libro/hoja los datos que desea enviar.
+ </li>
+<li>Utilizar la opción <b>Guardar</b> (o <b>Guardar como</b> si hemos creado una nueva hoja en lugar de un nuevo libro) para abrir el cuadro de diálogo del mismo nombre.
+ </li>
+<li>Desplegar la lista <b>Tipo</b> y elegir el formato deseado: CSV o DIF, tal y como se muestra en la imagen siguiente.
+ </li>
+<li>Pulsar los botones <b>Aceptar</b> y <b>Sí</b> de los dos cuadros de diálogo que aparecerán a continuación, confirmando que deseamos guardar únicamente el contenido de la hoja actual y que deseamos mantener el formato elegido a pesar de que se pierdan características del libro.
+</li>
+</ol>
+
+<image src="http://www.fcharte.com/imagenes/20130330-1.png" title="Guardamos los datos desde Excel a CSV/DIF" width="800px"></image>
+
+<p>Al guardar en cualquiera de estos dos formato Excel escribirá en el archivo de destino todo el contenido de la hoja actual, no la selección que tuviésemos hecha. Por ello es preciso el paso previo en que se crea una hoja auxiliar (o un nuevo libro) y se copia en ella la información a exportar. Esa hoja, lógicamente, puede ser eliminada al final. Si esta operación vamos a realizarla a menudo lo más cómodo es registrar una macro de Excel con todos los pasos, partiendo desde la copia al portapapeles de la selección actual e incluyendo la inserción de la nueva hoja, pegado de los datos, selección de la opción <b>Guardar como</b> y establecimiento del formato de exportación. De esta forma en adelante solo habrá que ejecutar la macro, que puede ser asignada a una cierta combinación de teclas, tras haber marcado el rango de celdillas a exportar.</p>
+
+<p>Una vez que tenemos la información en el archivo CSV/DIF llega el momento de importarla a R. Para leer un CSV tenemos a nuestra disposición múltiples funciones: <code>read.csv</code>, <code>read.csv2</code>, <code>read.delim</code> y la más genérica <code>read.table</code>. Vamos a concentrarnos en las dos primeras que son las que más se ajustan a lo que necesitamos en este momento. Ambas precisan como parámetro indispensable el nombre del archivo a leer y por defecto asumen que habrá una primera línea con los encabezados: los títulos de las columnas. La diferencia fundamental es que la primera asume que el formato sigue el estándar CSV: se usa el punto para decimales y la coma como separador de valores, mientras que la segunda está preconfigurada para el formato que suele usarse en algunos países europeos: coma para decimales y punto y coma como separador de valores. Si el formato que tenemos que leer no es ninguno de estos dos, como ocurre en nuestro caso que utiliza el punto para los decimales pero separa los valores con punto y coma, podemos usar cualquiera de las dos incluyendo los parámetros <code>dec</code> y/o <code>sep</code> para indicarlo. En la imagen siguiente puede verse cómo se ha usado <code>read.csv</code> para obtener el contenido del archivo en un data.frame.
+
+<image src="http://www.fcharte.com/imagenes/20130330-2.png" title="Importamos el archivo CSV desde R" width="800px"></image>
+
+</p><p>Para importar en R el contenido de un archivo en formato DIF recurriemos a la función <code>read.DIF</code>. Si la estructura del archivo se ajusta estrictamente al estándar, solamente habrá que facilitar el nombre del archivo y se obtendrá como resultado un data.frame con los datos. En el caso de Excel, no obstante, hay una diferencia importante: el orden en que se entregan filas y columnas está invertido, siendo necesario agregar el parámetro <code>transpose</code> dándole el valor <code>TRUE</code> (por defecto es <code>FALSE</code>) tal y como se aprecia en la siguiente imagen.</p>
+
+<image src="http://www.fcharte.com/imagenes/20130330-3.png" title="Importamos el archivo DIF desde R" width="800px"></image>
+
+<p>Supongamos ahora que el sentido de transferencia de la información se invierte: tenemos un data.frame en R con datos que necesitamos enviar a alguien que los tratará con Excel. Para ello lo primero que haremos será generar el archivo CSV, sencillamente usando la función <code>write.csv</code> con dos parámetros: el data.frame que contiene los datos y el argumento <code>file</code> indicando el nombre del archivo de destino. También podemos usar <code>write.csv2</code> para cambiar los separadores de decimales y valores, o bien incluir los parámetros <code>dec</code> y <code>sep</code> indicados anteriormente. El resultado será un archivo CSV que enviaremos al destinatario.</p>
+
+<p>Excel puede abrir directamente archivos CSV, de hecho suele ser la aplicación establecida por defecto para abrir ese tipo de archivos en sistemas Windows. El contenido del archivo se llevará a una nueva hoja en un nuevo libro, a partir de la celdilla <code>A1</code>. Sin embargo, a menos que los separadores sean los que espera Excel, puede ocurrir que lo que obtengamos sean unas líneas de texto en lugar de los datos debidamente almacenados en sus celdillas con el formato que corresponda. Además, es probable que no queramos los datos en un nuevo libro sino que nos interese agregarlos en una hoja ya existente. En estos casos reproduciremos los pasos siguientes:</p>
+
+<ol>
+ <li>Colocamos el cursor en la posición de la hoja a partir de la cual deseemos colocar los datos que van a importarse (la esquina superior izquierda del rango resultante).
+ </li>
+<li>Abrimos la pestaña <b>Datos</b> de la Cinta de opciones y hacemos clic en la opción <b>Obtener datos externos -&gt; Desde texto</b>.
+ </li>
+<li>En el cuadro de diálogo que se abre seleccionamos el archivo CSV que contiene los datos a exportar.
+ </li>
+<li>Se pone en marcha el <b>Asistente para importar texto</b>, cuyo primer paso nos permite elegir entre datos delimitados (con un separdor) o de ancho fijo. La opción marcada por defecto será la primera, por lo que hacemos clic en <b>Siguiente</b>.
+ </li>
+<li>En el segundo paso es donde tendremos que configurar el separador de valores, desmarcando el que aparece por defecto (<b>Tabulación</b> normalmente) y marcando <b>Coma</b> o <b>Punto y coma</b> según el caso. En la parte inferior de la ventana podremos apreciar cuál es el resultado que se obtendría según la configuración establecida actualmente.
+
+<image width="800px" src="http://www.fcharte.com/imagenes/20130330-4.png" title="Configuramos el separador de valores al importar en Excel"></image>
+
+ </li>
+<li>En el tercer paso del asistente podemos configurar el formato aplicado a cada una de las columnas de valores. En caso de que el separador de decimales no sea el adecuado, según la configuración que se haya establecido en Excel, usaremos el botón <b>Avanzadas</b> para abrir un pequeño cuadro de diálogo en el que podremos indicar explícitamente cuál es el separador decimal.
+</li>
+</ol>
+<image width="800px" src="http://www.fcharte.com/imagenes/20130330-5.png" title="Configuramos el separador decimal al importar en Excel"></image>
+
+<p>Una vez llegado al última paso del asistente podremos elegir el destino de los datos, por defecto será la posición actual en la hoja, y completar el proceso de importación. Ya tenemos el contenido del data.frame de R en la hoja de cálculo.
+
+</p><p>Un último apunte en relación a la importación/exportación usando archivos CSV/DIF, especialmente si se utilizan ordenadores distintos y sistemas distintos: en caso de que haya columnas con textos es importante que la codificación de caracteres empleada sea la misma al importar que al exportar. Todas las funciones R mencionadas aceptan el parámetro <code>fileEncoding</code>, con el que podemos indicar la codificación al leer o escribir. En Excel al importar datos, con el procedimiento descrito antes, el primer paso del asistente permite elegir la codificación en la lista <b>Origen del archivo</b>.</p>
 
 </article>
 
