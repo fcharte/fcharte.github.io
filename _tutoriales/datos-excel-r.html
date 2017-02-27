@@ -18,7 +18,7 @@ numbersections: true
 <p>El procedimiento a seguir para llevar datos desde Excel a R mediante el portapapeles consta de dos pasos:</p>
 <ol>
 <li>Seleccionamos en Excel los datos, incluyendo títulos, y los copiamos al portapapeles.
-<li>Introducimos en la consola de R el comando <code>rango <- read.delim("clipboard")</code>, asumiendo que deseemos guardar los datos en la variable <code>rango</code>. Esta será un data.frame, basta con escribir su nombre para obtener el contenido.
+<li>Introducimos en la consola de R el comando <code>rango &lt;- read.delim("clipboard")</code>, asumiendo que deseemos guardar los datos en la variable <code>rango</code>. Esta será un data.frame, basta con escribir su nombre para obtener el contenido.
 </ol>
 <p>Las dos imágenes siguientes muestran el procedimiento descrito.</p>
 
@@ -182,7 +182,7 @@ V
 
 <image width="800px" src="http://www.fcharte.com/imagenes/20130407-2.png" title="El libro abierto en Excel" />
 
-<p>La función complementaria a la anterior, mediante la que podemos leer desde R información almacenada en un libro Excel sin necesidad de tener instalada esta aplicación, es <code>read.xlsx</code>. El primer argumento será en este caso el nombre del archivo donde está almacenada la información, siendo obligatorio indicar un número de hoja con el parámetro <code>sheetIndex</code> o bien su nombre con el parámetro <code>sheetName</code>. Sin más parámetros la función leerá todo el contenido de la hoja indicada, generará un data.frame incluyendo títulos de columnas y lo devolverá. En caso de que nos interese leer un conjunto concreto de celdillas, no la hoja completa, recurriremos a los parámetros <code>colIndex</code> y <code>rowIndex</code> para especificar qué columnas y qué filas han de recuperarse. Estas no tienen necesariamente que ser contiguas. En el ejemplo de la imagen siguiente se recupera la primera fila y las filas 23 a 32.
+<p>La función complementaria a la anterior, mediante la que podemos leer desde R información almacenada en un libro Excel sin necesidad de tener instalada esta aplicación, es <code>read.xlsx</code>. El primer argumento será en este caso el nombre del archivo donde está almacenada la información, siendo obligatorio indicar un número de hoja con el parámetro <code>sheetIndex</code> o bien su nombre con el parámetro <code>sheetName</code>. Sin más parámetros la función leerá todo el contenido de la hoja indicada, generará un data.frame incluyendo títulos de columnas y lo devolverá. En caso de que nos interese leer un conjunto concreto de celdillas, no la hoja completa, recurriremos a los parámetros <code>colIndex</code> y <code>rowIndex</code> para especificar qué columnas y qué filas han de recuperarse. Estas no tienen necesariamente que ser contiguas. En el ejemplo de la imagen siguiente se recupera la primera fila y las filas 23 a 32.</p>
 
 <image width="800px" src="http://www.fcharte.com/imagenes/20130407-3.png" title="Recuperamos un rango de datos de una hoja Excel" />
 
