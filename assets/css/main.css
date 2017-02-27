@@ -99,3 +99,7 @@ pre {
 @media screen and (max-width: 800px) {
   body {
     font-size: 16px; } }
+.author {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  font-style: oblique; }
