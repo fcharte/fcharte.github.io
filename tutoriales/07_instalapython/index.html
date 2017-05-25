@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo instalar Python en Windows&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo instalar Python en Windows<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#características-de-python-como-lenguaje-de-programación">Características de Python como lenguaje de programación</a></li>
+<li class="toc-entry toc-h2"><a href="#instalación-de-python-en-windows">Instalación de Python en Windows</a></li>
+</ul><h2>
+<a id="características-de-python-como-lenguaje-de-programación" class="anchor" href="#caracter%C3%ADsticas-de-python-como-lenguaje-de-programaci%C3%B3n" aria-hidden="true"><span class="octicon octicon-link"></span></a>Características de Python como lenguaje de programación</h2>
+<p>Con la excepción de aquellos que tuvieron la oportunidad de cursar estudios de <i>informática</i> o <i>ciencias de la computación</i>, la mayoría de los jóvenes que apredieron a programar en la década que va de <b>1975 a 1985</b> (entre los que me cuento) lo hicieron de mano de un microordenador y, en consecuencia, del archiconocido y denostado lenguaje <a href="http://en.wikipedia.org/wiki/BASIC">BASIC (<i>Beginner's All-purpose Symbolic Instruction Code</i>)</a>. A pesar de sus carencias, los intérpretes que se usaban por entonces ni siquiera contemplaban el paradigma de <a href="http://en.wikipedia.org/wiki/Structured_programming">programación estructurada</a>, BASIC fue durante esos años, y algunos más, el lenguaje de programación más popular entre los que se iniciaban en el uso de un ordenador.</p>
+
+<p>Cabría preguntarse qué provocó que BASIC adquiriese aquella difusión y se convirtiese en el primer contacto de millones de programadores con el campo de la programación, a pesar de que muchos de ellos, con el tiempo, hayan preferido olvidarlo e, incluso, negar aquella experiencia. En mi opinión hay una respuesta clara: BASIC era el lenguaje más accesible a todos, ya que estaba incluido en la ROM de gran parte de los microordenadores (incluso el <a href="http://en.wikipedia.org/wiki/IBM_BASICA">IBM PC incluía inicialmente en ROM dicho intérprete</a> conjuntamente con una versión más avanzada en disco) o bien se incluía como parte del sistema operativo que facilitaba el fabricante, como el <a href="http://en.wikipedia.org/wiki/MBASIC">MBASIC de CP/M</a> o el <a href="http://en.wikipedia.org/wiki/GWBASIC">GW-BASIC de MS-DOS</a>.</p>
+
+<p>Otra <i>virtud</i> del BASIC de entonces era que no requería, por parte de los usuarios, ningún conocimiento previo sobre programación, algo prácticamente imprescindible para poder usar otros lenguajes. Sin saber nada, con un pequeño manual y algunos ejemplos se comenzaba a <b>escribir y ejecutar programas en pocos minutos</b>. El hecho de que BASIC fuese un <a href="http://en.wikipedia.org/wiki/Interpreter_(computing)">intérprete</a> (también existieron compiladores) era un factor determinante: no había que crear un archivo de código fuente, abrirlo con un editor, introducir el código, compilar y ejecutar, sino que bastaba con escribir las sentencias e interactivamente se obtenían las respuestas. Esa interactividad <i>enganchaba</i> al usuario que, tras algunas sesiones, aprendía a combinar múltiples sentencias (precediéndolas de un número de líneas) para crear su primer programa.</p>
+
+<p>Transcurridas varias décadas de aquel contexto, ¿qué lenguaje podríamos elegir como el <i>BASIC</i> de la actualidad? ¿Qué lenguaje podría usar alguien que, <b>sin conocimientos previos</b> más allá de los de cualquier usuario de ordenador, quisiese iniciarse en el mundo de la programación? Pienso que tendría que ser un <b>lenguaje multiplataforma</b>, de manera que el sistema operativo (e incluso el dispositivo empleado) no fuese un obstáculo; que debería ser un <b>intérprete</b> o al menos tener la posibilidad de usarlo como tal, que debería otorgar libertad al usuario a la hora de usar <a href="http://en.wikipedia.org/wiki/Programming_paradigm">el paradigma de programación</a> que prefiera y, sobre todo, que fuese <a href="http://en.wikipedia.org/wiki/Open_source">open source</a> para evitar atarse a una empresa determinada.</p>
+
+<p>Lenguajes de programación abiertos e interpretados hay multitud. Algunos de ellos, como es el caso de <a href="http://en.wikipedia.org/wiki/Javascript">JavaScript</a> o <a href="http://en.wikipedia.org/wiki/Php">PHP</a>, tienen asociadas funciones bastante específicas relacionadas con la Web (si bien pueden utilizarse fuera de esos campos). Otros, como es el caso de <a href="http://en.wikipedia.org/wiki/Ruby_(programming_language)">Ruby</a>, en la práctica fuerzan al usuario a utilizar un paradigma concreto como el de orientación a objetos. De otras opciones, como Perl, Lisp o Tcl (y muchos otros que desconozco), hay aspectos como su sintaxis o la poca adecuación a problemas de propósito general que le hacen poco deseables.</p>
+
+<p>Éste es un tema en el que llevo pensando algún tiempo, desde hace unos meses (escrito en septiembre de 2010), y en mi opinión uno de los lenguajes mejor posicionados para ocupar la posición de aquel BASIC, sino el mejor, es <a href="http://en.wikipedia.org/wiki/Python_(programming_language)">Python</a>. Algunas de las razones para ello:</p>
+
+<ul class="enumeracion">
+ <li>Se trata de un lenguaje que está disponible para multitud de sistemas operativos, entre ellos <b>Linux</b>, <b>MacOS X</b>, <b>Windows</b> o <b>Android</b>, de hecho forma parte de muchas distribuciones de Linux actuales lo que equivale, salvando las distancias, a tenerlo disponible de inmediato como el BASIC en ROM de antaño.
+ </li>
+<li>Aparte de ser interpretado, como muchas otras de las opciones antes citadas, Python <b>puede ser utilizado de forma interactiva</b> gracias a una consola sencilla.
+ </li>
+<li>Python permite emplear <b>distintos paradigmas de programación</b>, incluyendo la programación estructurada y la orientación a objetos, lo cual permite cambiar a medida que se va aprendiendo.
+ </li>
+<li>La sintaxis del lenguaje es suficientemente sencilla y clara, ofrece un sistema de tipos dinámico y gestión automática de asignación/liberación memoria.
+ </li>
+<li>A diferencia de otros lenguajes, Python cuenta con una extensa biblioteca estándar que facilita su aplicación para distintos propósitos: tratamiento científico de datos, diseño de interfaces de usuario, manipulación del sistema de archivos, comunicación por red, etc. Esto abre las puertas a su utilización en todo tipo de proyectos, no siendo únicamente un lenguaje ideal para el aprendizaje.
+</li>
+</ul>
+<p>El <a href="http://www.python.org/">sitio oficial de Python</a> es mantenido por la PSF <i>Python Software Foundation</i>, una fundación encargada de mantener el núcleo del lenguaje y hacerlo evolucionar. Desde él pueden obtenerse versiones compiladas de Python para distintos sistemas operativos, así como el código fuente. En los teléfonos con <b>Android</b> puede utilizarse Python gracias al <a href="http://code.google.com/p/android-scripting/">proyecto android-scripting</a>, un software que ofrece un editor integrado y el intérprete de Python.</p>
+
+<h2>
+<a id="instalación-de-python-en-windows" class="anchor" href="#instalaci%C3%B3n-de-python-en-windows" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instalación de Python en Windows</h2>
+El lenguaje Python está disponible para múltiples sistemas operativos, entre ellos <b>Linux</b> y <b>Windows</b>. En las últimas distribuciones de Linux y versiones de MacOS X Python ya está ahí, por lo que no es necesario instalar nada. En caso de que no sea así, basta con abrir el gestor de paquetes que corresponda y buscar <code>python</code> para encontrar rápidamente los paquetes a instalar. En el caso de <b>Ubuntu</b>, que es la distribución de Linux más conocida, Python está instalado por defecto y puede ser localizado en el <b>Centro de software Ubuntu</b> al que corresponde la imagen inferior.
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/pythonubuntu.png" title="Instalación de Python en Ubuntu"></image></p>
+
+<p>La instalación de módulos/extensiones de Python resulta, en Linux o MacOS X, igualmente fácil, ya que el gestor de paquetes normalmente ofrece la <b>versión adecuada</b> y se encarga de resolver las <b>dependencias que pudieran existir</b>, siendo posible siempre descargar el código fuente y compilar. Anecdóticamente la mayoría de <i>tutoriales</i> que se encuentran por la Web explican cómo instalar Python y sus extensiones en Linux, pero muy pocos detallan el proceso a seguir en Windows. Lógicamente se asume que un programador (puesto que va a usar Python) tendrá recursos suficientes como para arreglárselas por sí solito, pero por si acaso he decidido escribir esta breve entrada.</p>
+
+<p>Lo primero que hemos de tener en cuenta es <b>qué módulos de Python pretendemos usar</b>, ya que de esto dependerá en parte la <b>versión de lenguaje</b> que tengamos que instalar. Actualmente hay dos ramas en desarrollo del <a href="http://www.python.org/download/">núcleo de Python</a>: la 3.x y 2.x, cuyas últimas versiones son la <b>3.1</b> y <b>2.7</b>. La rama 3.x es, lógicamente, el futuro de Python, pero cuenta con algunos cambios que hacen necesario adecuar el código pensado para versiones previos. Ésta es la razón de muchos módulos aún no estén disponibles para usar con Python 3.x. En la rama 2.x la versión más alta es la 2.7, pero también hay una <a href="http://www.python.org/download/releases/2.6.6/">rama 2.6.x</a> que sigue manteniéndose resolviendo los fallos que se detectan. La última versión de dicha rama, la <b>2.6.6</b>, se lanzó hace ahora un mes y es importante, ya que muchos módulos populares funcionan sobre Python 2.6.x, pero no con Python 2.7.x ni Python 3.x.</p>
+
+<p>Es importante, en consecuencia, hacer una <b>revisión de los módulos</b> que vamos a necesitar y <b>la dependencia que tienen</b> respecto a la versión de Python que debe tenerse instalada. Asumiendo que vayamos a usar Python para realizar <b>tareas de análisis de datos</b>, como es mi caso, nos resultarán imprescindibles al menos los tres siguientes módulos:</p>
+
+<ul class="enumeracion">
+ <li>
+<a href="http://sourceforge.net/projects/numpy/files/">NumPy</a>: Facilita el trabajo con <b>matrices</b> de cualquier dimensión y ofrece funciones de <b>álgebra lineal</b> y generación de <b>números aleatorios</b>. La última versión disponible es la <b>1.5.0</b> liberada el pasado 31 de agosto.
+ </li>
+<li>
+<a href="http://sourceforge.net/projects/scipy/">SciPy</a>: Este módulo permite a Python acercarse a las capacidades de <b>MatLab</b>, al ofrecer funciones para el análisis de imágenes y señales, de integración numérica, cálculo de transformadas de Fourier, elaboración de estadísticas, etc. La última versión es la <b>0.8</b> liberada el pasado 28 de julio.
+ </li>
+<li>
+<a href="http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.0/">matplotlib</a>: Se trata de un módulo que ofrece la posibilidad de representar gráficamente conjuntos de datos, generando una visualización en pantalla o bien almacenando el gráfico en diversos formatos (PNG, PDF, EPS, etc.). La última versión disponible es la <b>1.0.0</b>.
+</li>
+</ul>
+
+<p>Se da la circunstancia de que a día de hoy, 27 de septiembre de 2010, <b>ninguno de estos tres módulos se ha actualizado</b> para su uso con Python 3.x ni 2.7.x, sino que esperan encontrar en el sistema alguna versión de la rama 2.6. Podríamos descargar el <b>código fuente y compilarlo</b> nosotros mismos, pero seguramente nos resultará difícil corregir los problemas que pudieran surgir debidos a los cambios que ha experimentado el lenguaje, especialmente en el caso de la versión 3.1, dado que no conocemos el código a fondo. Por ello lo recomendable es <b>instalar Python 2.6.6</b> y esperar a que esos módulos se actualicen para después cambiar a la versión 3.1. Dicho cambio no representará un gran obstáculo, ya que existe una <a href="http://docs.python.org/library/2to3.html">herramienta que se encarga de realizar las conversiones necesarias en el código fuente</a>.
+
+</p><p>Partiendo de estas premisas (que recuerda son válidas en esta fecha, pero cambiarán en el futuro), los pasos a seguir para instalar todos los elementos y comprobar su funcionamiento serían los siguientes:</p>
+
+<ul class="enumeracion">
+  <li>Descargamos el <a href="http://www.python.org/ftp/python/2.6.6/python-2.6.6.msi">instalador de Python 2.6.6</a> para Windows y autorizamos su ejecución. Al finalizar ya tenemos Python instalado.
+  </li>
+<li>Para comprobar que Python funciona correctamente buscamos en la carpeta que se ha agregado a <b>Todos los programas</b> el elemento <b>IDLE</b> y lo elegimos, accediendo a una ventana como la que aparece en la imagen inferior. Nos encontramos con el intérprete de Python. Introducimos la sentencia <code>import datetime</code> y pulsamos <b>Intro</b>, escribimos <code>print "Hola desde Python", datetime.date.today(), "Torre de Babel"</code> y al pulsar de nuevo <b>Intro</b> debemos obtener la respuesta que aparece en azul en la imagen inferior.
+</li>
+</ul>
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/idle.png" title="Probamos la instalación de Python desde el entorno IDLE"></image></p>
+<ul class="enumeracion">
+  <li>A continuación descargamos los instaladores de <a href="http://sourceforge.net/projects/numpy/files/">NumPy</a>, <a href="http://sourceforge.net/projects/scipy/">SciPy</a> y <a href="http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.0/">matplotlib</a> y los ejecutamos uno tras otro, aceptando en todos los casos las opciones por defecto.
+  </li>
+<li>Para probar que todos los módulos están ahí y operan correctamente abrimos de nuevo <b>IDLE</b> (si lo habíamos cerrado), seleccionamos <b>File -&gt; New Window</b> para abrir una ventana de edición y escribimos el <i>script</i> que puede verse a continuación:
+</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">interpolate</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.3</span><span class="p">)</span>  <span class="c"># Secuencia de 0 a 10 en pasos de 0.3</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>            <span class="c"># y[i] = sin(x[i])</span>
+<span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">'o'</span><span class="p">)</span>      <span class="c"># Dibujar cada dato como un punto sólido</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="c"># Obtengo función de interpolación x/y</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>    <span class="c"># Secuencia de 0 a 10 en pasos de 0.1</span>
+<span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s">'-'</span><span class="p">)</span>     <span class="c"># Dibujar d y el valor interpolado como línea</span>
+
+<span class="n">pyplot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>       <span class="c"># Mostrar la gráfica</span></code></pre></figure>
+
+<p>Finalmente, basta con pulsar <b>F5</b> para ejecutar el guión (habrá que guardarlo antes) y comprobar el resultado. Si aparece una ventana como la inferior, mostrando una gráfica de la función seno, es que todo ha ido bien.</p>
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/graficaseno.png" title="Un sencillo script que usa funciones de NumPy, SciPy y matplotlib"></image></p>
+<p>Este guión usa la función <code>arange()</code> del módulo <code>numpy</code>, una función de interpolación del módulo <code>scipy</code> y el objeto <code>pyplot</code> de <code>matplotlib</code> para representar los datos, por lo que en pocas líneas comprobamos la correcta instalación de todos ellos. A partir de este momento ya tenemos todo lo necesario para usar Python en tareas de análisis de datos.</p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo acelerar el inicio de Windows 7 (o todo lo contrario)&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo acelerar el inicio de Windows 7 (o todo lo contrario)<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+</ul><p>Con la disponibilidad de <b>Windows 7</b> a pocos días vista, e infinidad de usuarios utilizándolo ya desde hace unas semanas (se puede obtener a través de MSDNAA, MSDN o TechNet, entre otros medios), comienzan a surgir por la red <i>trucos</i> que supuestamente <i>mejoran</i> el rendimiento de este sistema. Algunas de esas recomendaciones no son exclusivas de Windows 7 y proceden de versiones previas, como es el caso de la que últimamente se ha publicado por diferentes medios digitales e incluso escritos: acelerar el inicio de Windows forzándolo a emplear todos los procesadores (núcleos) disponibles. Para ello se reproducen los siguientes pasos:</p>
+
+<ul>
+  <li>Se abre el cuadro de diálogo <code>Configuración del sistema</code>, por ejemplo pulsando <b>Win+R</b>, escribiendo <code>msconfig</code> y pulsando <b>Intro</b>
+</li>
+  <li>En la página <code>Arranque</code> de dicha ventana se hace clic en el botón <code>Opciones avanzadas</code>
+</li>
+  <li>Se abre la ventana <code>Opciones avanzadas de arranque</code>, en el que hay que marcar la opción <code>Número de procesadores</code>
+</li>
+  <li>Finalmente se despliega la lista y se elige el número máximo de procesadores, aceptando los cambios</li>
+</ul>
+
+<p><img style="margin: 10px; border: 1px solid black;" src="http://www.fcharte.com/imagenes/procesadores.gif"></p>
+
+<p>Según se afirma en este truco, de esta manera el sistema utilizará todos los procesadores durante el proceso de arranque y, en consecuencia, se tardará menos. Por la misma regla de tres habría que marcar la opción <code>Cantidad máxima de memoria</code> e indicar la cantidad de memoria que debe utilizarse, la máxima posible para que también se tarde menos en la carga del sistema.</p>
+
+<p>Lo cierto es que estas opciones avanzadas de inicio del sistema se encuentran ahí con otros fines. Por defecto Windows <b>utiliza todos los procesadores</b> y toda la memoria disponibles en el ordenador durante el arranque del sistema, sirviendo estas opciones para <b>limitar</b> ese uso, es decir, reducir el número de procesadores empleados y también la cantidad de memoria. ¿Qué sentido tiene establecer esos límites? En un contexto de uso general ninguno, pero Windows también es utilizado por desarrolladores cuyo trabajo es escribir <b>controladores de dispositivos</b>, módulos ejecutables que se cargan durante el inicio del sistema y que es necesario depurar como toda aplicación. Es en ese contexto, durante la depuración de los controladores, donde tiene sentido limitar el número de procesadores a usar, normalmente uno, porque de esta manera se simplifica considerablemente el trabajo. Es mucho más sencillo seguir un único hilo de ejecución que varios en paralelo.</p>
+
+<p>En cualquier caso, y como repetía incansablemente aquel anunciante de detergentes de la década de los noventa: <i>busque, compare y si encuentra algo mejor, cómprelo</i>, que en este caso podría reintepretarse como: calcula el tiempo de inicio de tu sistema, realiza los cambios indicados por este truco y vuelve a medirlo. Lo normal es que no haya diferencias significativas. Lo que sí puede mejorar el tiempo de inicio de Windows 7 es la reconfiguración de servicios para que no se ejecuten durante el inicio del sistema (salvo los indispensables), sino cuando vayan a ser necesitados por una aplicación o el propio sistema. Es una de las nuevas características de Windows 7 y aporta su granito de arena para que esta versión sea más rápida que Windows Vista.</p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>

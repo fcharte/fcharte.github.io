@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo paralelizar bucles en Visual Basic con Parallel.ForEach&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo paralelizar bucles en Visual Basic con Parallel.ForEach<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+</ul><p>Los microprocesadores que equipan los ordenadores personales, incluso los portátiles, cada vez incorporan un mayor número de núcleos y, además, suelen contar con tecnologías adicionales (como el <i>Hyper-Threading</i>) que hacen posible la ejecución de más de un hilo por parte del mismo núcleo. Actualmente no es raro que un equipo doméstico sea capaz de ejecutar 8 <i>threads</i> en paralelo, número que se irá incrementando (Intel ya está fabricando muestras de microprocesadores con 50 núcleos).`&gt;
+
+</p><p>Esta evolución del hardware afecta de lleno a los programadores que, para aprovechar toda la potencia que tienen a su alcance, no tienen más remedio que paralelizar su código, viéndoselas con la gestión de hilos, los problemas de sincronización, uso de semáforos, monitores, barreras, etc. No obstante, también hay alternativas sencillas aplicables a casos concretos, como el paralelismo para bucles que ofrece Visual Basic 2010 (en realidad la plataforma .NET 4.0).</p>
+
+<p>Para poder efectuar una comparativa simple, supongamos que recibimos un vector de datos que han de ser sometidos a un proceso de cierta complejidad <b>de manera independiente</b>, es decir, el tratamiento de un elemento del vector no afectará al resto. Ese proceso complejo podría ser, por ejemplo, calcular su factorial un millón de veces. Es lo que hace el código siguiente: 
+
+<figure class="highlight"><pre><code class="language-vb" data-lang="vb">        <span class="c1">' Vector con los valores de partida</span>
+        <span class="k">Dim</span> <span class="nv">valores</span> <span class="o">=</span> <span class="p">{</span><span class="mi">13</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">12</span><span class="p">}</span>
+
+        <span class="c1">' Una función que se encarga de calcular el factorial</span>
+        <span class="c1">' 1 millón de veces para consumir tiempo</span>
+        <span class="k">Dim</span> <span class="nv">Factorial</span> <span class="o">=</span> <span class="k">Function</span><span class="err">(</span><span class="nf">valor</span> <span class="ow">As</span> <span class="kt">Integer</span><span class="p">)</span> <span class="ow">As</span> <span class="kt">ULong</span>
+                            <span class="k">Dim</span> <span class="nv">resultado</span> <span class="ow">As</span> <span class="kt">ULong</span>
+                            <span class="k">For</span> <span class="n">indice</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">To</span> <span class="mi">1000000</span>
+                                <span class="n">resultado</span> <span class="o">=</span> <span class="mi">1</span>
+                                <span class="k">Dim</span> <span class="nv">n</span> <span class="o">=</span> <span class="n">valor</span>
+                                <span class="k">While</span> <span class="n">n</span>
+                                    <span class="n">resultado</span> <span class="o">*=</span> <span class="n">n</span>
+                                    <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+                                <span class="k">End</span> <span class="k">While</span>
+                            <span class="k">Next</span>
+                            <span class="k">Return</span> <span class="n">resultado</span>
+                        <span class="k">End</span> <span class="k">Function</span>
+
+        <span class="c1">' Obtener y mostrar el factorial para cada valor del vector</span>
+        <span class="k">For</span> <span class="k">Each</span> <span class="n">Valor</span> <span class="ow">In</span> <span class="n">valores</span>
+            <span class="nb">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"El factorial de {0} es {1}"</span><span class="p">,</span>
+                                <span class="n">Valor</span><span class="p">,</span> <span class="n">Factorial</span><span class="p">(</span><span class="n">Valor</span><span class="p">))</span>
+        <span class="k">Next</span></code></pre></figure>
+
+</p><p>El código que se encarga de calcular el factorial se ha introducido como función <i>lambda</i> asignada a una variable, aunque se podría tanto haber codificado como una función corriente como haberse introducido directamente en el propio bucle, no es algo que afecte al comportamiento del programa. La ejecución de éste provocará que los resultados vayan apareciendo lentamente por la consola y, como se aprecia en la imagen inferior, en el mismo orden en que aparecen los valores en el vector original, ya que se está procesando de manera secuencial.</p>
+
+<img src="http://www.fcharte.com/imagenes/ejec1.gif" alt="Resultado de la ejecución del programa">
+
+<p>Si durante la ejecución del programa examinamos la actividad del microprocesador (puede servir el propio Administrador de tareas de Windows) observaremos que solamente uno de los núcleos presenta una actividad significativa, como en la imagen inferior. El uso de CPU por parte del programa dependerá del número de núcleos que se tengan, no pasando del 25% para cuatro núcleos, del 13% para ocho y así sucesivamente, porque no usa más que un hilo durante toda su vida.</p>
+
+<img src="http://www.fcharte.com/imagenes/usocpu1.gif" alt="Uso de CPU por parte del programa">
+
+<p>Dado que en este caso concreto la evaluación de un elemento del vector no influye en los demás, nada nos impediría realizar todos los cálculos en paralelo creando un hilo por cada elemento del vector. Pero en luga de crear explícitamente el hilo, facilitando los parámetros correspondientes, y sincronizar el programa principal con todos los hilos para mostrar el resultado una vez terminen, podemos recurrir a la clase <code>System.Threading.Taks.Parallel</code> introducida en la versión 4.0 de la plataforma .NET. Ésta nos permite recodificar el bucle que hay al final del programa de la siguiente forma:
+<figure class="highlight"><pre><code class="language-vb" data-lang="vb">        <span class="n">Parallel</span><span class="p">.</span><span class="n">ForEach</span><span class="p">(</span><span class="n">valores</span><span class="p">,</span>
+                <span class="k">Sub</span><span class="err">(</span><span class="nf">valor</span><span class="p">)</span>
+                    <span class="nb">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"El factorial de {0} es {1}"</span><span class="p">,</span>
+                                    <span class="n">valor</span><span class="p">,</span> <span class="n">Factorial</span><span class="p">(</span><span class="n">valor</span><span class="p">))</span>
+                <span class="k">End</span> <span class="k">Sub</span><span class="p">)</span></code></pre></figure>
+
+</p><p>Sigue siendo un bucle de tipo <code>For Each</code>, que recorre cada uno de los elementos del vector <code>valores</code>, pero ahora no lo hace de manera secuencial, sino ejecutando todos los ciclos en paralelo (siempre que haya núcleos suficientes, claro está). Lo primero que notaremos es que el consumo de CPU por parte de la aplicación ahora es mucho más agresivo, pudiendo llegar fácilmente al 100%. Esto se refleja en la actividad de los núcleos, como puede verse en la imagen siguiente:</p>
+
+<img src="http://www.fcharte.com/imagenes/usocpu2.gif" alt="Uso de CPU por parte del programa">
+
+<p>Otra diferencia, aparte de que el programa tardará mucho menos en finalizar la ejecución y ofrecer los resultados, es que éstos no aparecerán necesariamente en el orden en que se encontraban los valores en el vector de origen. De hecho el orden variará de forma clara, como en la imagen inferior, ya que el cálculo para los números más pequeños concluirá antes que para los grandes.</p>
+
+<img src="http://www.fcharte.com/imagenes/ejec2.gif" alt="Resultado de la ejecución del programa">
+
+<p>También existe un método <code>Parallel.For</code> que funciona de manera análoga a un bucle <code>For</code>clásico, pero ejecutándose en paralelo. Lo único necesario para poder usar estas construcciones es agregar la cláusula <code>Imports System.Threading.Tasks</code> al inicio del módulo y, lógicamente, compilar el código para la versión 4.0 de la plataforma .NET.</p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>

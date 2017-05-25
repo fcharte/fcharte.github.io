@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo hacer GPGPU con CUDA&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo hacer GPGPU con CUDA<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#programación-de-gpu">Programación de GPU</a></li>
+<li class="toc-entry toc-h2"><a href="#qué-es-cuda">¿Qué es CUDA?</a></li>
+<li class="toc-entry toc-h2"><a href="#componentes-de-cuda">Componentes de CUDA</a></li>
+<li class="toc-entry toc-h2"><a href="#estructura-de-una-aplicación-cuda">Estructura de una aplicación CUDA</a></li>
+</ul><p>A medida que se han ido incorporando en la tarjeta de vídeo funciones más avanzadas, influidas por la necesidad de satisfacer requisitos más exigentes en la generación de gráficos y también las nuevas API de programación (OpenGL y DirectX), ha surgido un <i>nuevo</i> concepto: el de <b>GPU</b> (<i>Graphics Processor Unit</i>), como analogía de las <b>CPU</b> (<i>Central Processing Unit</i>) o microprocesadores clásicos. En realidad es algo que lleva casi dos décadas evolucionando, aunque para los programadores ajenos al campo de los vídeojuegos pueda considerarse algo nuevo.</p>
+
+<p>	Si bien la denominación GPU hace referencia a una arquitectura especializada, dirigida específicamente al tratamiento gráfico, cada vez es mayor el número de aplicaciones que aprovechan la potencia de estos circuitos integrados para otro tipo de propósitos. Es aquí, precisamente, donde cobran protagonismo soluciones como <a href="http://es.wikipedia.org/wiki/CG">Cg</a>, <a href="http://www.amd.com/la/products/technologies/stream-technology/Pages/stream-technology.aspx">ATI Stream</a>, <a href="http://www.khronos.org/opencl/">OpenCL</a> y <a href="http://www.nvidia.es/object/cuda_home_new_es.html">CUDA</a>, infraestructuras compuestas de bibliotecas, compiladores y lenguajes que dan a luz a una nueva filosofía de desarrollo: <b>GPGPU</b> (<i>General Purpose computing on Graphics Processing Units</i>), la computación de propósito general usando GPUs en lugar de CPUs.</p>
+
+<p>	¿Cuál es la razón de que los programadores se interesen en desarrollar aplicaciones que se ejecuten en una GPU? La respuesta surge por sí sola simplemente aportando algunos datos: las actuales CPU cuentan con cuatro, seis u ocho núcleos y son capaces de ejecutar hasta doce hilos de manera simultánea (dos por núcleo en algunos casos), las GPU más avanzadas disponen de hasta 1024 núcleos de procesamiento y tienen capacidad para ejecutar hasta 128 hilos por procesador, lo que ofrece un total de hilos muy superior. Sistemas compuestos únicamente de ocho tarjetas de vídeo de este tipo están superando, en cuanto a rendimiento se refiere, a clústeres de ordenadores como Blue Gene, formados por 512 nodos con CPUs clásicas.</p>
+
+<h2>
+<a id="programación-de-gpu" class="anchor" href="#programaci%C3%B3n-de-gpu" aria-hidden="true"><span class="octicon octicon-link"></span></a>Programación de GPU</h2>
+<p>	Para aprovechar la potencia de las GPU es necesario contar con herramientas de desarrollo adecuadas, capaces de explotar el alto nivel de paralelismo que ofrecen estos dispositivos. Hasta no hace mucho dichas herramientas eran bastante primitivas, ya que su objetivo era facilitar exclusivamente la programación de <i>shaders</i> que (véase el <i>Curso de shaders</i> en el margen derecho) son pequeños bloques de código que aplican un cierto procesamiento a los vértices de la geometría de una escena y los fragmentos resultantes de la rasterización. Ese código se ejecuta paralelamente en cada núcleo, lo cual permite aplicar un cierto algoritmo masivamente a miles o millones de vértices y píxeles.</p>
+
+<p>	Estos bloques de código tienen una longitud generalmente muy limitada y se programan en una suerte de lenguaje ensamblador a medida, por lo que difícilmente pueden aplicarse más que a la función para la que están pensados desde un principio. Existen diferentes versiones, denominadas <i>Shader Models</i>, que han ido evolucionando en paralelo a Microsoft DirectX y OpenGL y que tanto ATI como nVidia han ido implementando en su hardware. Al desarrollar una aplicación gráfica se utiliza una API, como las citadas DirectX u OpenGL, para escribir el código que se ejecutará en la CPU, usando el ensamblador del <i>shader model</i> correspondiente para escribir el código a ejecutar en la GPU. Tanto el tipo de operaciones que puede llevar a cabo ese código como la memoria a la que tiene acceso están limitados.</p>
+
+<p>	El desarrollo de Cg por parte de nVidia, hace prácticamente una década, fue un primer avance al facilitar la codificación de funciones a ejecutar en la GPU. En lugar de escribir el código en ensamblador se usa un lenguaje de más alto nivel, similar al C. Una función como la mostrada en el siguiente fragmento se ejecutaría una vez para cada vértice, pero no de manera secuencial sino paralelamente.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="nf">trataVertice</span><span class="p">(</span>
+  <span class="n">in</span> <span class="n">float4</span> <span class="n">posicion</span> <span class="o">:</span> <span class="n">POSITION</span><span class="p">,</span>
+  <span class="n">out</span> <span class="n">float4</span> <span class="n">posicionD</span> <span class="o">:</span> <span class="n">POSITION</span><span class="p">,</span>
+  <span class="n">out</span> <span class="n">float4</span> <span class="n">colorD</span> <span class="o">:</span> <span class="n">COLOR0</span><span class="p">,</span>
+  <span class="k">const</span> <span class="n">uniform</span> <span class="n">float4x4</span> <span class="n">ModelViewMatrix</span><span class="p">,</span>
+  <span class="k">const</span> <span class="n">uniform</span> <span class="n">float4</span> <span class="n">color</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">posicionD</span> <span class="o">=</span> <span class="n">mul</span><span class="p">(</span><span class="n">posicion</span><span class="p">,</span> <span class="n">ModelViewMatrix</span><span class="p">);</span>
+  <span class="n">colorD</span> <span class="o">=</span> <span class="n">color</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>	A diferencia de CUDA, no obstante, Cg se dirige específicamente a la generación de gráficos. 	A medida que el número de núcleos de proceso en una GPU se fue incrementando, y ganando en rendimiento al poder operar con datos en coma flotante, se hizo cada vez más patente la necesidad de aprovechar esa potencia bruta de cálculo para propósitos alternativos, aparte de la evidente aplicación en videojuegos de última generación. Solamente se precisaban herramientas de trabajo de corte más general, con un espectro de aplicación más amplio.</p>
+
+<h2>
+<a id="qué-es-cuda" class="anchor" href="#qu%C3%A9-es-cuda" aria-hidden="true"><span class="octicon octicon-link"></span></a>¿Qué es CUDA?</h2>
+<p>La mayoría de los lenguajes de programación no cuentan con estructuras nativas que faciliten la paralelización de procesos, entendiendo como tales partes de un algoritmo que pueden ser ejecutados de manera simultánea y no como lo que se entiende por procesos en el contexto de un sistema operativo.</p>
+
+	<p>Es cierto que existen API y bibliotecas de funciones que facilitan, hasta cierto punto, la programación paralela, pero prácticamente ninguna de ellas está pensada para ejecutar el código explotando una GPU. En la mayoría de los casos lo único que hacen es iniciar varios hilos de ejecución dejando en manos del sistema operativo el reparto de tiempo de proceso entre las unidades con que cuente la CPU. Para trasladar la aplicación a otro tipo de procesador, así como para ampliar o reducir el número de hilos en ejecución, es corriente tener que alterar, o incluso rescribir por completo, el código fuente.</p>
+
+<p>	La solución que ofrece <b>CUDA</b> (<i>Compute Unified Device Architecture</i>) es mucho más flexible y potente y, además, se basa en estándares existentes. Los programas se escriben en lenguaje C, no en el ensamblador de un cierto procesador o en un lenguaje especializado como es el caso de Cg. Esto facilita el acceso a un grupo mucho mayor de programadores.</p>
+
+<p>	Al desarrollar una aplicación CUDA el programador escribe su código como si <b>fuese a ejecutarse en un único hilo</b>, sin preocuparse de crear y lanzar <i>threads</i>, controlar la sincronización, etc. Ese código será ejecutado posteriormente en un número arbitrario de hilos, asignado cada uno de ellos a un núcleo de proceso, de manera totalmente transparente para el programador. Éste no tendrá que modificar el código fuente, ni siquiera recompilarlo, dependiendo de la arquitectura del hardware donde vaya a ejecutarse.</p>
+
+<p>	Incluso existe la posibilidad de recompilar el código fuente, dirigido originalmente a ejecutarse sobre una GPU, para que funcione sobre una CPU clásica, asociando los hilos CUDA a hilos de CPU en lugar de a núcleos de ejecución de GPU. Obviamente el rendimiento será muy inferior ya que el paralelismo al nivel de CPU no es, actualmente, tan masivo como en una GPU.</p>
+
+<h2>
+<a id="componentes-de-cuda" class="anchor" href="#componentes-de-cuda" aria-hidden="true"><span class="octicon octicon-link"></span></a>Componentes de CUDA</h2>
+<p>	Los objetivos planteados en el desarrollo de CUDA han dado como fruto un conjunto de tres componentes, disponibles gratuitamente en <a href="http://developer.nvidia.com/cuda-downloads">Developer Zone de nVidia</a> para versiones de 32 y 64 bits de Windows XP, Windows Vista, Windows 7, múltiples distribuciones de GNU/Linux y Mac OS X.</p>
+ 
+	<p>El controlador CUDA es el componente básico, ya que es el encargado de facilitar la ejecución de los programas y la comunicación entre CPU y GPU. Este controlador se aplica a prácticamente toda la gama GeForce 8XX, 9XX y GTX 2XX y posteriores, así como a la línea de adaptadores Quadro y los procesadores Tesla. En cualquier caso se requiere una cantidad mínima de 256 MB de memoria gráfica para poder funcionar, por lo que en adaptadores con menos memoria no es posible aprovechar CUDA.</p>
+
+<p>	Instalado el controlador, el siguiente componente fundamental para el desarrollo de aplicaciones es el <i>toolkit</i> CUDA, compuesto a su vez de un compilador de C llamado <code>nvcc</code>, un depurador específico para GPU, un perfilador de código y una serie de bibliotecas con funciones de utilidad ya predefinidas, entre ellas la implementación de la <b>Transformada rápida de Fourier</b> (FFT) y unas subrutinas básicas de <b>álgebra lineal</b> (BLAS). También en la misma web se encuentran múltiples documentos de introducción a la programación de GPUs con CUDA, manuales de referencia, etc.</p>
+
+	<p>El tercer componente de interés es el <b>CUDA Developer SDK</b>, un paquete formado básicamente por código de ejemplo y documentación. Se ofrece más de medio centenar de proyectos en los que se muestra cómo integrar CUDA con DirectX y OpenGL, cómo paralelizar la ejecución de un algoritmo y cómo utilizar las bibliotecas FFT y BLAS para realizar diversos trabajos: generación de un histograma, aplicación de convolución a una señal, operaciones con matrices, etc.</p>
+
+<p>	Conjuntamente estos tres componentes ponen al alcance del programador todo lo que necesita para aprender a programar una GPU con CUDA y comenzar a desarrollar sus propias soluciones, apoyándose en código probado como el de los ejemplos facilitados o el de las bibliotecas FFT y BLAS.</p>
+
+<h2>
+<a id="estructura-de-una-aplicación-cuda" class="anchor" href="#estructura-de-una-aplicaci%C3%B3n-cuda" aria-hidden="true"><span class="octicon octicon-link"></span></a>Estructura de una aplicación CUDA</h2>
+<p>El código de un programa escrito para CUDA siempre estará compuesto de dos partes: una cuya ejecución quedará en manos de la CPU y otra que se ejecutará en la GPU. Al código de la primera parte se le denomina código para el <i>host</i> y al de la segunda código para el dispositivo.</p>
+
+<p>	Al ser procesado por el compilador <code>nvcc</code>, el programa generará por una parte código objeto para la GPU y por otra código fuente u objeto para la CPU. El código objeto específico para la GPU se denomina <i>cubin</i>. El código fuente para la CPU será procesado por un compilador de C/C++ corriente, enlazando el código <i>cubin</i> como si de un recurso se tratase.</p>
+
+<p>	La finalidad del código <i>host</i> es inicializar la aplicación, transfiriendo el código <i>cubin</i> a la GPU, reservando la memoria necesaria en el dispositivo y llevando a la GPU los datos de partida con los que se va a trabajar. Esta parte del código puede escribirse en C o en C++, lo cual permite aprovechar el paradigma de orientación a objetos si se quiere.</p>
+
+<p>	El código a ejecutar en el dispositivo debe seguir estrictamente la sintaxis de C, contemplándose algunas extensiones de C++. Normalmente se estructurará en funciones llamadas <i>kernels</i>, cuyas sentencias se ejecutarán en paralelo según la configuración hardware del dispositivo final en el que se ponga en funcionamiento la aplicación.</p>
+
+<p>	Lo que hace el entorno de ejecución de CUDA, a grandes rasgos, es aprovechar el conocido como paralelismo de datos o SIMD (<i>Simple Instruction Multiple Data</i>), consistente en dividir la información de entrada, por ejemplo una gran matriz de valores, en tantos bloques como núcleos de procesamiento existan en la GPU. Cada núcleo ejecuta el mismo código, pero recibe unos parámetros distintivos que le permiten saber la parte de los datos sobre los que ha de trabajar.</p>
+
+<p style="text-align:center">
+  <image src="http://www.fcharte.com/imagenes/cuda2.gif" title="Las aplicaciones CUDA podrán escribirse en el futuro en múltiples lenguajes"></image></p>
+
+<p>El listado siguiente corresponde a una función <i>kernel</i> muy sencilla, cuyo objetivo es hallar el producto escalar de una matriz por una constante. La función solamente opera sobre un elemento de la matriz, el que le indica la variable <code>threadIdx.x</code> que identifica el hilo en que está ejecutándose el código. Esta función se ejecutaría paralelamente en todos los núcleos de la GPU, por lo que en un ciclo se obtendría el producto de una gran porción de la matriz o incluso de ésta completa, dependiendo de su tamaño y el número de núcleos disponibles.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">__global__</span> <span class="kt">void</span> <span class="nf">ProdEscalar</span><span class="p">(</span>
+    <span class="kt">float</span><span class="o">*</span> <span class="n">M1</span><span class="p">,</span> 
+    <span class="kt">float</span><span class="o">*</span> <span class="n">M2</span><span class="p">,</span> 
+    <span class="kt">float</span> <span class="n">Constante</span><span class="p">)</span>
+<span class="p">{</span>
+   <span class="c1">// Se obtiene el número de thread
+</span>   <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+   <span class="c1">// y se procesa el dato que corresponde
+</span>   <span class="n">M2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">M1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">Constante</span><span class="p">;</span>
+<span class="p">}</span><span class="o">&lt;/</span><span class="n">textarea</span><span class="o">&gt;</span></code></pre></figure>
+
+<p>	En una CPU moderna, como los <b>Athlon Phenom</b> o <b>Core i7</b>, es posible dividir los datos de entrada en cuatro o seis partes pero sin ninguna garantía de que se procesarán en paralelo, salvo que se programe explícitamente el reparto trabajando a bajo nivel. En una GPU y usando CUDA, por el contrario, esos datos se dividirán en bloques mucho más pequeños, al existir 240, 512, 1024 o más núcleos de procesamiento, garantizándose la ejecución en paralelo si necesidad de recurrir a la programación en ensamblador.</p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>

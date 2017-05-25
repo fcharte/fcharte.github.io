@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sobre la imprecisión y la lógica difusa&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Sobre la imprecisión y la lógica difusa<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#sobre-la-terminología">Sobre la terminología</a></li>
+<li class="toc-entry toc-h2"><a href="#el-sentido-común-humano">El sentido común humano</a></li>
+<li class="toc-entry toc-h2"><a href="#la-incertidumbre-ante-los-sucesos">La incertidumbre ante los sucesos</a></li>
+<li class="toc-entry toc-h2"><a href="#la-necesidad-de-la-imprecisión">La necesidad de la imprecisión</a></li>
+<li class="toc-entry toc-h2"><a href="#cómo-trasladar-a-un-ordenador-la-lógica-humana">Cómo trasladar a un ordenador la lógica humana</a></li>
+<li class="toc-entry toc-h2"><a href="#teorías-sobre-la-imprecisión">Teorías sobre la imprecisión</a></li>
+<li class="toc-entry toc-h2"><a href="#la-propuesta-de-zadeh">La propuesta de Zadeh</a></li>
+<li class="toc-entry toc-h2"><a href="#conclusiones">Conclusiones</a></li>
+<li class="toc-entry toc-h2"><a href="#si-quieres-saber-más">Si quieres saber más</a></li>
+</ul><p>Durante nuestra actividad cotidiana, a lo largo de la vida pero también en lapsos de tiempo reducido como puede ser un día o incluso pocos segundos, tomamos infinidad de decisiones que exigen la <b>evaluación de situaciones de diversa complejidad</b>. Aunque de manera inconsciente, no nos paramos a pensar en cómo lo hacemos, esa evaluación implica la <b>valoración de múltiples variables</b>, cuyo estado (valor) en conjunto nos lleva a inclinarnos por una acción u otra.</p>
+
+<p>En la mayoría de las ocasiones, por no decir siempre, es más importante el hecho de que <b>la decisión se tome a tiempo</b>: lo antes posible, que de manera lo más exacta posible. Si la ejecución de una acción se demora en exceso es posible que cuando se tome ya no resulte útil, por tardía. Un claro ejemplo lo encontramos al pensar en cómo frenábamos nuestro automóvil al detectar la presencia de un peatón: es obvio que lo importante es frenar a tiempo, más que de manera absolutamente precisa, si no queremos que haya un siniestro. Otro ejemplo similar es el del <a href="http://www.youtube.com/watch?v=CdIZmr8ZdRE">péndulo invertido (vídeo)</a>.</p>
+
+<p>Pienso que ese requerimiento de actuar rápido, que resultaba imprescindible para la supervivencia hace miles de años y que hemos ido desarrollando durante nuestra evolución y adaptando a las necesidades de cada momento, justifican en gran parte el <b>funcionamiento de nuestra mente</b> y, en consecuencia, la manera en que nos enfrentamos a las situaciones y decidimos. Es un método suficientemente probado, sabemos que funciona porque de lo contrario posiblemente no estaríamos aquí, así que ¿por qué no utilizarlo para automatizar la toma de decisiones y otros procesos en un ordenador? Ése es precisamente el objetivo de la teoría de conjuntos difusos y la lógica difusa.</p>
+
+<h2>
+<a id="sobre-la-terminología" class="anchor" href="#sobre-la-terminolog%C3%ADa" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sobre la terminología</h2>
+<p>Es habitual que al hablar no seamos excesivamente precisos en los términos que utilizamos y que, en muchos casos, utilicemos una cierta palabra asumiendo que representa el concepto que deseamos transmitir por ser sinónima (en mayor o menor grado) de la que seria correcta. La <i>imprecisión</i>, por tanto, está presente incluso en la forma que tenemos de hablar y por extensión en la de pensar (según diferentes estudios incluso cuando pensamos en silencio es imposible hacerlo sin utilizar la lengua materna, usando palabras y oraciones).</p>
+
+<p>Para situarse correctamente es importante no confundir la imprecisión con la <i>incertidumbre</i>, ni tampoco con la <i>indeterminación</i>, términos éstos que, en una conversación, podrían pasar por sinónimos sin serlo en realidad.</p>
+
+<p>La RAE define <a href="http://buscon.rae.es/draeI/SrvltConsulta?TIPO_BUS=3&amp;LEMA=incertidumbre">incertidumbre</a> como la falta de <a href="http://buscon.rae.es/draeI/SrvltConsulta?TIPO_BUS=3&amp;LEMA=certidumbre">certidumbre</a>, ésta como sinónimo de <a href="http://buscon.rae.es/draeI/SrvltConsulta?TIPO_BUS=3&amp;LEMA=certeza">certeza</a> y ésta, a su vez, como el <cite>conocimiento seguro y claro de algo</cite>. Tener incertidumbre, por tanto, es <b>no tener seguro ni claro el conocimiento sobre algo</b>, por regla general algún evento. Obviamente la incertidumbre desaparece por completo una vez que dicho evento ha tenido lugar.</p>
+
+<p>Análogamente la definición de <a href="http://buscon.rae.es/draeI/SrvltConsulta?TIPO_BUS=3&amp;LEMA=imprecisi%C3%B3n">imprecisión</a> nos lleva a la falta de <a href="http://buscon.rae.es/draeI/SrvltConsulta?TIPO_BUS=3&amp;LEMA=precisi%C3%B3n">precisión</a>, expresada en la tercera de las acepciones como la <cite>concisión y exactitud rigurosa en el lenguaje</cite>. En consecuencia al ser imprecisos <b>usamos un lenguaje no conciso y cuya exactitud no es rigurosa</b>, lo cual se ajusta bastante bien a la forma de expresarnos habitualmente: <i>ese coche es bastante rápido</i>, sin especificar su velocidad; <i>mi compañero es muy alto</i>, sin concretar la estatura, etc.</p>
+
+<p>Un proceso de búsqueda similar para la palabra <b>indeterminación</b> nos lleva a concluir que es la <b>imposibilidad de distinguir, discernir o fijar los términos de algo</b>, por lo que podría decirse que la indeterminación se obtiene de la siguiente ecuación: <code>indeterminación = incertidumbre + imprecisión</code>.</p>
+
+<p>Cuando algo es tan impreciso como para no poder ser distinguido de otros similares y, además, no somos capaces de aportar conocimiento seguro sobre él nos encontramos ante una indeterminación. El tratamiento de la indeterminación es un <b>tema que queda fuera del ámbito de este artículo</b>, lo que me interesaba era señalar el hecho de que no es sinónimo en ningún caso del término <b>imprecisión</b>.</p>
+
+<p>Distinguir claramente entre estos términos es importante porque la forma de actuar del ser humano, y los métodos derivados de ella, son específicos según se trate de un imprecisión, incertidumbre o una combinación de ambas.</p>
+
+<h2>
+<a id="el-sentido-común-humano" class="anchor" href="#el-sentido-com%C3%BAn-humano" aria-hidden="true"><span class="octicon octicon-link"></span></a>El sentido común humano</h2>
+<p>¿Cómo se enfrenta una persona a una <b>situación cualquiera</b> en su vida cotidiana con independencia de cuál sea su preparación o conocimiento previo sobre la misma? Asumimos que para ello tenemos el sentido común, una suerte de <b>método innato</b> en cuyo funcionamiento nunca nos paramos a pensar. ¿Cómo abordamos, por ejemplo, la necesidad de cruzar andando una vía en una ciudad?</p>
+
+<p>Si la vía es una calle estrecha y larga, sabemos que normalmente nos dará tiempo a cruzarla si no vemos ningún vehículo en uno de los extremos (será de un único sentido). Si a pesar de ser estrecha es corta (de poca longitud), hemos de tener en cuenta la <b>probabilidad</b> de que un vehículo aparezca de repente por algún lado. La situación se complica si la vía es ancha y, aparte de permitir la circulación en dos o más carriles, da facilidad a los conductores para ir a mayor velocidad. Es necesario, por tanto, tener en cuenta los vehículos que se desplazan en cada sentido, la velocidad a la que lo hacen y nuestra propia agilidad para cruzar esa vía.</p>
+
+<p>Analizando el problema soy capaz de identificar al menos las siguientes <b>variables</b>:</p>
+<ul class="enumeracion">
+<li>La velocidad de los vehículos que circulan por la vía
+</li>
+<li>El ancho de la vía
+</li>
+<li>El tiempo en que somos capaces de cruzar la vía
+</li>
+<li>La posibilidad de que aparezcan vehículos de manera inesperada
+</li>
+</ul>
+<p>De la evaluación de éstas surgirá la <b>decisión</b> de en qué momento cruzar y cómo hacerlo (con más o menos celeridad).</p>
+
+<h2>
+<a id="la-incertidumbre-ante-los-sucesos" class="anchor" href="#la-incertidumbre-ante-los-sucesos" aria-hidden="true"><span class="octicon octicon-link"></span></a>La incertidumbre ante los sucesos</h2>
+<p>Comienzo por la <b>cuarta variable</b> de las antes mencionadas: posibilidad de que otros vehículos entren en la vía y, en consecuencia, debamos tenerlos en cuenta a la hora de cruzarla. ¿Cómo se evalúa esa posibilidad? En ella influirá la longitud de la vía: si es muy larga y estamos en la parte central nos preocupará poco que entren vehículos por los extremos; la existencia de intersecciones con otras calles y también la de garajes.</p>
+
+<p>Salvo que seamos adivinos o capaces de ver el futuro, esta variable lo que hace es <b>agregar incertidumbre</b> a la situación. ¿Cómo la tratamos para poder decidir? Echando mano de las <b>probabilidades</b>: el número de garajes, intersecciones con otras vías e incluso la densidad del tráfico (según la hora que sea) influyen en la probabilidad de que otros vehículos entren en la vía.</p>
+
+<p>Aunque en un documento como éste, en el que se realiza un análisis detallado de la situación, podríamos dar valores a las variables y, sirviéndonos de la <b>teoría de probabilidades</b>, saber aproximadamente qué posibilidad hay de que ese evento suceda, en la situación real esto es imposible. En términos generales <b>a las personas no se nos da bien el cálculo de probabilidades</b>, por ello nos empeñamos en jugar a la lotería y nos preocupa más viajar en avión que cruzar la calle. En el primer caso la posibilidad de ganar es ínfima y en el segundo la de que tengamos un accidente es mucho mayor al cruzar la calle que en el avión.</p>
+
+<p>La incertidumbre ante un evento potencial, por tanto, se evalúa como la probabilidad a priori de que se dé y tenemos herramientas para tratarla: el cálculo de probabilidades. Esa <b>incertidumbre desaparece</b> en el momento en que el evento concluye: nuestra incertidumbre ante el lanzamiento de una moneda nos dice que hay un 0.5 de probabilidad para cada resultado, pero una vez lanzada la probabilidad sera 1 para el resultado obtenido y 0 para el opuesto.</p>
+
+<h2>
+<a id="la-necesidad-de-la-imprecisión" class="anchor" href="#la-necesidad-de-la-imprecisi%C3%B3n" aria-hidden="true"><span class="octicon octicon-link"></span></a>La necesidad de la imprecisión</h2>
+<p>Solamente una de las cuatro variables antes citadas aporta incertidumbre a la situación, mientras que las otras tres pueden ser establecidas con <b>completa certeza</b>: el ancho de la vía será un número concreto de metros, centímetros, milímetros, etc.; la velocidad de los vehículos se puede medir en m/s y también podemos medir el tiempo que tardamos en cruzar la calle.</p>
+
+<p>No obstante ningún peatón conoce esas medidas de manera exacta (no llevamos una cinta métrica para saber el ancho de la vía y un radar para conocer la velocidad de los vehículos) sino que las estima, por lo que <b>aportan imprecisión</b> a la situación.</p>
+
+<p>En realidad si nos diesen esos datos con <b>absoluta precisión no nos ayudarían</b> en nada para tomar nuestra decisión de si debemos cruzar o no. ¿De qué nos sirven los centímetros y milímetros de ancho de la vía o los m/s exactos de velocidad de cada vehículo? Es suficiente con saber que la vía es muy estrecha, estrecha, normal, ancha o muy ancha y que los vehículos se acercan despacio, a velocidad normal o rápidamente. Como es fácil apreciar, éstas son etiquetas lingüísticas que asocian un valor impreciso (difuso) pero útil a cada variable.</p>
+
+<p>Por lo tanto en este contexto hay que entender la <b>imprecisión no como la existencia de ambigüedad</b> o generalidad, sino como la <b>ocultación de detalles innecesarios</b> en una situación en la que el detalle excesivo en la información dificulta la operación en lugar de facilitarla. Es esta reducción del nivel de detalle, adecuándolo a la necesidad de la situación, lo que hace de la imprecisión una herramienta robusta en la toma de decisiones, una <b>fortaleza del lenguaje humano</b> que le permite hacer frente a sucesos muy variopintos que encuentra en su entorno.</p>
+
+<h2>
+<a id="cómo-trasladar-a-un-ordenador-la-lógica-humana" class="anchor" href="#c%C3%B3mo-trasladar-a-un-ordenador-la-l%C3%B3gica-humana" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cómo trasladar a un ordenador la lógica humana</h2>
+<p>Se indicaba antes que para el tratamiento de la incertidumbre se ha desarrollado una teoría sólida y aceptada de manera general: la teoría de probabilidades. Ésta es fácilmente trasladable a un ordenador y permite automatizar, mediante herramientas como las redes bayesianas, la toma de decisiones para ciertos tipos de problemas.</p>
+
+<p>Sería deseable, por tanto, contar con una teoría análoga que nos permitiese operar cuando lo que se tiene es imprecisión en lugar de incertidumbre. Frente a la imprecisión la teoría de probabilidades resulta totalmente inútil. En realidad la matemática tradicional en su conjunto no servirá de demasiado y, por ello, se hace necesaria alguna herramienta más específica.</p>
+
+<h2>
+<a id="teorías-sobre-la-imprecisión" class="anchor" href="#teor%C3%ADas-sobre-la-imprecisi%C3%B3n" aria-hidden="true"><span class="octicon octicon-link"></span></a>Teorías sobre la imprecisión</h2>
+<p>En palabras de <a href="http://www.filosofos.net/russell/russell_inter.htm">Bertrand Rusell</a> <cite>"toda la lógica tradicional asume el empleo de símbolos precisos"</cite>, por lo que ya de entrada descarta por completo el uso de la imprecisión. Sin embargo ésta está presente en la vida real, como bien resumió Einstein en su famosa frase <cite>"Cuando las leyes de la matemática se refieren a la realidad no son ciertas y cuando son ciertas no se refieren a la realidad"</cite>.</p>
+
+<p>Según se ha visto, la <b>imprecisión es necesaria</b> cuando se desea aportar <b>información útil y relevante</b> sobre algún problema o situación compleja, ante la cual el uso de abundancia de detalles dificultarían la comprensión global. Podría decirse que cuanto mayor sea el nivel de detalle mejor conoceremos los componentes del problema, pero será menos relevante para comprender el todo.</p>
+
+<p>Ya en la década de los 30 <a href="http://en.wikipedia.org/wiki/Max_Black">Max Black</a>, citando la <i>incertidumbre en la geometría</i> de Platón, habla de <i>conjuntos vagos</i> y argumenta que los objetos con los que se trata en distintas teorías, como la geometría perfecta, los planetas como puntos de la astronomía o los gases perfectos de la termodinámica, <b>nada tienen que ver con los objetos de la vida real</b>. Se precisa una lógica que trate <b>de la experiencia</b>, más que de la teoría, tratando con objetos que están lejos de la perfección matemática.</p>
+
+<p>Black define una <i>proposición vaga</i> como aquella en la que no están nítidamente definidos sus posibles estados respecto a la inclusión o exclusión, ya que éstos dependen en cierta medida de la interpretación que cada individuo haga de ellos.</p>
+
+<p>Un ejemplo de este tipo de proposiciones podría ser <cite>"ser una persona mayor"</cite>. Para mi hijo una <i>persona mayor</i> es alguien que tiene la edad de su padre o más, pero para mi madre yo no estaría incluido en el grupo de <i>personas mayores</i> porque soy mucho más joven que ella. Ante un problema así la lógica binaria clásica no es aplicable y, por tanto, hay que buscar una <b>lógica alternativa</b>.</p>
+
+<p>A partir de este tipo de proposición <b>Black habla del nivel de pertenencia</b> en que los objetos son miembros de un conjunto, usando <b>diferentes gradaciones</b> y sentando las bases para una teoría general sobre la imprecisión (<i>vagueness</i>).</p>
+
+<p>Las aportaciones de Black no fueron las únicas en ocuparse de la imprecisión, pero todo parece indicar que fueron la base sobre la que se asentó Zadeh para crear la teoría más aceptada en este campo: la de los conjuntos y la lógica difusa.</p>
+
+<h2>
+<a id="la-propuesta-de-zadeh" class="anchor" href="#la-propuesta-de-zadeh" aria-hidden="true"><span class="octicon octicon-link"></span></a>La propuesta de Zadeh</h2>
+<p>Es en la década de los 60, con la publicación de <a href="http://www.eecs.berkeley.edu/Faculty/Homepages/zadeh.html">Lotfi Zadeh titulada</a> <i>Fuzzy sets</i>, cuando comienza verdaderamente a desarrollarse una <b>teoría útil para el tratamiento de la imprecisión</b>. De hecho Zadeh se ha dedicado en gran parte durante las últimas cuatro décadas a extender las ideas recogidas en dicha publicación, desarrollando la teoría de conjuntos difusos, la lógica difusa y sus aplicaciones.</p>
+
+<p>Aparte de los conjuntos vagos de Black antes mencionados, Zadeh se apoya en la <b>lógica multivalorada</b> de Lukaszewicz para dar a luz a los <i>conjuntos difusos</i> y la <i>lógica difusa</i> que, inicialmente, no tienen una buen acogida en la comunidad científica en gran medida por el sentido peyorativo asociado a la palabra <i>difuso</i>. Otro de los pilares es el <i>principio de incompatibilidad</i> de Pierre Duhem, que Zadeh redefine de la siguiente manera: <cite>"en la medida en que se incrementa la complejidad de un sistema se reduce proporcionalmente nuestra capacidad para explicar su funcionamiento de una manera precisa y que resulte relevante, hasta llegar a un límite a partir del cual precisión y relevancia se convierten en características prácticamente excluyentes"</cite>.</p>
+
+<p>El principal mérito del trabajo de Zadeh es que evidencia la <b>posibilidad de usar las matemáticas</b> para crear un vínculo entre el lenguaje humano y la inteligencia subyacente que conduce nuestra forma de actuar, tomando como base la lógica matemática clásica para crear una nueva <b>capaz de operar con la imprecisión</b> de manera sistemática, análoga a como ya se venía tratando la incertidumbre.</p>
+
+<p>Los distintos trabajos de Zadeh, principalmente los publicados en las décadas de los 70, 80 y 90, introducen las <b>herramientas principales</b> de esta nueva teoría: los conjuntos difusos y funciones de pertenencia, las relaciones difusas, las sentencias cuantificadas, los números difusos, la lógica difusa, la extracción de reglas difusas, etc.</p>
+
+<p>Pienso que la idea fundamental de toda la teoría es el hecho de definir <b>cómo se opera sobre variables sin necesidad de cuantificarlas</b> de manera exacta, empleando las variables lingüísticas que se ajustan mucho mejor al pensamiento humano. Para ello ha sido necesario <i>inventar</i> nuevos operadores, como las <i>t-normas</i> y <i>t-conormas</i> o los α-cortes, la proyección y extensión cilíndrica que permiten analizar las relaciones, etc.</p>
+
+<p>Las <b>etiquetas lingüísticas</b> actúan como las distintas gradaciones de una variable difusa y pueden tener diferente granularidad. Es importante el hecho de que se preserve la idea de <b>continuidad</b>: teóricamente una variable puede tomar infinitos valores distintos, aunque por regla general se representen con 3, 5 ó 7 etiquetas. Es la continuidad precisamente la que posibilita que una pequeña diferencia entre una cierta propiedad de dos objetos no los haga distintos: dos personas con <i>estatura</i> de 1,90 y 1,95 se considerarán <i>altas</i>, a pesar de la variación de 5cm entre una y otra.</p>
+
+<p>Personalmente encuentro una cierta relación entre esa continuidad o <i>suavidad</i> en la transición entre las etiquetas de una variable difusa y el método de inducción que empleamos con mucha frecuencia: si consideramos que una estatura <i>N es alta</i>, también serán altas las estaturas <i>N-1 y N+1</i>. Lo que cambia es la medida en que se pertenece a ese grupo.</p>
+
+<p>A partir de esta teoría se han obtenido <b>aplicaciones prácticas</b> concretas, de las cuales quizá el mayor exponente sean los <b>controladores difusos</b>. La base de éstos es, en principio, bastante sencilla: la propia descripción imprecisa de un proceso por parte de una persona se convierte en un manual que permite controlarlo. Con un conjunto reducido de reglas pueden controlarse procesos aparentemente complejos y es un método que se emplea actualmente en multitud de electrodomésticos.</p>
+
+<p>Con el inicio del nuevo siglo Zadeh dio un nuevo giro a sus investigaciones y propuso la idea del CW (<i>Computing with Words</i>) que, según sus propias palabras, permitirá abrir una nueva vía en la evolución de la lógica difusa y sus aplicaciones.</p>
+
+<p>Si bien la <b>teoría de conjuntos difusos y lógica difusa</b> de Zadeh es la más aceptada en la actualidad, <b>no es la única</b> y existen varias teorías más sobre la imprecisión. Una de ellas, bastante desarrollada, se denomina AST: <i>Alternative Set Theory</i>. Su base es que la incertidumbre surge por el fenómeno de la infinitud al tratar con grandes variedades de estados posibles, argumentando que puede demostrarse que los números muy grandes, pero finitos, se comportan como los infinitos desde la perspectiva de la mentalidad humana. La infinitud es una cualidad dependiente del contexto.</p>
+
+<h2>
+<a id="conclusiones" class="anchor" href="#conclusiones" aria-hidden="true"><span class="octicon octicon-link"></span></a>Conclusiones</h2>
+<p>El pensamiento humano es <b>impreciso por naturaleza</b>, es el principio que le permite ajustar el nivel de detalle que necesita en cada momento para poder dar respuesta a todos los problemas a los que ha de enfrentarse a lo largo de su vida. En contraposición, en el cálculo matemático y la lógica clásica es precisamente la precisión el pilar fundamental. Anecdóticamente resulta bastante más sencillo formular operaciones sobre datos precisos que con datos imprecisos. Por ello teorías como las de la probabilidad llevan asentadas desde hace más de dos siglos y, por el contrario, hasta hace pocas décadas se carecía de una teoría que permitiese tratar de forma sistemática la imprecisión.</p>
+
+<p>Las teorías sobre la imprecisión han tratado de dar respuesta a la necesidad de contar con herramientas que permitan de alguna manera <b>modelar los problemas como lo hace la mente humana</b>, entrando en campos como la psicología, neurología, biología y computación. Todo este esfuerzo se explica por el importante papel que en ingeniería y ciencias de la computación tiene la capacidad para tratar con la imprecisión.</p>
+
+<p>Se puede ampliar este artículo con la bibliografía referenciada a continuación si se quiere obtener una <b>idea global</b> sobre multitud de aspectos que explican porqué es interesante aprender sobre conjuntos difusos, lógica difusa, reglas difusas, etc., ya que son las herramientas que permitirán simular/emular en un programa de ordenador el comportamiento de uno mismo y, por tanto, abre las puertas a otras maneras de resolver los problemas, seguramente más coherentes con el pensamiento humano.</p>
+
+<h2>
+<a id="si-quieres-saber-más" class="anchor" href="#si-quieres-saber-m%C3%A1s" aria-hidden="true"><span class="octicon octicon-link"></span></a>Si quieres saber más</h2>
+<ul class="enumeracion">
+<li>Nikravesh, M. (2007) Evolution of fuzzy logic: from intelligent systems and computation to human mind. Studies in Fuzziness and Soft Computing, 2007, Volume 217/2007, 37-53, DOI: 10.1007/978-3-540-73182-5_3.
+</li>
+<li>Novák, V.(2005) Are fuzzy sets a reasonable tool for modeling vague phenomena? Fuzzy Sets and Systems Volume 156, Issue 3, 16 December 2005, Pages 341-348.
+</li>
+<li>Russell, B. (1923) <a href="http://cscs.umich.edu/~crshalizi/Russell/vagueness/">Vagueness</a>. 
+</li>
+<li>Black, M. (1937) Vagueness: An exercise in logical analysis, International Journal of General Systems, Volume 17, Issue 2 &amp; 3 June 1990 , pages 107 - 128.
+</li>
+</ul>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>

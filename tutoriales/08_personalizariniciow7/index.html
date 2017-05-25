@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo personalizar la pantalla de inicio en Windows 7&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo personalizar la pantalla de inicio en Windows 7<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+</ul><p>Hace unos días (septiembre 2009) el conocido especialista en productos de Microsoft <b>Paul Thurrott</b> recomendaba en <a href="http://community.winsupersite.com/blogs/paul/default.aspx">su blog</a> la utilización de <a href="http://community.winsupersite.com/blogs/paul/archive/2009/09/11/software-pick-of-the-week-windows-7-logon-background-changer.aspx">un programa</a> cuya finalidad era facilitar la personalización de la pantalla de inicio de sesión de Windows 7. Se trata de una aplicación basada en WPF (<i>Windows Presentation Foundation</i>) de la que rápidamente se hacían eco distintos sitios, tanto en inglés como ya en nuestro idioma, como la mejor vía para que cada uno coloque en la pantalla de inicio de sesión la imagen de fondo que prefiera.</p>
+
+<p>El mencionado programa ofrece una vía sencilla y una interfaz agradable para realizar ese cambio, pero no es la única alternativa. De hecho, cualquiera que haya manipulado en alguna ocasión el registro de Windows puede activar esta posibilidad. Para ello no tiene más que crear la clave <code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\Background</code>, que puede existir ya por defecto si se ha adquirido Windows 7 preinstalado en un sistema y el fabricante ha activado esta característica, y crear un valor de tipo <code>DWORD</code> llamado <code>OEMBackground</code> asignándole el dato <code>1</code> como contenido. A continuación se debe tomar la imagen que quiere utilizarse como fondo y guardarla en <code>C:\Windows\System32\oobe\info\backgrounds</code> (asumiendo que se tiene instalado Windows 7 en <code>C:\Windows</code>) en formato JPEG con el nombre <code>backgroundDefault.jpg</code>. Esta imagen no debería tener un tamaño superior a los 256 kilobytes. Realizados los cambios, en el próximo inicio de sesión se verá aparecer el nuevo fondo, sustituyendo al que usa por defecto Windows 7 o el que hubiese establecido el fabricante del hardware.</p>
+
+<p><img style="margin: 10px; border: 1px solid black;" src="http://www.fcharte.com/imagenes/fondoInicioSesion.jpg"></p>
+
+<p>Además de cambiar la imagen de fondo, también es posible alterar el color y sombra tanto del texto que aparece en dicha pantalla, por ejemplo el nombre de los usuarios, como de los botones asociados. Esto es necesario en ciertos casos, por ejemplo cuando un fondo muy claro u oscuro dificulta la legibilidad de esos elementos. En este caso hay que modificar el contenido del valor <code>ButtonSet</code>, alojado en la clave <code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI</code>, que estará comprendido entre 0 y 2.</p>
+
+<p>Pueden efectuarse estos cambios de manera simultánea, siempre que contemos con los privilegios necesarios para poder manipular el registro, introduciendo las líneas siguientes en un archivo de texto que se guardaría con extensión <code>.reg</code> y sobre el que se haría doble clic después para combinarlo.
+
+<figure class="highlight"><pre><code class="language-conf" data-lang="conf"><span class="n">Windows</span> <span class="n">Registry</span> <span class="n">Editor</span> <span class="n">Version</span> <span class="m">5</span>.<span class="m">00</span>
+
+[<span class="n">HKEY_LOCAL_MACHINE</span>\<span class="n">SOFTWARE</span>\<span class="n">Microsoft</span>\<span class="n">Windows</span>\<span class="n">CurrentVersion</span>\<span class="n">Authentication</span>\<span class="n">LogonUI</span>]
+<span class="s2">"ButtonSet"</span>=<span class="n">dword</span>:<span class="m">00000001</span>
+
+[<span class="n">HKEY_LOCAL_MACHINE</span>\<span class="n">SOFTWARE</span>\<span class="n">Microsoft</span>\<span class="n">Windows</span>\<span class="n">CurrentVersion</span>\<span class="n">Authentication</span>\<span class="n">LogonUI</span>\<span class="n">Background</span>]
+<span class="s2">"OEMBackground"</span>=<span class="n">dword</span>:<span class="m">00000001</span></code></pre></figure>
+
+
+</p><p>Como es habitual, siempre que vaya a manipularse el registro se debe ser extremadamente cuidadoso. Siempre recomiendo realizar una copia de seguridad que permita recuperarse de los cambios, aunque en este caso, que se limita a cambiar el contenido de dos valores, puede resultar excesivo.</p>
+
+<p>Volviendo al principio, lo que hace la aplicación que recomienda Paul es, básicamente, activar el fondo personalizado dando el valor 1 a <code>OEMBackground</code> y copiar al directorio apropiado la imagen que se elija, si es necesario reduciendo su tamaño.</p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
