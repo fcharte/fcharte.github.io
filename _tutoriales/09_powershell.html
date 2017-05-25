@@ -1,0 +1,22 @@
+---
+layout: post
+title: Introducción a PowerShell<br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>Son muchos los usuarios de Windows que, en alguna ocasion, han recurrido a la ventana <b>Símbolo del sistema</b> para realizar alguna operación puntual. Los usuarios más avanzados incluso escriben sus propios guiones, los conocidos y antiguos archivos <b>.BAT</b> heredados del DOS, pero son pocos los que aprovechan una de las características más interesantes de las últimas versiones de Windows: <a href="http://technet.microsoft.com/es-es/scriptcenter/powershell.aspx">PowerShell</a>.</p>
+
+<p>PowerShell es una línea de comandos que permite la ejecución interactiva de tareas, por una parte, así como un lenguaje avanzado para la codificación de <i>scripts</i> que facilitan, por ejemplo, las tareas de administración del sistema. A dierencia de la línea de comandos básica, la de PowerShell reconoce un extensísimo conjunto de órdenes, denominadas genéricamente <i>cmdlets</i>, agrupados en múltiples categorías. En principio el comando fundamental es <code>get-help</code> que, como es fácil imaginar, facilita el acceso a toda la ayuda de PowerShell.</p>
+
+<p>Como es habitual, la salida de un comando puede enviarse como entrada a la de otro mediante el operador <code>|</code>, lo cual permite, simplemente encadenando tres órdenes, obtener resultados como el de la imagen inferior: una tabla de los procesos que hay en marcha en el sistema ordenados descendentemente según el consumo de CPU.</p>
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/powershell.png" alt="La línea de comandos de PowerShell" /></p>
+
+<p>Con los comandos de PowerShell es posible conocer los procesos en ejecución, obtener información del hardware del sistema, controlar los servicios iniciándolos o deteniéndolos, configurar redes y, en general, realizar cualquier tarea de administración que podamos imaginar, incluso de manera remota, controlando desde una máquina local un ordenador situado en otro lugar.</p>
+
+<p>Cuando se utiliza para escribir guiones, PowerShell ofrece un lenguaje con estructuras condicionales y de repetición similares a las de los lenguajes modernos. En Windows 7 y Windows Server 2008 incluso se cuenta con un entorno de desarrollo integrado, llamado ISE (<i>Integrated Scripting Environment</i>), que ya viene incluido en el sistema y que, como se aprecia en la imagen inferior, facilita un editor, un depurador y una consola interactiva para realizar pruebas.</p>
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/ise.png" alt="El entorno integrado de PowerShell" /></p>
+
+<p>Si quieres saber más sobre PowerShell, una <a href="http://www.google.es/search?q=windows+powershell">simple búsqueda</a> te servirá. Los sitios de referencia son obviamente los de Microsoft, especialmente el <a href="http://blogs.msdn.com/b/powershell/">Windows PowerShell Blog</a> y la sección <a href="http://technet.microsoft.com/es-es/scriptcenter/powershell.aspx">Scripting con Windows PowerShell</a> de TechNet.</p>
