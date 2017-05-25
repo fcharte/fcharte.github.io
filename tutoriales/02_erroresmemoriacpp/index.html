@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo evitar problemas con la asignación dinámica de memoria en C&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo evitar problemas con la asignación dinámica de memoria en C<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+</ul><p>Todos los que programamos con C/C++, incluso los que nos consideramos experimentados, solemos emplear una significativa cantidad de tiempo depurando errores siempre relacionados con el mismo tema: la asignación dinámica de memoria. Siguiendo una serie de reglas básicas podemos reducir apreciablemente este tipo de fallos:</p><ol>
+<li>Antes de usar un puntero comprobar que no es <code>NULL</code>. Introducir un <code>if(q) usa_q_como_sea;</code> nos ahorrará muchos disgustos.</li>
+<li>Asignar el valor <code>NULL</code> a todo puntero sin inicializar. Acostumbrarse a escribir <code>char* q = NULL</code> es una buena costumbre.</li>
+<li>Tras asignar memoria dinámicamente, inicializarla de inmediato. Tras un <code>q = malloc(sizeof(X))</code> siempre un <code>memset(q,0,sizeof(X))</code>, así evitaremos usar la basura que hay en la memoria sin inicializar.</li>
+<li>Usar siempre <code>strncpy()</code> y <code>strncat()</code> al operar sobre cadenas asignadas dinámicamente, así evitaremos escribir más allá del tamaño del bloque, en zonas de memoria que no nos pertenecen.</li>
+<li>No calcular nunca a mano el tamaño de los operandos, en su lugar recurrir siempre al operador <code>sizeof()</code>. El tamaño de los tipos básicos y la alineación de los campos en las estructuras alteran el espacio que se ocupa.</li>
+<li>Al trabajar con cadenas, no olvidar que si hemos asignado <code>N</code> bytes dinámicamente, sólo podremos almacenar <code>N-1</code> caracteres. Obvio, pero fuente de muchos quebraderos de cabeza.</li>
+<li>Antes de asignar a un puntero no nulo otra dirección, no olvidar liberar la memoria previamente asignada. La construcción <code>if(q) free(q)</code> ha de ser una costumbre antes de reutilizar una variable puntero.</li>
+<li>Cada <code>free(q)</code> irá siempre seguido de un <code>q = NULL</code>, así evitaremos acceder a bloques de memoria que ya hemos liberado.</li>
+<li>Moldear siempre los punteros al tipo correcto, de lo contrario la aritmética de punteros no funcionará. Una operación del tipo <code>q++</code> nos llevará a una dirección u otra dependiendo del tipo de <code>q</code>.</li>
+<li>Antes de usar un puntero comprobar que no es <code>NULL</code>. Esta regla, primera y última, es fundamental y nunca suficientemente repetida. Comprobar siempre que un puntero no es <code>NULL</code> antes de leer o escribir con él.</li>
+</ol><p>Espero que estas indicaciones puedan ser de alguna utilidad a los que programan diariamente utilizando el lenguaje C.</p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
