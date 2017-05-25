@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Qué herramientas de desarrollo de &lt;i&gt;shaders&lt;/i&gt; puedo usar&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Qué herramientas de desarrollo de <i>shaders</i> puedo usar<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#shader-maker">Shader Maker</a></li>
+<li class="toc-entry toc-h2"><a href="#shaderdesigner">ShaderDesigner</a></li>
+<li class="toc-entry toc-h2"><a href="#fx-composer">FX Composer</a></li>
+</ul>p&gt;	Las entregas de los meses previos, sobre <i>Tipos de shaders</i> y <i>Lenguajes para programar shaders</i>, nos han servido para establecer el contexto en el que se utilizan los <i>shaders</i>, ofreciendo una visión general de esta tecnología y los conceptos teóricos fundamentales para comprenderla. El objetivo de este nuevo tutorial es complementar a los anteriores, haciendo una evaluación de algunas herramientas que pueden utilizarse para la programación de <i>shaders</i> y sirve de antesala a las entregas finales en las que se brindarán algunos ejemplos prácticos.
+
+<h2>
+<a id="shader-maker" class="anchor" href="#shader-maker" aria-hidden="true"><span class="octicon octicon-link"></span></a>Shader Maker</h2>
+<p>	Cada tipo de trabajo requiere sus herramientas específicas, no siendo en este sentido una excepción el desarrollo de <i>shaders</i>. Un diseñador web precisará un editor de XHTML/CSS, un programador OpenGL un entorno de desarrollo C/C++ y, análogamente, un creador de <i>shaders</i> necesitará una herramienta específica para este fin.</p>
+<p>	Es cierto que podrían utilizarse DirectX, OpenGL o incluso O3D para implementar <i>shaders</i>, pero la visualización de los efectos requiere la escritura de una cantidad importante de código adicional que nada tiene que ver con el <i>shader</i> en sí, especialmente si se quiere tener la posibilidad de probarlos sobre distintas geometrías, con diversas luces y con la capacidad para rotar, hacer zoom, mover las luces, etc.</p>
+<p>	Existen multitud de herramientas específicas para el diseño de <i>shaders</i>, procedentes tanto de los fabricantes de hardware como de terceras partes. La mayor parte de ellas son gratuitas. Shader Maker 	es una herramienta desarrollada por el CGC (<i>Computer Graphics Clausthal</i>), un grupo de investigación de la <a href="http://cg.in.tu-clausthal.de">University of Clausthal (Alemania)</a>, desde cuyo sitio web puede descargarse gratuitamente. Para poder utilizarla es necesario tener instalados unos controladores de vídeo con soporte para OpenGL actualizados, especialmente si se quiere utilizar la programación de <i>geometry shaders</i>. El programa no necesita instalación, basta con extraer los archivos en un directorio y ejecutarlo, incluye todo lo necesario salvo los citados controladores que serán específicos para cada hardware.</p>
+
+<p><img src="http://www.fcharte.com/imagenes/shadermaker.png" alt="Entorno de desarrollo de ShaderMaker"></p>
+
+<p>	Como puede apreciarse en la figura superior, el programa consta de dos ventanas independientes: una en la que se visualiza la escena, con numerosos controles que permiten ajustar la geometría a mostrar, iluminación, materiales, etc., y otra (derecha) en la que se edita el código de los diferentes tipos de <i>shaders</i>. Éstos deberán escribirse en OGLSL, al ser una herramienta específica para OpenGL.</p>
+<p>	Junto con la herramienta se entregan algunos <i>shaders</i> de ejemplo, como el GS que aparece en la figura anterior y que genera dígitos de siete segmentos a partir de la geometría original. La textura pétrea la aplica un PS. Desarrollar un <i>shader</i> es tan fácil como escribir el código, o modificar uno de los existentes, y pulsar el botón de compilación. El resultado aparece de inmediato en la ventana de visualización.</p>
+<p>Una vez que los <i>shaders</i> creados con <b>Shader Maker</b> producen el efecto deseado, no hay más que tomar el código e importarlo en el proyecto OpenGL donde se deseen utilizar. Para ello se recurriría al procedimiento descrito en la entrada dedicada a OGLSL <a href="http://www.fcharte.com/Default.asp?noticias=1&amp;a=2010&amp;m=3">publicada en el mes de marzo</a>.</p>
+
+<h2>
+<a id="shaderdesigner" class="anchor" href="#shaderdesigner" aria-hidden="true"><span class="octicon octicon-link"></span></a>ShaderDesigner</h2>
+<p>	Al igual que Shader Maker, ésta es una herramienta dirigida específicamente al desarrollo de <i>shaders</i> con OGLSL, por lo que se parte de los mismos requerimientos: disponer de un controlador de vídeo actualizado que soporte las últimas versiones de OpenGL.</p>
+
+<p>	Es un programa creado por la desaparecida empresa TyphoonLabs que puede obtenerse gratuitamente desde el <a href="http://www.typhoonlabs.com">sitio de esta empresa</a> o bien como parte del OpenGL SDK. La última versión data de abril de 2009 y, aunque aprovecha las características de OpenGL 3.0, únicamente contempla el desarrollo de VS y PS, pero no de GS.</p>
+
+<p>	Como se aprecia en la figura inferior, la interfaz del programa tiene el aspecto típico de un entorno de desarrollo, ofreciendo un editor de <i>shaders</i>, paneles para la modificación de propiedades, una previsualización del <i>shader</i> en funcionamiento y diferentes opciones para la aplicación de texturas, uso de luces y selección de la geometría sobre la que se quieren probar los efectos.</p>
+
+<p><img src="http://www.fcharte.com/imagenes/shaderdesigner.png" alt="Entorno de desarrollo de ShaderDesigner"></p>
+
+<p>	El inconveniente de esta herramienta es que no permite trabajar con GS y, además, está limitada al lenguaje de <i>shading</i> de OpenGL, al igual que Shader Maker.</p>
+
+<h2>
+<a id="fx-composer" class="anchor" href="#fx-composer" aria-hidden="true"><span class="octicon octicon-link"></span></a>FX Composer</h2>
+p&gt;	La tercera herramienta que me ha parecido interesante, ya que complementa en cierta manera a las anteriores, es <a href="http://developer.nvidia.com/object/fx_composer_home.html">nVidia FX Composer</a>. Como sería de esperar, al ser un programa desarrollado por nVidia, el lenguaje empleado para codificar los shaders no es OGLSL, siendo posible elegir entre HLSL, Cg y COLLADA Fx Cg.
+
+<p>	Lo más interesante de este programa es que, como puede verse en la figura inferior, permite comprobar los shaders sobre DirectX 9, DirectX 10 y OpenGL. No hay más que abrir la lista y seleccionar la API, obteniéndose la visualización del efecto de manera inmediata. De esta forma es posible diseñar un mismo conjunto de shaders para DirectX y OpenGL, sin que importe el lenguaje de <i>shading</i> empleado originalmente.</p>
+
+<p><img src="http://www.fcharte.com/imagenes/fxcomposer.png" alt="Entorno de desarrollo de FX Composer"></p>
+
+	<p>Salvo por las opciones ya citadas, que permiten elegir el lenguaje de <i>shading</i> y el API sobre el que se ejecutarán los <i>shaders</i>, FX Composer no se diferencia demasiado de ShaderDesigner. Hay un editor de código para escribir los <i>shaders</i>, una ventana de propiedades, un panel de previsualización y una serie de funciones que permiten establecer la geometría sobre la que se probarán los efectos, luces, texturas, etc.</p>
+
+<p>	Otra posibilidad interesante de este programa es la de convertir los <i>shaders</i> de un lenguaje a otro, por ejemplo de HLSL a Cg, con una simple opción de menú. También es capaz de analizar el rendimiento de los <i>shaders</i> en distintas configuraciones hardware.</p>
+
+<p>Tras la introducción de estas tres herramientas, los últimos tutoriales en esta serie de artículos sobre programación de <i>shaders</i> estarán dedicados al desarrollo de algunos ejemplos sencillos, diseñando <i>vertex shaders</i>, <i>pixel shaders</i> y <i>geometry shaders</i>. Para ello se recurrirá a la herramienta <b>Shader Maker</b> descrita antes y se utilizará el lenguaje <b>OGLSL</b>.</p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
