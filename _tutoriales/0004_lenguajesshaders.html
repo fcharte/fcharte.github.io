@@ -1,0 +1,103 @@
+---
+layout: post
+title: Introducción a los lenuajes de programación de <i>shaders</i><br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>Al igual que el propio hardware, también el software asociado al desarrollo de <i>shaders</i> ha ido evolucionando con el paso del tiempo. Originalmente no existía más que el ensamblador, como en los primeros computadores, apareciendo con posterioridad lenguajes de más alto nivel como <b>Cg</b>, <b>HLSL</b> y <b>OGLSL</b>.</p>
+
+<h2>Ensamblador</h2>
+<p>El primer fabricante de hardware en introducir <i>shaders</i> en sus productos fue nVidia, por lo que no es de extrañar que el primer lenguaje para desarrollar estos programas provenga también de dicha empresa. Se trataba de un lenguaje de bajo nivel, equivalente al ensamblador usado habitualmente en los microprocesadores y específico para el hardware de nVidia.</p>
+
+<p>Paralelamente Microsoft introdujo en el <b>DirectX 8.1 SDK</b> su propio ensamblador para <i>shaders</i>, diseñado para su uso desde Direct3D (no es necesario un ensamblador externo) y con la importante ventaja, respecto al de nVidia, de ser independiente del hardware. Esto significa que puede escribir el código de un <i>shader</i> y utilizarlo en placas de nVidia y ATI sin cambios.</p>
+
+<p>El lenguaje ensamblador para <i>shaders</i> de Microsoft recuerda al de cualquier procesador de tipo RISC (<i>Reduced Instruction Set Computer</i>), al estar formado por un conjunto limitado de instrucciones carga/almacenamiento cuya sintaxis general es la siguiente:</p>
+
+{% highlight c %}
+codop destino, origen1[, origen2[, ...]]
+{% endhighlight %}
+
+<p>Cada línea se inicia con un código de operación: el nombre de la instrucción que indica la acción a llevar a cabo. A continuación se especifica cuál será el destino de la operación y de dónde procederán los datos en los que se operará. Esos datos, así como el destino, serán normalmente vectores de tres o cuatro componentes, no simples números enteros o en coma flotante.</p>
+
+<p>Las instrucciones de este ensamblador específico para <i>shaders</i> realizan sumas y productos corrientes, pero también productos escalares y vectoriales, productos matriciales, logaritmos, cálculos de coeficientes de luz, de vectores distancia, etc.</p>
+
+<p>Para crear <i>shaders</i> con este lenguaje ensamblador no se precisa ninguna herramienta externa siempre que se programe con DirectX, basta con introducir el código del <i>shader</i> en una cadena de texto y facilitarla como argumento a la función <code>D3DXAssembleShader()</code>. Ésta efectuará el ensamblado y enviará el código resultante a la GPU, dejando el <i>shader</i> listo para usar.</p>
+
+<p>Aunque es completamente factible seguir desarrollando shaders en ensamblador, en la práctica la aparición de lenguajes de alto nivel (como los que se describirán en entradas posteriores) ha provocado, como en la programación de aplicaciones para CPU, que el ensamblador vaya abandonándose paulatinamente. En el caso de los <i>shaders</i> esto es aún más lógico si cabe, ya que el uso de un lenguaje de alto nivel no implica ninguna pérdida de rendimiento. Al final todos ellos generan ensamblador y éste se compila y envía a la GPU de la misma manera.</p>
+
+<p>Si se pretende usar el lenguaje ensamblador para crear <i>shaders</i> las dos referencias indispensables son <a href="http://msdn.microsoft.com/en-us/library/bb219852(VS.85).aspx">Referencia de instrucciones ensamblador de la especificación PS 2.0</a> y <a href="http://msdn.microsoft.com/en-us/library/bb172936(VS.85).aspx">Referencia de instrucciones ensamblador de la especificación VS 2.0</a>, alojadas en MSDN.</p>
+
+<h2>El lenguaje Cg</h2>
+<p>DirectX y OpenGL son interfaces de programación, lo que en la jerga de los programadores se conoce como bibliotecas de funciones o servicios. Estas interfaces aportan una cierta funcionalidad y pueden ser utilizadas desde distintos lenguajes de programación, pero no son en sí un lenguaje, sino un conjunto de funciones. <b>Cg</b>, por el contrario, es un lenguaje de programación, no una biblioteca de servicios, siendo en este sentido una herramienta similar al lenguaje ensamblador mencionado en la primera entrada de esta serie.</p>
+
+<p>	Lo que ofrece Cg es la posibilidad de usar un lenguaje de alto nivel, similar al <b>lenguaje C</b>, para efectuar operaciones que, hasta el momento en que nVidia presentó Cg, se realizaban en un cierto lenguaje ensamblador. Cg ha sido desarrollado por nVidia y el paquete de herramientas para utilizarlo, de manera conjunta con Direct3D u OpenGL, está disponible desde principios de 2003. Aparte del compilador de Cg, la documentación y diversas utilidades, también es posible obtener el código fuente sin ningún coste bajo una licencia abierta.</p>
+
+<p>	Cg no puede utilizarse para crear una aplicación gráfica completa, como DirectX y OpenGL. Su uso siempre es complementario con estas bibliotecas, no en competencia con ellas. Podemos servirnos de Cg en Windows, ya sea con DirectX u OpenGL, así como en Linux y Mac OS X, en estos dos casos con OpenGL. La figura inferior representa la estructura general de una aplicación en la que se utilizase Cg.</p>
+
+<img src="http://www.fcharte.com/imagenes/diagramacg.gif" alt="Diagrama Cg" />
+
+<p>	Para usar Cg lo primero que se precisará será el conocido como <a href="http://developer.nvidia.com/object/cg_toolkit.html">Cg Toolkit</a>, un paquete de herramientas, ejemplos y documentación ofrecidos por Nvidia. Además del compilador para un sistema u otro, también existen <i>plug-ins</i> para distintas aplicaciones gráficas de uso general, como son 3ds max y Maya.</p>
+
+<p>	Una vez instalado el paquete de desarrollo, la creación de PS y VS con el lenguaje Cg se completa básicamente siguiendo dos procedimientos diferentes. El primero de ellos consiste en introducir el código fuente de los <i>shaders</i> en un archivo de texto, como cualquier otro programa, usando a continuación el compilador de Cg desde la línea de comandos. Mediante una opción indicaríamos el perfil al que debe ajustarse el compilador, que generaría un módulo de código en ensamblador ajustado a DirectX 8, DirectX 9 o diferentes extensiones de OpenGL para shaders. Ese módulo sería el que se utilizaría en la aplicación DirectX u OpenGL, facilitándolo con el API adecuado a la GPU.</p>
+
+<img src="http://www.fcharte.com/imagenes/consolacg.gif" alt="Compilador de Cg desde la línea de comandos" />
+
+<p>	La segunda opción, mucho más flexible, consiste en usar la biblioteca de ejecución de Cg, mediante la cual es posible compilar el código de los <i>shaders</i> en ejecución, sin necesidad de recurrir al compilador manualmente. Dependiendo de que usemos DirectX 8, DirectX 9 u OpenGL añadiremos un archivo de cabecera u otro a nuestro programa, utilizando a continuación un pequeño conjunto de funciones mediante las cuales se establecerá el contexto para los <i>shaders</i> y, facilitando una cadena de caracteres con su código, efectuará la compilación y obtendrá el código ensamblador correspondiente.</p>
+
+<p>	La actual versión de Cg, la 2.2 liberada en octubre de 2009, contempla el uso de distintas versiones de PS, VS y GS, siendo actualizado periódicamente por parte de nVidia. Es un recurso para programadores interesante y totalmente gratuito.</p>
+
+<h2>High Level Shading Language</h2>
+<p>	HLSL (<i>High Level Shading Language</i>) es un lenguaje de programación de <i>shaders</i>, similar a Cg, creado por Microsoft y que, en consecuencia, se usa conjuntamente con DirectX. En realidad HLSL ha sido desarrollado de manera conjunta por Microsoft y nVidia, siendo ésta la razón de su similitud con Cg.</p>
+
+<p>	Al igual que ocurre con Cg, los <i>shaders</i> escritos con HLSL pueden ser compilados desde la línea de comandos, generando un módulo con código preparado para transferir a la GPU, o bien introducirse como código fuente en un programa DirectX, en cuyo caso se compilarían durante la ejecución.</p>
+
+<p>	Dependiendo de la versión de DirectX con la que se trabaje, HLSL permitirá usar unas versiones u otras del <i>Shader Model</i>. Con DirectX 9 puede elegirse entre las versiones 1, 2 y 3 de SM, mientras que con DirectX 10 la única opción es el SM 4.0, es decir, la última versión. Esto es así porque DirectX 10 está diseñado para funcionar sobre un cauce gráfico totalmente programable, sin hacer uso de las etapas fijas clásicas que se describieron al principio de este documento.</p>
+
+<p>	¿Qué se necesita para poder programar shaders con HLSL? Únicamente el DirectX SDK, <a href="http://msdn.microsoft.com/en-us/directx/default.aspx">disponible gratuitamente en la web de Microsoft</a>. Éste incluye, aparte de todas las herramientas necesarias, un gran conjunto de aplicaciones de ejemplo y documentación, accesibles a través del visor mostrado en la figura inferior.</p>
+
+<p><img src="http://www.fcharte.com/imagenes/visorDirectX.gif" alt="DirectX Sample Browser"></img></p>
+
+<p>	Para crear y utilizar un <i>shader</i> con HLSL, asumiendo que está utilizándose DirectX 10, habría que seguir los pasos indicados a continuación:</p>
+
+<ul class="enumeracion">
+<li>	Escribir el código del shader almacenándolo en un archivo de texto, como se haría con cualquier otro código fuente.
+<li>	En el programa DirectX, utilizar la función <code>D3D10CompileShader()</code> para compilar el <i>shader</i> y obtener su versión binaria.
+<li>	A continuación, usando la versión binaria, se genera el <i>shader</i> en el dispositivo con el que está trabajándose mediante el método <code>Create{Vertex|Pixel|Geometry}Shader()</code>. Éste devuelve un puntero al <i>shader</i> que ya estará alojado en la GPU.
+<li>	Por último se activa el <i>shader</i> para introducirlo en el cauce gráfico, usando para el método <code>{GS|PS|VS}SetShader()</code>.
+</ul>
+
+<p>	Un método alternativo consiste en utilizar un formato de archivo específico de DirectX, con extensión .fx, en el que pueden introducirse múltiples <i>shaders</i>, por ejemplo uno para vértices, otro para geometría y un tercero para fragmentos, usando la función <code>D3DX10CreateEffectFromFile()</code> para cargarlos de manera conjunta. En la imagen inferior puede verse el entorno de Visual Studio 2008, con un programa DirectX 10 en la parte superior que recupera un PS y un VS de un archivo de efectos. Ésta es el que establece los <i>shaders</i> a compilar y transferir a la GPU.</p>
+
+<p><img src="http://www.fcharte.com/imagenes/shadervs.gif" alt="Shaders en Visual Studio"></img></p>
+
+<h2>OpenGL Shading Language</h2>
+<p>	Al igual que DirectX, la otra gran API para programación gráfica, que es OpenGL, también cuenta con su propio lenguaje de desarrollo de <i>shaders</i>. Dicho lenguaje se denomina OGLSL (<i>Open GL Shading Language</i>), si bien también es posible encontrar la denominación GLSL.</p>
+<p>	OGLSL es un lenguaje basado en el C estándar, como Cg y HLSL, por lo que tiene muchas similitudes con éstos. La última versión disponible, en cuanto a especificación, es la 1.5, anunciada en julio de 2009. La mayor parte del hardware actual, no obstante, aún no soporta las características de dicha versión, asociada a OpenGL 3.1/3.2. Habrá que esperar hasta que los fabricantes, principalmente nVidia y ATI (AMD), actualicen sus controladores.</p>
+<p style="border: 1px solid black; margin: 40px; padding: 10px; background: cyan">El 5 de mayo de 2009 nVidia actualizó sus controladores para Windows, Linux y otros sistemas operativos incluyendo soporte para OpenGL 3.1 y la versión 1.3 de OGLSL. Están disponibles en <a href="http://developer.nvidia.com/object/opengl_3_driver.html">la Developer Zone</a> de nVidia.</p>
+<p>	En realidad OGLSL no es un lenguaje, sino dos lenguajes diferentes con ciertos puntos en común. Uno de los lenguajes es específico para la creación de VS y otro para los PS. No existe (hasta la versión 1.4), por el momento, soporte para GS, si bien sí hay disponible una extensión para OpenGL que permite utilizarlos.</p>
+<p>	Inicialmente el soporte de OGLSL en OpenGL dependía de las extensiones <code>GL_ARB_vertex_shader</code> y <code>GL_ARB_fragment_shader</code>, siendo necesario instalarlas y cargarlas desde los programas OpenGL. Este trabajo puede simplificarse gracias a GLEW (<i>OpenGL Extension Wrangler Library</i>). A partir de OpenGL 2.0, sin embargo, dichas extensiones ya no son precisas y se pueden escribir <i>shaders</i> OGLSL con menos complicaciones.</p>
+<p>	Asumiendo que se tiene instalado OpenGL 2.0 o posterior en el sistema, y que los controladores de vídeo soportan OGLSL (todos los últimos productos de nVidia y ATI lo soportan), el proceso a seguir constaría de los pasos indicados a continuación:</p>
+<ul class="enumeracion">
+<li>Escribir el código del <i>shader</i> almacenándolo en una cadena de texto o recuperándolo del archivo donde esté guardado.</li>
+<li>Invocar a <code>glCreateShader()</code> para crear en OpenGL un objeto interno que representa al <i>shader</i>, facilitándole el código fuente almacenado antes en la cadena mediante la función <code>glShaderSource()</code>.</li>
+<li>Compilar el <i>shader</i>, llamando a la función <code>glCompileShader()</code>.</li>
+<li>A continuación hay que crear un programa en memoria para alojar los <i>shaders</i>, tarea de la que se ocupa la función <code>glCreateProgram()</code>.</li>
+<li>Por cada <i>shader</i>, previamente cargado y compilado con las funciones ya mencionadas, habrá que hacer una llamada a <code>glAttachShader()</code>. De esta forma los <i>shaders</i> se asocian con el objeto devuelto por <code>glCreateProgram()</code>.</li>
+<li>Finalmente hay que vincular (<i>linkar</i>) el programa con todos los <i>shaders</i>, llamando a la función <code>glLinkProgram()</code>, e instalar los <i>shaders</i> en la GPU mediante la función <code>glUseProgram()</code>.</li>
+</ul>
+<p>	El procedimiento puede parecer largo pero es muy mecánico, de forma que podemos concentrar nuestro esfuerzo en escribir los <i>shaders</i> con OGLSL e instalarlos reproduciendo siempre estos mismos pasos.</p>
+<p>	La programación de GS en OpenGL requiere actualmente el uso de la extensión <code>GL_EXT_geometry_shader4</code>. Una vez cargada y activada, básicamente se dispone de dos métodos adicionales: <code>EmitVertex()</code> y <code>EndPrimitive()</code>. El primero envía un vértice a la siguiente etapa del cauce, pudiendo ser invocado múltiples veces por cada ejecución del GS. El segundo marca el fin de la primitiva generada a partir de los datos de entrada, siendo opcional en caso de que el GS genere una lista de puntos como primitiva.</p>
+
+<h2>O3D Shading Language</h2>
+<p>	A finales de abril de 2009 Google anunció la disponibilidad de O3D, un complemento independiente del navegador y del sistema operativo que permite generar gráficos 3D usando el lenguaje JavaScript, de forma que la escena se visualiza directamente en un cliente como Internet Explorer o Mozilla Firefox.</p>
+<p>	O3D tiene una arquitectura basada en un cauce gráfico completamente programable, prescindiendo de las etapas fijas de tratamiento de vértices y fragmentos. Por ello todo programa O3D debe aportar sus propios <i>shaders</i>, escritos en un lenguaje denominado genéricamente <i>O3D Shading Language</i>.</p>
+<p>	Una vez instalado el complemento O3D, un módulo de código escrito en C++, la descripción de la escena escrita en JavaScript, incluidos los <i>shaders</i>, serán procesados apoyándose sobre DirectX u OpenGL, según la configuración del sistema. En este sentido O3D representa una capa adicional de software, de más alto nivel que DirectX y OpenGL. La figura inferior es un esquema de bloques que representa la arquitectura de O3D, con la aplicación en la parte superior, escrita en JavaScript usando el API de O3D y una serie de utilidades; el núcleo de O3D (el complemento) justo debajo, apoyándose en OpenGL y DirectX, siendo responsabilidades de éstas bibliotecas la comunicación final con la GPU.</p>
+
+<p><img src="http://www.fcharte.com/imagenes/o3d.png" alt="Arquitectura de O3D"></img></p>
+
+<p>	El lenguaje de <i>shanding</i> de O3D es una variante de HLSL y Cg, limitado al SM 2.0. Esto significa que permite crear VS y PS, pero no GS. Además existen ciertas restricciones en cuanto a los tipos de datos que pueden utilizarse a la hora de compartir información entre los diferentes <i>shaders</i> de un programa. También se contempla la posibilidad de emplear SAS (<i>Standard Annotations and Semantics</i>), un conjunto de 24 semánticas de transformación definidas por nVidia que simplifica la implementación de VS.</p>
+
+<p>	Al igual que ocurre con otras opciones de las descritas en puntos previos, en O3D el código de los <i>shaders</i> se introduce en una cadena de caracteres corriente. El <i>shader</i> en sí, por tanto, no se escribe en JavaScript, aunque sí el resto de los elementos de la escena. Se utiliza el lenguaje JavaScript para crear un objeto de tipo <code>Effect</code>, invocar a su método <code>loadFromFXString()</code> facilitando el código del <i>shader</i> y, finalmente, asociando el efecto con un material aplicable a las primitivas.</p>
+
+<p>	La gran ventaja de O3D SL, respecto al resto de alternativas, estriba en que permite generar rápidamente prototipos de shaders con muy poco esfuerzo. No hay más que crear un esqueleto de aplicación con JavaScript, introducir el código del <i>shader</i> dentro de la propia página web y abrirla en un navegador para ver el resultado. Cualquier cambio se reduce a modificar esa página y refrescar el navegador, sin necesidad de compilar código en C/C++, conocer OpenGL o DirectX.</p>
