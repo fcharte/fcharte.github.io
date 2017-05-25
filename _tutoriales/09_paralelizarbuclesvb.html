@@ -1,0 +1,68 @@
+---
+layout: post
+title: Cómo paralelizar bucles en Visual Basic con Parallel.ForEach<br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+
+<p>Los microprocesadores que equipan los ordenadores personales, incluso los portátiles, cada vez incorporan un mayor número de núcleos y, además, suelen contar con tecnologías adicionales (como el <i>Hyper-Threading</i>) que hacen posible la ejecución de más de un hilo por parte del mismo núcleo. Actualmente no es raro que un equipo doméstico sea capaz de ejecutar 8 <i>threads</i> en paralelo, número que se irá incrementando (Intel ya está fabricando muestras de microprocesadores con 50 núcleos).</`>
+
+<p>Esta evolución del hardware afecta de lleno a los programadores que, para aprovechar toda la potencia que tienen a su alcance, no tienen más remedio que paralelizar su código, viéndoselas con la gestión de hilos, los problemas de sincronización, uso de semáforos, monitores, barreras, etc. No obstante, también hay alternativas sencillas aplicables a casos concretos, como el paralelismo para bucles que ofrece Visual Basic 2010 (en realidad la plataforma .NET 4.0).</p>
+
+<p>Para poder efectuar una comparativa simple, supongamos que recibimos un vector de datos que han de ser sometidos a un proceso de cierta complejidad <b>de manera independiente</b>, es decir, el tratamiento de un elemento del vector no afectará al resto. Ese proceso complejo podría ser, por ejemplo, calcular su factorial un millón de veces. Es lo que hace el código siguiente: 
+
+{% highlight vb %}
+
+        ' Vector con los valores de partida
+        Dim valores = {13, 19, 12, 8, 20, 15, 12}
+
+        ' Una función que se encarga de calcular el factorial
+        ' 1 millón de veces para consumir tiempo
+        Dim Factorial = Function(valor As Integer) As ULong
+                            Dim resultado As ULong
+                            For indice = 0 To 1000000
+                                resultado = 1
+                                Dim n = valor
+                                While n
+                                    resultado *= n
+                                    n -= 1
+                                End While
+                            Next
+                            Return resultado
+                        End Function
+
+        ' Obtener y mostrar el factorial para cada valor del vector
+        For Each Valor In valores
+            Console.WriteLine("El factorial de {0} es {1}",
+                                Valor, Factorial(Valor))
+        Next
+{% endhighlight %}
+
+<p>El código que se encarga de calcular el factorial se ha introducido como función <i>lambda</i> asignada a una variable, aunque se podría tanto haber codificado como una función corriente como haberse introducido directamente en el propio bucle, no es algo que afecte al comportamiento del programa. La ejecución de éste provocará que los resultados vayan apareciendo lentamente por la consola y, como se aprecia en la imagen inferior, en el mismo orden en que aparecen los valores en el vector original, ya que se está procesando de manera secuencial.</p>
+
+<img src="http://www.fcharte.com/imagenes/ejec1.gif" alt="Resultado de la ejecución del programa"></img>
+
+<p>Si durante la ejecución del programa examinamos la actividad del microprocesador (puede servir el propio Administrador de tareas de Windows) observaremos que solamente uno de los núcleos presenta una actividad significativa, como en la imagen inferior. El uso de CPU por parte del programa dependerá del número de núcleos que se tengan, no pasando del 25% para cuatro núcleos, del 13% para ocho y así sucesivamente, porque no usa más que un hilo durante toda su vida.</p>
+
+<img src="http://www.fcharte.com/imagenes/usocpu1.gif" alt="Uso de CPU por parte del programa"></img>
+
+<p>Dado que en este caso concreto la evaluación de un elemento del vector no influye en los demás, nada nos impediría realizar todos los cálculos en paralelo creando un hilo por cada elemento del vector. Pero en luga de crear explícitamente el hilo, facilitando los parámetros correspondientes, y sincronizar el programa principal con todos los hilos para mostrar el resultado una vez terminen, podemos recurrir a la clase <code>System.Threading.Taks.Parallel</code> introducida en la versión 4.0 de la plataforma .NET. Ésta nos permite recodificar el bucle que hay al final del programa de la siguiente forma:
+{% highlight vb %}
+
+        Parallel.ForEach(valores,
+                Sub(valor)
+                    Console.WriteLine("El factorial de {0} es {1}",
+                                    valor, Factorial(valor))
+                End Sub)
+{% endhighlight %}
+
+<p>Sigue siendo un bucle de tipo <code>For Each</code>, que recorre cada uno de los elementos del vector <code>valores</code>, pero ahora no lo hace de manera secuencial, sino ejecutando todos los ciclos en paralelo (siempre que haya núcleos suficientes, claro está). Lo primero que notaremos es que el consumo de CPU por parte de la aplicación ahora es mucho más agresivo, pudiendo llegar fácilmente al 100%. Esto se refleja en la actividad de los núcleos, como puede verse en la imagen siguiente:</p>
+
+<img src="http://www.fcharte.com/imagenes/usocpu2.gif" alt="Uso de CPU por parte del programa"></img>
+
+<p>Otra diferencia, aparte de que el programa tardará mucho menos en finalizar la ejecución y ofrecer los resultados, es que éstos no aparecerán necesariamente en el orden en que se encontraban los valores en el vector de origen. De hecho el orden variará de forma clara, como en la imagen inferior, ya que el cálculo para los números más pequeños concluirá antes que para los grandes.</p>
+
+<img src="http://www.fcharte.com/imagenes/ejec2.gif" alt="Resultado de la ejecución del programa"></img>
+
+<p>También existe un método <code>Parallel.For</code> que funciona de manera análoga a un bucle <code>For</code>clásico, pero ejecutándose en paralelo. Lo único necesario para poder usar estas construcciones es agregar la cláusula <code>Imports System.Threading.Tasks</code> al inicio del módulo y, lógicamente, compilar el código para la versión 4.0 de la plataforma .NET.</p>
