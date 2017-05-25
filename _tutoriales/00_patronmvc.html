@@ -1,0 +1,38 @@
+---
+layout: post
+title: Qué es el patrón arquitectónico MVC<br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>El patrón arquitectónico MVC (<i>Model-View-Controller</i>) es, en la actualidad, un estándar muy asentado para el desarrollo de sistemas software que precisan interactuar con personas y que, por tanto, entre sus componentes existe una interfaz de usuario. Todo ingeniero de software conoce este patrón y en la red es posible encontrar infinidad de artículos explicándolo. En esta breve entrada solamente se ofrece una visión histórica del mismo y, sobre todo, se destacan las ventajas que aporta al desarrollo de aplicaciones.</p>
+
+<h2>Cómo surge el patrón MVC</h2>
+<p>El primer documento en que se habla de la separación de los elementos de un sistema software en un <b>modelo</b> de ordenador, un software <b>controlador</b> y una <b>vista</b> manipulable por el usuario surge en los<b> Xerox PARC</b> (<i>Palo Alto Research Center</i>) en 1978 en <a href="http://heim.ifi.uio.no/~trygver/2007/MVC_Originals.pdf"><i>The original MVC reports</i></a>, mencionándose un componen adicional, llamado <b>Editor</b>, que forma parte de la vista.</p>
+
+<p>Durante el desarrollo de una aplicación (por parte de un científico visitante que pasaba una temporada en el PARC) se hizo patente la necesidad de buscar <b>una solución general</b> al problema que planteaba el control de un conjunto de datos grande y complejo por parte de un usuario. El objetivo era <b>adaptar el modelo de ordenador</b> de esos datos <b>al modelo mental</b> de la persona que debía usarlos, interponiendo los componentes software apropiados para ello.</p>
+
+<p>	La aplicación a desarrollar era un sistema de planificación y en él se empleaban cuatro metáforas: <b>thing</b>, <b>model</b>, <b>view</b> y <b>editor</b>, extrapolación del <b>objeto</b> de interés para el usuario, la <b>abstracción</b> de ese objeto en forma de datos en un ordenador, una o más posibles <b>representaciones</b> de dicho objeto y la <b>interfaz</b> entre el usuario y esas vistas, respectivamente.</p>
+
+<p>	Tras un proceso de refinamiento se definió el <b>modelo</b> como una representación del conocimiento con el que debe trabajar el sistema, la <b>vista</b> como una representación visual de ese modelo y se introduce el <b>controlador</b> como el enlace entre el usuario y el sistema. Estas ideas se plasman en un documento publicado el 10 de diciembre de 1979 con el título <i>Model-Views-Controllers</i>, naciendo el acrónimo MVC.</p>
+
+<p>	La primera implementación de MVC como patrón arquitectónico, más allá de la aplicación puntual que le dio origen, se efectuó en el propio PARC para la librería Smalltalk-80. A partir de ese momento comenzó su popularización y se extendió su uso, con independencia de plataformas, lenguajes de programación e incluso arquitectura del sistema a desarrollar.</p>
+
+<h2>Beneficios que aporta MVC al diseño de sistemas software</h2>
+<p>	Es necesario partir de la base de que este patrón es aplicable exclusivamente a <b>sistemas software en los que se precisa interacción</b> por parte del usuario, no teniendo sentido fuera de dicho contexto.</p>
+
+<p>	Un mismo sistema puede contar con <b>múltiples vistas</b>, dependiendo por ejemplo del tipo de usuario que lo utiliza. Una aplicación bancaria, por poner un ejemplo, ofrece una vista especializada al cliente que accede a través de la Web desde su ordenador, distinta de la que obtiene el trabajador que atiende físicamente en la oficina a los clientes. El sistema es el mismo, pero las vistas obviamente no.</p>
+
+<p>	Además las vistas suelen <b>evolucionar con el tiempo</b>, adaptándose a los nuevos <i>toolkit</i> de los sistemas operativos, a nuevos dispositivos como los teléfonos móviles o sencillamente adaptándose a nuevas necesidades. En contraposición, el <b>modelo</b> interno del sistema suele mantenerse estable a lo largo del tiempo y raramente cambia una vez concluida la fase de desarrollo. Podría decirse que el modelo es la esencia invariable del sistema y es la plasmación del conocimiento que se tiene del dominio en una estructura interpretable por un ordenador.</p>
+
+<p>	Diseñar (y especialmente mantener) un sistema en el que unos componentes cambian dinámicamente durante la ejecución y/o a lo largo del tiempo y deben comunicarse con otros invariables representa una cierta dificultad. En este contexto el patrón MVC <b>facilita el desacoplamiento</b> de dichos componentes, de forma que es posible cambiar de vista con gran sencillez sin necesidad de alterar en  ningún sentido el modelo.</p>
+
+<p>	Para que el modelo pueda permanecer inmutable a lo largo del tiempo es indispensable que esté <b>completamente desconectado del mundo exterior</b>, es decir, el modelo no tiene conocimiento alguno sobre la vista ni acerca del controlador. Esto se consigue principalmente mediante la aplicación de dos patrones software bien conocidos: el <b>patrón estrategia</b> y el <b>patrón observador</b>.</p>
+
+<p>	El patrón <b>observador</b> permite al modelo notificar hacia el exterior los cambios que se produzcan en el estado del sistema, pero sin conocer detalle alguno sobre el componente al que está notificando. Esto hace posible que el controlador y la vista reciban mensajes desde el modelo sin que éste cuente con un conocimiento explícito sobre aquellos.</p>
+
+<p>	Aunque la arquitectura MVC <b>no lo establece explícitamente</b>, el desacoplamiento entre el modelo y los demás componentes del sistema se incrementa si estos últimos tampoco tienen un conocimiento directo del primero, para lo cual se recurre al citado <b>patrón estrategia</b>. Lo que controlador y vista tienen es una interfaz de acceso al modelo, no una referencia directa a los objetos que lo componen.</p>
+
+<p>	Cabe preguntarse, si el modelo no tiene conocimiento de vista ni controlador y éstos no conocen directamente el modelo, <b>¿cómo es posible que el sistema opere como un todo?</b> Por convención cuando el sistema se pone en marcha crea el controlador y deja en sus manos la creación del modelo y la vista o vistas que pudieran existir, estableciendo las conexiones adecuadas entre ellos.</p>
+
+<p>	En resumen, el patrón arquitectónico <b>MVC favorece el diseño</b> de sistemas software en base a componentes que tienen una alta cohesión: únicamente el modelo gestiona el estado del sistema, solamente la vista genera representaciones visuales de dicho estado etc.; y mantienen un <b>elevado grado de desacoplamiento</b>, haciendo posible la modificación e incluso sustitución de cualquiera de ellos sin afectar al resto. Todo ello contribuye a <b>simplificar el diseño de aplicaciones complejas</b> que, de otra forma, resultarían mucho más difíciles de abordar y mantener.</p>
