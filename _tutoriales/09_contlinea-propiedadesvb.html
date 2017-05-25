@@ -1,0 +1,123 @@
+---
+layout: post
+title: Cómo aprovechar las novedades del lenguaje en Visual Basic 2010<br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+
+p>Llevo programando en lenguaje BASIC desde 1983, primero en microordenadores como el <a href="http://museopc.ujaen.es/mediawiki/index.php/Sinclair_ZX-81">Sinclair ZX-81</a>, el <a href="http://museopc.ujaen.es/mediawiki/index.php/Sinclair_ZX-Spectrum_48K">Sinclair Spectrum</a> y los <a href="http://es.wikipedia.org/wiki/Msx">MSX</a>, posteriormente en ordenadores de corte profesional de mediados de los ochenta, como el <a href="http://en.wikipedia.org/wiki/Xerox_820">Xerox 820-II</a>, y finalmente en la plataforma PC en sus distintos <i>sabores</i>: <a href="http://en.wikipedia.org/wiki/BASICA">BASICA</a>, <a href="http://en.wikipedia.org/wiki/GW-BASIC">GW-BASIC</a>, <a href="http://en.wikipedia.org/wiki/QuickBASIC">Quick Basic</a>, <a href="http://en.wikipedia.org/wiki/Turbo_Basic">Turbo Basic</a> y <a href="http://en.wikipedia.org/wiki/Visual_basic">Visual Basic</a>, entre otras. Más de veinticinco años de uso de este lenguaje me permiten tener una ciertas perspectiva de cómo ha ido evolucionando a lo largo del tiempo, algo sobre lo que me ha hecho reflexionar una de las novedades que incorpora el nuevo <a href="http://msdn.microsoft.com/en-us/vbasic/default.aspx">Visual Basic 2010</a> que, según las previsiones, será presentado el próximo mes.</p>
+
+<h2>Continuación implícita de línea</h2>
+
+<p>Las primeras versiones de BASIC utilizaban números de línea para establecer el orden de ejecución de las sentencias. Los conceptos de instrucción, sentencia y línea de programa eran casi indeferenciables, dado que una instrucción y sus parámetros (una sentencia) debía, salvo excepciones muy contadas, estar contenida en una línea de programa. Es decir, no podía dividirse en varias líneas para facilitar su lectura y edición, como es habitual en la actualidad. Un condicional que hoy escribiríamos como:
+{% highlight vb %}
+
+IF condicional THEN
+  sentencias
+ELSE
+  sentencias
+END IF
+{% endhighlight %}
+
+
+<p>debía escribirse necesariamente en una línea de programa:
+
+{% highlight vb %}
+
+IF condicional THEN sentencia ELSE sentencia
+{% endhighlight %}
+
+<p>En caso de que hubiese más de una sentencia asociada a la parte cierta o falsa del condicional, y en general siempre que se quisiese disponer más de una sentencia en la misma línea de programa, se escribían separadas por dos puntos. Ésta es una sintaxis que aún hoy perdura en la mayoría de los intérpretes/compiladores de BASIC, si bien no es muy utilizada.</p>
+
+<p>Con el tiempo el lenguaje fue modernizándose, se deshizo de los incómodos números de línea, surgieron las funciones y procedimientos y también una sintaxis más flexible, cercana a la de Pascal en muchos casos, que permitía la descomposición de sentencias como los condicionales en múltiples líneas. Como en las primeras versiones de BASIC, no obstante, el carácter que indica el fin de una sentencia seguía siendo el retorno de carro (en BASIC nunca se han usado llaves, puntos o puntos y comas como en otros lenguajes). Esto implica que si se tiene un condicional de cierta complejidad, un procedimiento con muchos parámetros y, en general, sentencias de extensión considerable, no había más remedio que escribirlas en una sola línea física.</p>
+
+<p>Para solventar esa limitación Visual Basic introdujo el carácter de continuación de línea: al colocar el carácter _ al final de una línea se está indicando que la sentencia no acaba ahí, sino que continúa en la siguiente línea física. Es el enfoque inverso de la mayoría de lenguajes, como Pascal, C/C++ o Java, de forma que se usa un carácter concreto no para indicar dónde termina una sentencia, sino dónde no termina. Esto permite escribir la cabecera de una función como la siguiente:</p>
+
+{% highlight vb %}
+Function RecuperarNombreUsuario(ByVal nombreUsuario As String, ByVal delimitador As Char, ByVal posicion As Integer) As String
+{% endhighlight %}
+
+<p>de la siguiente forma, que resulta más fácil de leer sobre todo cuando el espacio en pantalla es limitado:</p>
+
+{% highlight vb %}
+Function RecuperarNombreUsuario( _
+    ByVal nombreUsuario As String, _
+    ByVal delimitador As Char, _
+    ByVal posicion As Integer) _
+             As String
+{% endhighlight %}
+			 
+
+<p>Con Visual Basic 2010 todos los caracteres de continuación de este sencillo ejemplo son supérfluos, pudiendo escribirse en su lugar:</p>
+
+{% highlight vb %}
+Function RecuperarNombreUsuario( 
+    ByVal nombreUsuario As String, 
+    ByVal delimitador As Char, 
+    ByVal posicion As Integer
+             ) As String
+{% endhighlight %}
+			 
+
+<p>Hay que fijarse en la leve diferencia de la última línea, en la que el paréntesis de cierre de la lista de parámetros se ha colocado ahora al inicio de dicha línea. No es un capricho, si se pusiese al final de la línea anterior, como estaba antes pero sin el carácter de continuación, se obtendría un error sintáctico como puede verse en la figura inferior. En el lado izquierdo antes de desplazar el cierre de paréntesis y en el lado derecho después de hacerlo.</p>
+<img src="http://www.fcharte.com/imagenes/vb2010.gif" alt="El editor de Visual Basic 2010"></img>
+
+<p>El problema estriba en que la continuación implícita de línea se efectúa en una lista de casos concretos, por lo que el carácter de continuación de línea no puede omitirse siempre. En el caso anterior se podría haber dejado el paréntesis donde estaba originalmente, junto con el carácter _, y no se obtendría error alguno. Lo único que necesitamos, por tanto, es conocer los casos en que sí podemos prescindir del carácter de continuación de línea, casos que iremos reconociendo intuitivamente porque, en general, tienen bastante lógica. A modo de resumen, la lista siguiente indica en qué puntos puede dividirse una sentencia sin necesidad de usar el citado carácter de continuación:</p>
+
+<ul class="enumeracion">
+<li>Después de una coma y de la mayoría de los operadores binarios, incluyendo el <code>&</code>, los operadores aritméticos, de asignación, relacionales y lógicos.</li>
+<li>Después de una apertura de paréntesis o llaves y antes de un cierre de paréntesis y llaves.</li>
+<li>Después del carácter <code>.</code> que se usa para acceder a miembros de un objeto.</li>
+<li>Antes y después de los operadores de consulta usados con LINQ.</li>
+<li>Después de la palabra <code>In</code> en la sentencia <code>For Each</code> y de la palabra <code>From</code> al inicializar colecciones.</li>
+</ul>
+
+<p>Si se analizan estos casos, nos daremos cuenta de que, en general, se puede dividir la línea en puntos en los que existe alguna indicación que permite al compilador de Visual Basic 2010 que la sentencia aún no ha terminado. Si al final de una línea hay una coma, un operador <code>&</code> o se abre un paréntesis, por citar ejemplos comunes, está claro que la sentencia continua.</p>
+
+<p>Al final del apartado <a href="http://msdn.microsoft.com/en-us/library/865x40k4(v=VS.100).aspx">Sentences in Visual Basic de la documentación de Visual Basic 2010</a> se enumeran todos los casos y se facilitan ejemplos.</p>
+
+<h2>Propiedades auto-implementadas</h2>
+<p>Los componentes software cuentan genéricamente con tres categorías de miembros: <b>propiedades</b>, métodos y eventos, siguiendo un modelo <a href="http://www.google.es/patents/download/5724589_Development_system_with_a_proper.pdf?id=iHkjAAAAEBAJ&output=pdf&sig=ACfU3U2uEWYB8f40i6ieTDS9xYSfPnREqg">patentado por Ivar Wold</a>. En Visual Basic la implementación de propiedades se efectúa mediante la escritura de los habituales <i>getters</i> y <i>setters</i>, como se hace por ejemplo en Java, pero con una sintaxis simplificada como se aprecia en el siguiente ejemplo:
+
+{% highlight vb %}
+
+Property Telefono As String
+  Get 
+     Return miTelefono
+  End Get
+
+  Set(ByVal nuevoTelefono As String)
+     miTelefono = nuevoTelefono
+  End Set
+End Property
+{% endhighlight %}
+
+<p>Obviamente el código introducido en los métodos de lectura y asignación de la propiedad pueden ser más complejos, llevando a cabo operaciones que tengan un efecto en el estado del objeto en lugar de limitarse a guardar/devolver el contenido de una variable. Sin embargo, en una gran mayoría de las ocasiones lo único que se hace es eso: devolver el valor actual de la propiedad y modificarlo, no necesitándose más.</p>
+
+<p>Cabría preguntarse, en estos casos, por qué no se prescinde de la estructura anterior y se implementa la propiedad como una simple variable pública:
+
+{% highlight vb %}
+
+Public Telefono As String
+
+{% endhighlight %}
+
+<p>El problema es que los mecanismos de instrospección no tratan las variables públicas como propiedades, por lo que no sería posible, por ejemplo, vincular la variable directamente a un origen de datos, algo que sí puede hacerse con una propiedad. Ésta es la razón de que en <b>Visual Basic 2010</b> se agreguen al lenguaje las <i>propiedades auto-implementadas</i>. Se trata, sencillamente, de agregar la palabra <code>Property</code> delante de lo que sería una declaración de variable habitual:
+
+{% highlight vb %}
+
+Property Telefono As String
+
+{% endhighlight %}
+
+<p>Esta línea de código generaría el efecto equivalente a las 8 líneas del ejemplo inicial, con la única diferencia de que la variable privada en la que se mantendría el valor no se llamaría <code>miTelefono</code> sino <code>_Telefono</code>. A pesar de no haberse declarado explícitamente, el resto del código del componente puede acceder a dicha variable como a cualquier otra.</p>
+<p>En caso de que la variable deba tomar un valor inicial, éste puede asignarse directamente en la propia declaración de la propiedad, con la sintaxis siguiente:
+
+{% highlight vb %}
+
+Property Telefono As String = "999-99-99-99"
+
+{% endhighlight %}
+
+<p>Esta novedad de <b>Visual Basic 2010</b>, al igual que la <b>continuación implícita de línea</b> descrita anteriormente, no aportan nada revolucionario al lenguaje, pero hacen que sea más cómoda la escritura de código, algo que siempre es de agradecer.</p>
