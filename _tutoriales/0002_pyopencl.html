@@ -1,0 +1,82 @@
+---
+layout: post
+title: Cómo usar OpenCL desde Python con PyOpenCL<br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+
+<p>En algunos artículos previos ya he hablado de las <a href="http://fcharte.com/Default.asp?noticias=2&a=2010&m=9&d=20">características de Python</a> y también he introducido algunas ideas sobre <a href="http://fcharte.com/Default.asp?noticias=2&a=2010&m=9&d=22">OpenCL al tratar el paralelismo en GPU</a>. Uno de los problemas que suele plantearse durante el aprendizaje de una nueva API/lenguaje, en este caso concreto OpenCL, es que suele implicar también adecuarse al uso de unas herramientas concretas (bibliotecas, objetos/funciones, compiladores, etc.) y un procedimiento de <b>prueba-error</b> bastante tedioso.</p>
+
+<p>La sencilla operación de <b>enumerar las plataformas y dispositivos</b> disponibles desde OpenCL, siguiendo las indicaciones de la documentación, implican el uso de C/C++, la codificación de un programa completo que es necesario compilar antes de ejecutarlo y ver el resultado, pero hasta llegar a éste normalmente habrá <b>obstáculos</b>: errores durante la compilación, compilación correcta pero con errores de ejecución, sin errores de ejecución pero resultado nulo o incompleto y así sucesivamente.</p>
+
+<p>Personalmente, cuando quiero probar algo nuevo o escribir un prototipo rápido para alguna tarea, prefiero recurrir a un intérprete porque me permite centrarme en el objetivo al no tener que pasar por el habitual proceso de <b>edición-compilación-ejecución</b>. En su lugar escribo las sentencias en la <i>shell</i> del intérprete y obtengo un error inmediato o el resultado que buscaba. Una vez que tengo <b>bien claro cómo hacer aquello que pretendo</b> no hay más que transcribirlo al lenguaje en el que vaya a efectuarse la implementación definitiva y, teóricamente, debería funcionar.</p>
+
+<p>Al comenzar a probar <b>OpenCL</b> mi enfoque no fue distinto y por ello busqué la manera de trabajar con él desde <b>Python</b>, en lugar de hacerlo desde C/C++ que es lo más corriente. Para ello no hay más que configurar e instalar la <b>extensión PyOpenCL</b>, algo que debería ser simple pero que, en la realidad, no lo es tanto, más por las dependencias existentes entre las diferentes partes que otra cosa. Por ello, y por si a alguien le interesa usar OpenCL desde Python, he preparado este pequeño artículo indicando los pasos que he seguido, y que habría que reproducir, para comenzar a funcionar en pocos minutos.</p>
+
+
+
+<p>Parto avisando de que las instrucciones siguientes hacen referencia a la <b>instalación de PyOpenCL sobre Windows 7</b>, si bien el procedimiento no debería diferir en exceso en otros sistemas no es algo que haya comprobado personalmente. ¿Por qué en Windows? Aunque uso habitualmente un iMac con MacOS X y un portátil con Linux, la máquina en la que tengo el mejor hardware, tanto en CPU (Intel Core i7) como en GPU (nVidia GTX 285), es un ordenador de escritorio con Windows 7, no hay más razón que ésta.</p>
+
+<p>Sin más, procedo a enumerar los pasos a seguir en el mismo orden en que yo mismo los he llevado a cabo:</p>
+<ul class="Enumeracion">
+  <li>Lo primero que hay que hacer es <b>instalar Python</b> y las bibliotecas <b>NumPy</b> y </b>SciPy</b>. Las instrucciones para ello están en el artículo <a href="http://fcharte.com/Default.asp?noticias=2&a=2010&m=9&d=27">Python: instalación en Windows del pasado 27 de septiembre</a>.
+  <li>A continuación debe instalarse <a href="http://pypi.python.org/pypi/setuptools/0.6c11">la herramienta setuptools</a>, cuya finalidad es facilitar la descarga, instalación y configuración de paquetes Python. Si se ha instalado Python 2.6.x, el archivo a descargar es <a href="http://pypi.python.org/packages/2.6/s/setuptools/setuptools-0.6c11.win32-py2.6.exe#md5=1509752c3c2e64b5d0f9589aafe053dc">setuptools-0.6c11.win32-py2.6.exe</a>. Una vez descargado no hay más que ejecutarlo, no requiere más intervención por nuestra parte.
+  <li>Dependiendo de nuestro hardware gráfico tendremos que instalar los <a href="http://developer.nvidia.com/object/opencl-download.html">controladores OpenCL de nVidia y el CUDA Toolkit</a> o bien el <a href="http://developer.amd.com/gpu/ATIStreamSDK/Pages/default.aspx">ATI Stream SDK</a>. El SDK de nVidia solamente permite usar OpenCL sobre sus GPU (lógico puesto que nVidia no fabrica CPUs), mientras que el de ATI facilita el acceso a GPUs de ATI y también CPUs (ATI hoy es propiedad de AMD y éste es el segundo fabricante de CPUs tras Intel). Lo ideal sería contar con hardware (CPU y GPU) del mismo fabricante pero si, como es mi caso, la GPU es de nVidia, nada nos impide instalar tanto el SDK de este fabricante como el de ATI. En mi sistema están los controladores y SDKs de ambos y funcionan perfectamente.
+  <li>El siguiente elemento necesario es <a href="http://www.microsoft.com/express/Downloads/">Microsoft Visual C++ 2008 Express</a> que, por el momento, sigue estando disponible para descarga gratuita en la web de Microsoft como puede comprobarse en la imagen inferior. Es importante que tengamos en cuenta que ha de ser la <b>versión 2008</b>, no la 2010, ya que el proceso de configuración y compilación de PyOpenCL de momento no se ha actualizado a la última versión de Visual C++. No es necesario que registremos el producto, ya que sin registro puede utilizarse durante 30 días y realmente lo vamos a necesitar sólo un momento: durante la compilación de PyOpenCL.
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/vc2008.gif" title="Descarga de Visual C++ 2008 Express" /></a></p>
+
+  <li>Para compilar PyOpenCL además del compilador también necesitaremos la biblioteca <a href="http://www.boostpro.com/">Boost para C++</a>, concretamente la versión para Visual Studio 2008 que es <a href="http://www.boostpro.com/download/boost_1_40_setup.exe">la ofrecida en este archivo</a>. Al ejecutarlo se pondrá en marcha un asistente con varios pasos. Al llegar a la ventana <b>Select Default Variants</b> hemos de marcar <b>Visual C++ 9.0</b> y <b>Multithread, DLL</b> como puede verse en la primera imagen de las dos que hay debajo. Al llegar a la lista de componentes (segunda imagen inferior) hemos de marcar como mínimo los elementos <b>Boost DateTime</b>, <b>Boost Python</b> y <b>Boost Thread</b>.
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/boost1.gif" title="Variante de Boost a instalar" /></a></p>
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/boost2.gif" title="Componentes de Boost a instalar" /></a></p>
+
+   <li>Finalmente, en cuanto a descargas se refiere, debemos obtener el <a href="http://pypi.python.org/pypi/pyopencl#downloads">paquete PyOpenCL</a> y descomprimirlo en una carpeta de nuestro sistema, preferiblemente dentro de la carpeta donde previamente hemos instalado Python.
+</ul>
+
+<p>En este momento ya tenemos en nuestro sistema todo lo necesario para configurar, compilar e instalar PyOpenCL. En la <a href="http://wiki.tiker.net/PyOpenCL/Installation/Windows">wiki de PyOpenCL</a> explican poco este proceso y no hacen referencia a algunos apartados sin los cuales no es posible echar PyOpenCL a funcionar. Dicho proceso, completo según la experiencia propia en mi sistema, se compone de los pasos indicados a continuación:</p>
+<ul class="Enumeracion">
+<li>Abrimos una ventana <b>Símbolo del sistema</b> y cambiamos a la carpeta donde hayamos descomprimido PyOpenCL, por ejemplo <code>C:\Python26\pyopencl-0.92</code>.
+<li>Hemos de asegurarnos que la ruta del directorio donde está instalado Python se encuentra en la variable <code>PATH</code>. Para añadirla basta con escribir en la línea de comandos: <code>PATH=%PATH%;C:\Python26</code>, asumiendo que el directorio es <code>C:\Python26</code>.
+<li>A continuación escribimos <code>python configure.py</code>, ejecutando el <i>script</i> que ha de generar el archivo de configuración <code>siteconf.py</code> con unos valores por defecto.
+<li>Abrimos el citado archivo de configuración con cualquier editor y lo modificamos para que quede como se muestra a continuación:
+
+{% highlight conf %}
+BOOST_INC_DIR = ['C:\\Program Files (x86)\\boost\\boost_1_40']
+BOOST_LIB_DIR = ['C:\\Program Files (x86)\\boost\\boost_1_40\\lib']
+BOOST_COMPILER = 'msvc'
+BOOST_PYTHON_LIBNAME = ['boost_python-vc90-mt-1_40']
+USE_SHIPPED_BOOST = False
+CL_TRACE = False
+CL_ENABLE_GL = False
+CL_INC_DIR = ['C:\\Program Files (x86)\\ATI Stream\\include']
+CL_LIB_DIR = ['C:\\Program Files (x86)\\ATI Stream\\lib\\x86']
+CL_LIBNAME = ['OpenCL']
+CXXFLAGS = ['/EHsc', '/DBOOST_PYTHON_NO_PY_SIGNATURES']
+LDFLAGS = ['/FORCE']
+{% endhighlight %}
+
+La ruta de las variables <code>BOOST_INC_DIR</code> y <code>BOOST_LIB_DIR</code> ha de ser la del directorio donde se haya instalado la biblioteca Boost, mientras que la de las variables <code>CL_INC_DIR</code> y <code>CL_LIB_DIR</code> deberá apuntar a donde se haya instalado el SDK de nVidia o de ATI, según corresponda. En cualquier caso hay que poner atención a las dobles barras invertidas para evitar problemas.
+
+<li>Tras guardar el archivo de configuración modificado, estamos en disposición de compilar e instalar la biblioteca PyOpenCL. Para ello hay que introducir en la línea de comandos <code>python setup.py install</code> tal y como se aprecia en la imagen inferior, en la que pueden verse parte de los mensajes generados durante la compilación.
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/compilapy.gif" title="Compilación de la biblioteca PyOpenCL" /></a></p>
+
+<li>En caso de que al llegar al mensaje <code>building '_cl' extension</code> se genere un error y detenga el proceso, haciendo referencia a que no es posible encontrar un archivo <code>vcvars</code> o <code>vsvars</code>, hay que asegurarse de que la variable <code>PATH</code> se actualizó durante la instalación de <b>Visual C++ 2008 Express</b> y permite acceder al compilador. Aparte es posible que haya que configurar manualmente la variable <code>VS90COMNTOOLS</code> que debe contener la ruta al directorio donde se encuentran las herramientas comunes de Visual Studio 2008. Para ello no hay más que introducir la sentencia <code>set VS90COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\Tools\</code> (lógicamente adecuada a donde se haya instalado Visual C++ 2088 en nuestro sistema), poniendo especial atención a esa barra invertida al final, sin la cual seguirán surgiendo errores.
+</ul>
+
+<p>Completado el proceso de compilación e instalación, ya deberíamos poder trabajar con OpenCL desde Python. Podemos comprobarlo abriendo el intérprete interactivo de Python y ejecutando la sentencia <code>import pyopencl</code>. Si todo va bien, podemos usar el objeto <code>pyopencl</code> para obtener información del hardware OpenCL, transferir datos desde y hacia la GPU, enviar programas a la GPU para que los ejecute, etc. Si al ejecutar dicha orden, por el contrario, aparece un mensaje de error como el siguiente:</p>
+
+{% highlight conf %}
+Traceback (most recent call last):
+  File "C:\Python26\pruebaPYOPENCL.py", line 1, in <module>
+    import pyopencl as cl
+  File "C:\Python26\lib\site-packages\pyopencl-0.92-py2.6-win32.egg\pyopencl\__init__.py", 
+     line 3, in <module> import pyopencl._cl as _cl
+ImportError: DLL load failed: No se puede encontrar el módulo especificado.
+{% endhighlight %}
+
+<p>el problema se deberá seguramente a que no es posible localizar las bibliotecas de Boost. Aunque en la mencionada wiki de PyOpenCL que es necesario copiarlas a <code>C:\Windows\System32</code>, en mi caso esto tampoco solucionaba el problema, que desapareció al copiarlas al directorio <code>C:\Python26</code>, es decir, la carpeta donde esté instalado Python. Los archivos a copiar, desde la carpeta de Boost a la de Python, son dos: <b>boost_python-vc90-mt-1_40.dll</b> y <b>boost_thread-vc90-mt-1_40.dll</b>.</p>
+
+<p>Solucionado este último problema, deberíamos poder usar OpenCL desde Python sin ningún problema. En la imagen inferior puede verse cómo desde el intérprete he consultado el número de plataformas disponibles y, para cada una de ellas, los dispositivos que hay instalados. Lo más interesante es que a partir de aquí es posible trabajar con OpenCL interactivamente, olvidándose de los quebraderos de cabeza de C/C++, la compilación, depuración, etc.</p>
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/pyopencl.gif" title="Acceso interactivo a OpenCL desde Python" /></a></p>
