@@ -1,0 +1,76 @@
+---
+layout: post
+title: Tutorial sobre tipos de <i>shaders</i><br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>
+	Al estudiar las etapas programables del pipeline de las GPU actuales se aprecia la existencia de tres tipos de <i>shaders</i> en la actualidad: <i>vertex</i>, <i>fragment</i> y <i>geometry</i>. En realidad existen distintas versiones de cada una de estas clases de <i>shaders</i>, pudiendo utilizarse unas u otras dependiendo del hardware con que se cuente, los controladores de dispositivo y la API de programación empleada.</p>
+
+<p>	Un <i>shader</i> no es más que un programa, por regla general de reducida longitud, que se ejecuta en el interior de la GPU con el objetivo de realizar el procesamiento de los vértices o los fragmentos. Se puede decir, por tanto, que un <i>shader</i> es un procesador especializado en tratar una cierta información.</p>
+
+<h2>Procesadores de vértices</h2>
+<p>Este apartado describe someramente el funcionamiento de cada uno de los tipos de <i>shaders</i> y también resume algunos datos relativos a las distintas versiones existentes.
+
+<p><b>SM x.y</b>: Los denominados <i>Shader Models</i> son especificaciones elaboradas conjuntamente por Microsoft y nVidia. La versión del SM disponible en un sistema determina si podrá ejecutar o no una aplicación gráfica concreta, dependiendo de la versión de SM para la que ésta se haya construido. Aunque los SM están estrechamente ligados a DirectX y el lenguaje HLSL, existe una equivalencia entre sus versiones y las extensiones disponibles para las aplicaciones OpenGL.</p>
+
+	<p>Las instrucciones de un <i>vertex shader</i> se ejecutan sobre uno de los vértices de la geometría original, vértice facilitado por la aplicación a la GPU. El resultado ha de ser necesariamente otro vértice, no es posible generar vértices adicionales ni tampoco eliminar el que se recibe de entrada.</p>
+
+<p>	El vértice de entrada está expresado en coordenadas 3D en un sistema virtual, el que el programador haya decidido para su escena, que es necesario transformar en coordenadas 2D de pantalla. Dicha transformación puede ser lineal, como la que efectúa por defecto la etapa de transformación de un cauce no programable, o bien conllevar cálculos más complejos para generar efectos diversos, como puede ser el <i>morphing</i> de una figura.</p>
+
+	<p>Un <i>vertex shader</i> también puede operar sobre la información de color, los coeficientes de iluminación y las coordenadas de textura, así como sobre las normales. Además de transformar las coordenadas 3D a 2D, generará la información necesaria para la construcción del z-buffer.</p>
+
+<p>	La tabla siguiente recoge las características más destacables de los <i>vertex shaders</i> en cada una de las versiones aparecidas hasta el momento de escribir esto (2009).</p>
+<table style="inner-padding: 10px; border: 1px solid black" cellpadding="10">
+<tr style="background-color: blue; color: white"><td>Característica</td><td>	VS 1.0</td><td>	VS 2.0</td><td>	VS 3.0</td><td>	VS 4.0</td></tr>
+<tr><td>Nº máx. instr.</td><td>	128</td><td>	256</td><td>	512</td><td>	4096</td></tr>
+<tr><td>Registros</td><td>	4	</td><td>12</td><td>	32</td><td>	4096</td></tr>
+<tr><td>Control flujo</td><td>	No</td><td>	No</td><td>	Sí</td><td>	Sí</td></tr>
+<tr><td>Vértices de textura</td><td>	No	</td><td>No	</td><td>Sí	</td><td>Sí</td></tr>
+<tr><td>Nº samplers de textura	</td><td>-</td><td>	-</td><td>	4</td><td>	128</td></tr>
+<tr><td>Operadores de bits y enteros nativos</td><td>	No	</td><td>No	</td><td>No	</td><td>Sí</td></tr>
+</table>
+
+<h2>Procesadores de fragmentos</h2>
+<p>
+Se denominan <b>fragmentos</b> las porciones de la escena, ya en coordenadas 2D, justo antes de aplicarles texturas, color y otros atributos que darán como resultado el píxel final. También se les llama habitualmente <i>pre-píxeles</i>. Los términos <i>fragment shader</i> y <i>pixel shader</i> hacen referencia al mismo elemento: el programa encargado de procesar esos pre-píxeles para generar el píxel que aparecerá en pantalla.</p>
+
+<p>	A diferencia de los <i>vertex shaders</i>, no existe una correspondencia uno a uno entre los fragmentos que forman la escena ya en 2D y los píxeles que finalmente conformarán la imagen a mostrar. Esto es debido a que al proyectar de 3D a 2D puede darse el caso de que varios fragmentos correspondan a un mismo píxel, posiblemente con diferentes profundidades en el <i>z-buffer</i>. También podría darse el caso opuesto: que un mismo fragmento deba cubrir más de un píxel físico. Por ello un <i>fragment shader</i> puede generar, al procesar el fragmento recibido, cualquiera de los tres resultados siguientes:</p>
+<ul>
+<li>No generar ninguna salida, eliminando así el fragmento origen de la imagen final.</li>
+<li>	Producir un píxel a partir del fragmento.</li>
+<li>	Generar más de un píxel para representar al fragmento.</li>
+</ul>
+<p>	En cuanto a las operaciones que un <i>fragment shader</i> tiene encomendadas, todas ellas van enfocadas a decidir cuál será el color que se asigne al píxel o píxeles generados a partir del fragmento. Para ello se basará en las coordenadas del fragmento, establecidas en etapas previas y que no puede modificar, y la información disponible sobre texturas e iluminación.</p>
+
+<p>	Los <i>fragment shaders</i> no aparecieron hasta la versión 2.0 de la especificación <i>Shader Model</i>, razón por lo que en la tabla siguiente no existe una versión 1.0.</p>
+
+<table style="inner-padding: 10px; border: 1px solid black" cellpadding="10">
+<tr style="background-color: blue; color: white"><td>Característica</td><td>	PS 2.0</td><td>	PS 3.0</td><td>	PS 4.0</td></tr>
+<tr><td>Nº máx. instr.</td><td>	64</td><td>	512</td><td>	65536</td></tr>
+<tr><td>Registros</td><td>12</td><td>	32</td><td>	4096</td></tr>
+<tr><td>Nº máx. instr. textura</td><td>	32</td><td>Ilimitado</td><td>	Ilimitado</td></tr>
+<tr><td>Control flujo</td><td>	No</td><td>	Limitado</td><td>	Sí</td></tr>
+<tr><td>Contador de bucle</td><td>No	</td><td>Sí	</td><td>Sí</td></tr>
+<tr><td>Nº de texturas	</td><td>	8</td><td>	Ilimitado</td><td>	Ilimitado</td></tr>
+<tr><td>Operadores de bits y enteros nativos</td><td>No	</td><td>No	</td><td>Sí</td></tr>
+<tr><td>Registros de posición</td><td>No	</td><td>Sí	</td><td>Sí</td></tr>
+<tr><td>Instrucciones de gradiente</td><td>No	</td><td>Sí	</td><td>Sí</td></tr>
+<tr><td>Registro iluminación a dos caras</td><td>No	</td><td>Sí	</td><td>Sí</td></tr>
+</table>
+
+<h2>Procesadores de geometría</h2>
+<p>Es el último tipo de <i>shader</i> existente en la actualidad (2009), introducido en la versión 4.0 de <i>Shader Model</i>. Para poder utilizarlo es necesario contar con DirectX 10, disponible a partir de Windows Vista, o bien una extensión de OpenGL: <code>GL_EXT_geometry_shader4</code>. El primer hardware en soportar este tipo de programas fue la nVidia 8800.</p>
+
+<p>	Hasta cierto punto un <i>geometry shader</i> es una versión potenciada de un <i>vertex shader</i>, al recibir como entrada vértices de la geometría que compone la escena y generar como salida también vértices. Los <i>vertex shaders</i>, como se apuntó en una entrada previa, están limitados en cuanto al resultado que pueden generar: siempre un vértice, tras aplicarle todas las transformaciones que desee, pero sin posibilidad de eliminar o agregar vértices. Un <i>geometry shader</i>, por el contrario, tiene la capacidad para generar geometría dinámicamente, produciendo un conjunto de vértices a partir de una sola entrada.</p>
+
+<p>	Interpuesto entre la etapa de procesamiento de vértices y el resto del pipeline de la GPU, un <i>geometry shader</i> recibe como entrada una primitiva, puede ser un punto, un segmento de línea o un triángulo, y puede generar entre 0 y 1024 valores. Éstos irán asociados a una de tres primitivas posibles: puntos, secuencias de líneas (<i>linestrip</i>) y secuencias de triángulos (<i>trianglestrip</i>). De esta forma un <i>geometry shader</i> puede ser usado para generar efectos complejos, por ejemplo una explosión, a partir de unos pocos datos de entrada, realizando todo el trabajo en la GPU en lugar de en la CPU.</p>
+
+<img src="http://www.fcharte.com/imagenes/unificada.gif" alt="Arquitectura unificada de las actuales GPU">
+
+<p>	Aunque los <i>geometry shaders</i> aparecen en un hardware que cuenta con la arquitectura unificada, esquematizada en la figura superior, desde una perspectiva lógica el lugar que ocuparían en el cauce gráfico sería el que puede verse en la figura inferior.</p>
+
+<img src="http://www.fcharte.com/imagenes/caucegrafico.gif" alt="Cauce gráfico tras la introducción de los geometry shaders">
+
+<p>Al igual que para hacer referencia a <i>pixel shaders</i> y <i>vertex shaders</i> se utilizan las abreviaciones <b>PS</b> y <b>VS</b>, respectivamente, los <i>geometry shaders</i> suelen aparecer en la literatura como <b>GS</b>. Estos serán los acrónimos que se empleen en las entradas siguientes, correspondientes a una breve serie titulada <b>Lenguajes de programación de shaders</b>, en los que se tratará sobre <b>Cg</b>, <b>HLSL</b> y <b>OGLSL</b>, entre otros.</p>
