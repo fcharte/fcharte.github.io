@@ -1,0 +1,29 @@
+---
+layout: post
+title: Cómo configurar la división de palabras en MikTeX-Lyx<br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+p>Una de las ventajas de usar LaTeX para generar documentos es que uno puede centrarse en el contenido, dejando en manos de este magnífico software los detalles relativos al formato: tipos y tamaños de letra de títulos y subtítulos, ajustes de los párrafos, paginación, encabezados y pies, etc. Mientras escribimos el documento solamente hemos de marcar cada elemento adecuadamente: esto es un título, esto de aquí una lista, aquí va una imagen o una ecuación y así sucesivamente. El resultado no lo vemos hasta que <i>compilamos</i> ese documento para obtener, por ejemplo, una versión en PDF.</p>
+
+<p>Por comodidad, dado que el software que tengo que usar funciona sobre Windows, edito mis documentos LaTeX con <a href="http://www.lyx.org/">LyX</a> y los proceso con <a href="http://miktex.org/">MiKTeX</a>, dos programas que funcionan muy bien conjuntamente y que cuentan con versiones para ese sistema operativo. El inconveniente principal es que prácticamente todos los manuales y documentación de dichas aplicaciones están pensados para usuarios de Linux, por lo que solucionar un problema concreto puede costar algo más de lo que uno esperaba.</p>
+
+<p>Uno de esos problemas, del que solamente nos damos cuenta cuando generamos el PDF y lo leemos porque durante la edición no aparece, es la división de palabras o <i>guionado</i>, una tarea automática pero que, por defecto, está configurada para funcionar en inglés. Si el documento está en otro idioma, como es mi caso, las palabras se dividen de manera incorrecta. Uno se asegura de haber configurado correctamente el idioma del documento en LyX pero el resultado no cambia, por lo que recurre a <i>San Google</i> y ahí comienzan las penas: tienes que instalar el paquete X en Debian, tocar el archivo de configuración Y en Ubuntu y, en general, recetas abundantes que no sirven de nada en Windows porque no pueden trasladarse directamente.</p>
+
+
+
+
+<p>En realidad el problema en Windows se soluciona de una forma mucho más sencilla, siempre que uno la conozca, claro está. Debemos abrir el panel de opciones de MiKTeX, abriendo el menú <b>Inicio</b> y siguiendo la ruta <code><b>Todos los programas>MiKTeX>Maintenance>Settings</b></code>:</p>
+
+<p style="text-align:center"><image src="htt://www.fcharte.com/imagenes/miktex-settings.png" title="Abrimos el panel Settings de MiKTeX" /></a></p>
+
+<p>A continuación marcamos el elemento <b>spanish</b> de la página <b>Languages</b> que por defecto no está seleccionado:</p>
+
+<p style="text-align:center"><image src="htt://www.fcharte.com/imagenes/miktex-languages.png" title="Seleccionamos los idiomas activos" /></a></p>
+
+<p>Finalmente, en la página <b>Options</b> hemos de hacer clic en el botón <b>Update Formats</b>. Este paso es imprescindible, ya que de lo contrario no se actualizarán los archivos que usa MiKTeX para procesar el código LaTeX y generar el documento PDF.</p>
+
+<p style="text-align:center"><image src="htt://www.fcharte.com/imagenes/miktex-options.png" title="Actualizamos los archivos de configuración de MiKTeX" /></a></p>
+
+<p>Dados estos pasos podemos abrir LyX con nuestro documento, volver a generar el PDF, DVI o EPS y comprobar que las palabras se dividen de manera correcta, algo imprescindible en un documento de calidad.</p>
