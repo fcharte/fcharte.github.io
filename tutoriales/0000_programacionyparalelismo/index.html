@@ -99,7 +99,7 @@
 
 <p>Si se cuenta con un hardware gráfico de nVidia, los controladores OpenCL de esta empresa solamente reconocerán como dispositivo la propia GPU, tal y como se aprecia en la ventana de la izquierda de la imagen inferior. Los controladores de ATI/AMD (menos avanzados que los de nVidia en el soporte OpenCL), por el contrario, sí reconocen la CPU como dispositivo (ventana de la derecha), pero obviamente no pueden usar la GPU de nVidia.</p>
  
-<p style="text-align:center"><image src="http:/www.fcharte.com/imagenes/gpucaps.png" title="Soporte OpenCL en distintas plataformas"></image></p>
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/gpucaps.png" title="Soporte OpenCL en distintas plataformas"></image></p>
 
 <p>Es necesario, por tanto, contar con una configuración hardware específica si se quiere usar OpenCL o, de lo contrario, recurrir a la oferta específica de cada fabricante: CUDA o Stream. Una opción adicional, pero que tal como indiqué en la entrada antes citada es válida únicamente para Windows, sería <a href="http://en.wikipedia.org/wiki/DirectCompute">DirectCompute</a>, una API similar a OpenCL que hace posible la programación GPGPU sin que importe el fabricante de hardware. En realidad ésta es una verdad a medias, ya que recientemente <del>Microsoft</del> <b>el equipo de desarrollo de Mesa/Galium3D</b> anunció que habrá una <a href="http://www.phoronix.com/scan.php?page=article&amp;item=mesa_gallium3d_d3d11&amp;num=1">implementación nativa de DirectX 10/11 para Linux</a>, lo cual permitiría usar DirectCompute en Windows/Linux (por ahora no en Mac) sin que importe el fabricante.</p>
 
