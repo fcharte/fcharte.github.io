@@ -16,7 +16,8 @@ numbersections: true
 <p>	Estos bloques de código tienen una longitud generalmente muy limitada y se programan en una suerte de lenguaje ensamblador a medida, por lo que difícilmente pueden aplicarse más que a la función para la que están pensados desde un principio. Existen diferentes versiones, denominadas <i>Shader Models</i>, que han ido evolucionando en paralelo a Microsoft DirectX y OpenGL y que tanto ATI como nVidia han ido implementando en su hardware. Al desarrollar una aplicación gráfica se utiliza una API, como las citadas DirectX u OpenGL, para escribir el código que se ejecutará en la CPU, usando el ensamblador del <i>shader model</i> correspondiente para escribir el código a ejecutar en la GPU. Tanto el tipo de operaciones que puede llevar a cabo ese código como la memoria a la que tiene acceso están limitados.</p>
 
 <p>	El desarrollo de Cg por parte de nVidia, hace prácticamente una década, fue un primer avance al facilitar la codificación de funciones a ejecutar en la GPU. En lugar de escribir el código en ensamblador se usa un lenguaje de más alto nivel, similar al C. Una función como la mostrada en el siguiente fragmento se ejecutaría una vez para cada vértice, pero no de manera secuencial sino paralelamente.</p>
-<textarea cols="80" rows="11" readonly="readonly">
+
+{% highlight c %}
 void trataVertice(
   in float4 posicion : POSITION,
   out float4 posicionD : POSITION,
@@ -26,7 +27,9 @@ void trataVertice(
 {
   posicionD = mul(posicion, ModelViewMatrix);
   colorD = color;
-}</textarea>
+}
+{% endhighlight %}
+
 <p>	A diferencia de CUDA, no obstante, Cg se dirige específicamente a la generación de gráficos. 	A medida que el número de núcleos de proceso en una GPU se fue incrementando, y ganando en rendimiento al poder operar con datos en coma flotante, se hizo cada vez más patente la necesidad de aprovechar esa potencia bruta de cálculo para propósitos alternativos, aparte de la evidente aplicación en videojuegos de última generación. Solamente se precisaban herramientas de trabajo de corte más general, con un espectro de aplicación más amplio.</p>
 
 <h2>¿Qué es CUDA?</h2>
@@ -67,7 +70,7 @@ void trataVertice(
 
 <p>El listado siguiente corresponde a una función <i>kernel</i> muy sencilla, cuyo objetivo es hallar el producto escalar de una matriz por una constante. La función solamente opera sobre un elemento de la matriz, el que le indica la variable <code>threadIdx.x</code> que identifica el hilo en que está ejecutándose el código. Esta función se ejecutaría paralelamente en todos los núcleos de la GPU, por lo que en un ciclo se obtendría el producto de una gran porción de la matriz o incluso de ésta completa, dependiendo de su tamaño y el número de núcleos disponibles.</p>
 
-<textarea cols="80" rows="10" readonly="readonly">
+{% highlight c %}
 __global__ void ProdEscalar(
     float* M1, 
     float* M2, 
@@ -78,5 +81,6 @@ __global__ void ProdEscalar(
    // y se procesa el dato que corresponde
    M2[i] = M1[i] * Constante;
 }</textarea>
+{% endhighlight %}
 
 <p>	En una CPU moderna, como los <b>Athlon Phenom</b> o <b>Core i7</b>, es posible dividir los datos de entrada en cuatro o seis partes pero sin ninguna garantía de que se procesarán en paralelo, salvo que se programe explícitamente el reparto trabajando a bajo nivel. En una GPU y usando CUDA, por el contrario, esos datos se dividirán en bloques mucho más pequeños, al existir 240, 512, 1024 o más núcleos de procesamiento, garantizándose la ejecución en paralelo si necesidad de recurrir a la programación en ensamblador.</p>
