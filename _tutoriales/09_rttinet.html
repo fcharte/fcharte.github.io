@@ -100,7 +100,7 @@ numbersections: true
                           leyendo ciertas propiedades. También podemos enumerar
                           todos los módulos que lo componen, como veremos de
                           inmediato.</p>
-                          <h4>Información sobre el ensamblado</h4>
+                          <h3>Información sobre el ensamblado</h3>
                           <p class="TextoNormal">Un ensamblado tiene un nombre,
                           una localización física, un punto de entrada, etc.
                           Todos éstos son datos que podemos recuperar sirviéndonos
@@ -122,23 +122,25 @@ class Aplicación
     // Obtenemos el objeto Assembly que representa
     // al ensamblado que contiene este mismo código
     Assembly EsteEnsamblado = 
-      Assembly.GetExecutingAssembly();&nbsp;</o:p>    // Mostramos por la consola el nombre, localización 
+      Assembly.GetExecutingAssembly()    // Mostramos por la consola el nombre, localización 
     // y otras propiedades
-    Console.WriteLine(&quot;Nombre del ensamblado: {0}&quot;, 
-      EsteEnsamblado.FullName);<o:p></o:p>    Console.WriteLine();
-    Console.WriteLine(&quot;Localización física: {0}&quot;, 
-      EsteEnsamblado.Location);<o:p></o:p>    Console.WriteLine();
-    Console.WriteLine(&quot;CodeBase: {0}&quot;, 
+    Console.WriteLine("Nombre del ensamblado: {0}", 
+      EsteEnsamblado.FullName);
+    Console.WriteLine();
+    Console.WriteLine("Localización física: {0}", 
+      EsteEnsamblado.Location);
+	Console.WriteLine();
+    Console.WriteLine("CodeBase: {0}", 
       EsteEnsamblado.CodeBase);
-    Console.WriteLine();<o:p></o:p>    Console.WriteLine(&quot;Está en la caché de ensamblados: {0}&quot;, 
-      EsteEnsamblado.GlobalAssemblyCache);<o:p>
+    Console.WriteLine();
+	Console.WriteLine("Está en la caché de ensamblados: {0}", 
+      EsteEnsamblado.GlobalAssemblyCache);
 
     Console.WriteLine();
-    Console.WriteLine(&quot;EntryPoint: {0}&quot;, 
+    Console.WriteLine("EntryPoint: {0}", 
       EsteEnsamblado.EntryPoint);
   }
-}<o:p>
-</o:p>
+}
 {% endhighlight %}
 
                           <p class="Listado">Tras obtener una referencia al
@@ -170,9 +172,8 @@ class Aplicación
 {% highlight csharp %}
                           
 EsteEnsamblado = Assembly.Load(
-  &quot;System.Windows.Forms,version=1.0.3300.0, culture=neutral,&quot; +
-  &quot;PublicKeyToken=b77a5c561934e089&quot;);<o:p>
-</o:p>
+  "System.Windows.Forms,version=1.0.3300.0, culture=neutral," +
+  "PublicKeyToken=b77a5c561934e089");
 {% endhighlight %}
 
                           <p class="TextoNormal">En este caso se recupera el
@@ -187,7 +188,7 @@ EsteEnsamblado = Assembly.Load(
                           <b>Figura 2.</b> Información sobre el ensamblado <b>System.Windows.Forms</b>.<o:p>
                           </o:p>
                           </p>
-                          <h4>Módulos que componen el ensamblado</h4>
+                          <h3>Módulos que componen el ensamblado</h3>
                           <p class="TextoNormal">La clase <b>Assembly</b>
                           dispone de varios métodos que nos permiten obtener un
                           cierto módulo de los que componen el ensamblado o
@@ -209,8 +210,8 @@ EsteEnsamblado = Assembly.Load(
 {% highlight csharp %}
 
 foreach(Module UnModulo in EsteEnsamblado.GetModules())
-      Console.WriteLine(UnModulo.Name);<o:p>
-</o:p>
+      Console.WriteLine(UnModulo.Name);
+
 {% endhighlight %}
                           <p class="PieFigura"><img border="0" src="{{ '/assets/img/rttinet/03.jpg' | absolute_url }}" width="669" height="338"><br>
                           <b>Figura 3.</b> Mostramos la lista de módulos que
@@ -249,7 +250,7 @@ foreach(Module UnModulo in EsteEnsamblado.GetModules())
                           u objeto mediante el método <b>GetType()</b> definido
                           en la clase <b>Object</b>, ascendiente común de todos
                           los tipos existentes en Visual C# .NET.</p>
-                          <h4>La clase Type</h4>
+                          <h3>La clase Type</h3>
                           <p class="TextoNormal">A pesar de estar definida en el
                           ámbito <b>System</b> y ser una clase fundamental para
                           el funcionamiento de los diseñadores y editores de
@@ -374,7 +375,7 @@ foreach(Module UnModulo in EsteEnsamblado.GetModules())
                           sea <b>NestedType</b> nos encontramos con la definición
                           de un nuevo tipo. Es lo que ocurre, por ejemplo,
                           cuando una clase alberga la definición de otra clase.</p>
-                          <h4>Parámetros de un método</h4>
+                          <h3>Parámetros de un método</h3>
                           <p class="TextoNormal">En caso de que tengamos
                           información sobre un método, los métodos de acceso
                           de una propiedad o un constructor, puede interesarnos
@@ -449,7 +450,7 @@ foreach(Module UnModulo in EsteEnsamblado.GetModules())
 						  
 namespace JerarquiaTipos
 {
-using System.Reflection;&nbsp;
+using System.Reflection;
 // Una enumeración
   public enum Dias
   {
@@ -460,7 +461,7 @@ using System.Reflection;&nbsp;
     Viernes,
     Sabado,
     Domingo,
-  }&nbsp;
+  }
 
   // y una estructura para tener algunos tipos
   // en el ensamblado 
@@ -471,7 +472,7 @@ using System.Reflection;&nbsp;
       ID = mIDe;
       Nombre = mNombre;
       Telefono = mTelefono;
-    }&nbsp;
+    }
 	public int ID;
     public string Nombre;
     public string Telefono;
@@ -479,12 +480,12 @@ using System.Reflection;&nbsp;
   
   public class Form1 : System.Windows.Forms.Form
   {
-    private System.Windows.Forms.TreeView treeView1;&nbsp;
+    private System.Windows.Forms.TreeView treeView1;
 	// Al abrirse el formulario
     private void Form1_Load(object sender, System.EventArgs e)
     {
       // obtenemos una referencia al ensamblado
-      Assembly EsteEnsamblado = Assembly.Load(&quot;JerarquiaTipos&quot;);
+      Assembly EsteEnsamblado = Assembly.Load("JerarquiaTipos");
 	  // y añadimos su nombre como raíz
       TreeNode Nodo = treeView1.Nodes.Add(EsteEnsamblado.FullName);
 	  // Enumeramos todos sus tipos 
@@ -498,9 +499,9 @@ using System.Reflection;&nbsp;
       // añadimos un nodo hijo al árbol con el nombre 
       // y el tipo base
       TreeNode Hijo = Nodo.Nodes.Add(Tipo.Name +
-        &quot; Inherits &quot; + Tipo.BaseType.Name);
+        " Inherits " + Tipo.BaseType.Name);
 		EnumeraMiembros(Hijo, Tipo); // y enumeramos sus miembros
-    }&nbsp;
+    }
 	
 	// Por cada miembro de los existentes en una clase
     private void EnumeraMiembros(TreeNode Nodo, Type Tipo)
@@ -509,14 +510,14 @@ using System.Reflection;&nbsp;
       foreach(MemberInfo Info in Tipo.GetMembers())
       {
         // añadiendo su nombre y el tipo de miembro
-        TreeNode Hijo = Nodo.Nodes.Add(Info.Name + &quot; (&quot; +
-          Info.MemberType.ToString() + &quot;)&quot;);
+        TreeNode Hijo = Nodo.Nodes.Add(Info.Name + " (" +
+          Info.MemberType.ToString() + ")");
 		  // si el miembro es un método
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(Info.MemberType == MemberTypes.Method)
+          if(Info.MemberType == MemberTypes.Method)
           // enumeramos los parámetros
           EnumeraParametros(Hijo, Info);
       }
-    }&nbsp;
+    }
 	
 	// Por cada parámetro existente en un método
     private void EnumeraParametros(TreeNode Nodo,
@@ -526,7 +527,7 @@ using System.Reflection;&nbsp;
       foreach(ParameterInfo Info in 
         ((MethodInfo )InfoMetodo).GetParameters())
         // añadiendo su nombre y tipo
-        Nodo.Nodes.Add(Info.Name + &quot; - &quot; + 
+        Nodo.Nodes.Add(Info.Name + " - " + 
           Info.ParameterType.ToString());
     }
   }
@@ -589,7 +590,7 @@ using System.Reflection;&nbsp;
                           Como no existe esa posibilidad, tendremos que recurrir
                           al <i>late binding</i> o enlace tardío o en fase de
                           ejecución.</p>
-                          <h4>La clase Activator</h4>
+                          <h3>La clase Activator</h3>
                           <p class="TextoNormal">El primer paso para poder
                           utilizar una clase mediante enlace en fase de ejecución,
                           creándola y accediendo a sus miembros de manera dinámica,
@@ -622,14 +623,13 @@ using System.Reflection;&nbsp;
                           
 // obtenemos una referencia al ensamblado
     Assembly Ensamblado = Assembly.LoadFrom(
-      &quot;..\\..\\..\\Formulario\\bin\\debug\\Formulario.dll&quot;);
+      "..\\..\\..\\Formulario\\bin\\debug\\Formulario.dll");
 
     // y localizamos el tipo que nos interesa
-    Type Clase = Ensamblado.GetType(&quot;Formulario.Formulario&quot;);
+    Type Clase = Ensamblado.GetType("Formulario.Formulario");
 
     // utilizándolo para crear un objeto
-    Object Objeto = Activator.CreateInstance(Clase);&nbsp;<o:p>
-</o:p>
+    Object Objeto = Activator.CreateInstance(Clase)
 {% endhighlight %}
                           <p class="TextoNormal">Observe que el tipo de la
                           variable <b>Objeto</b> es <b>Object</b> y no <b>Formulario</b>.
@@ -645,7 +645,7 @@ using System.Reflection;&nbsp;
                             que cuente con un solo método, llamado <b>Saludos()</b>,
                             que se limite a mostrar un mensaje.</p>
                           </blockquote>
-                          <h4>Invocación dinámica</h4>
+                          <h3>Invocación dinámica</h3>
                           <p class="TextoNormal">Disponiendo de una referencia a
                           nuestro objeto en la variable <b>Objeto</b>, podríamos
                           invocar al método <b>Saludos()</b> o, puesto que <b>Formulario</b>
@@ -674,19 +674,18 @@ using System.Reflection;&nbsp;
 {% highlight csharp %}
 
 // Obtenemos una referencia a un método
-  MethodInfo Metodo = Clase.GetMethod(&quot;Saludos&quot;);
+  MethodInfo Metodo = Clase.GetMethod("Saludos");
   Metodo.Invoke(Objeto, null); // y lo llamamos
 
   // Obtenemos una referencia a una propiedad
-&nbsp;&nbsp;PropertyInfo Propiedad = Clase.GetProperty(&quot;Text&quot;);
+  PropertyInfo Propiedad = Clase.GetProperty("Text");
 
   // y modificamos su valor
-  Propiedad.SetValue(Objeto, &quot;Nuevo título de la ventana&quot;, null);
+  Propiedad.SetValue(Objeto, "Nuevo título de la ventana", null);
 
   // Cambiamos la referencia a otro método
-  Metodo = Clase.GetMethod(&quot;Show&quot;);
-  Metodo.Invoke(Objeto, null); // y lo llamamos&nbsp;<o:p>
-</o:p>
+  Metodo = Clase.GetMethod("Show");
+  Metodo.Invoke(Objeto, null); // y lo llamamos
 {% endhighlight %}
                           <p class="TextoNormal">En este ejemplo hemos asumido
                           que el ensamblado <b>Formulario.dl</b>l contenía un
