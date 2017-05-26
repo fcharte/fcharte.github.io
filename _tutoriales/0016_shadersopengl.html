@@ -1,0 +1,71 @@
+---
+layout: post
+title: Cómo usar los <i>shaders</i> desde OpenGL<br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>	El diseño de <i>shaders</i> usando programas como Shader Maker resulta bastante sencillo, pero el objetivo último es usar esos <i>shaders</i> en nuestras propias aplicaciones. Para ello habría que seguir el procedimiento descrito en el tutorial sobre lenguajes de <i>shaders</i>, concretamente el apartado <a href="http://fcharte.com/tutoriales/0004_lenguajesshaders/">sobre OGLSL</a>. Traducido a código, dicho procedimiento se implementaría así:</p>
+
+{% highlight c %}
+
+// Variables para almacenar los identificadores de shaders
+GLuint vs, gs, ps, shaders;
+// y para contener el código
+char *codVS, *codGS, *codPS;
+
+// Asignar a codVS, codGS y codPS el código de los shaders
+codVS = "uniform vec3 dirLuz; \
+   varying float intensidad;\
+   \
+   void main() { \
+     intensidad = dot(dirLuz, gl_Normal);\
+     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;\
+   }";
+
+   codPS = "varying float intensidad;\
+   \
+   void main() { \
+   if (intensidad > 0.95) // se asigna un color blanco\
+     gl_FragColor = vec4(1.0,1.0,1.0,1.0);\
+       else if (intensidad > 0.75) // rojo\
+     gl_FragColor = vec4(1.0,0.0,0.0,1.0);\
+       else if (intensidad > 0.5) // verde\
+     gl_FragColor= vec4(0.0,1.0,0.0,1.0);\
+       else if (intensidad > 0.25) // azul\
+     gl_FragColor = vec4(0.0,0.0,1.0,1.0);\
+       else // o amarillo\
+     gl_FragColor = vec4(1.0,1.0,0.0,1.0);\
+   }";
+
+
+// Se crea y compila el VS
+vs = glCreateShader(GL_VERTEX_SHADER);
+glShaderSource(vs, 1, &codVS, NULL);
+glCompileShader(vs);
+
+// Se crea y compila el GS
+gs = glCreateShader(GL_GEOMETRY_SHADER_EXT);
+glShaderSource(gs, 1, &codGS, NULL);
+glCompileShader(gs);
+
+// Se crea y compila el PS
+ps = glCreateShader(GL_FRAGMENT_SHADER);
+glShaderSource(ps, 1, &codPS, NULL);
+glCompileShader(ps);
+
+// Se crea un programa y se asocian los shaders
+shaders = glCreateProgram();
+glAttachShader(shaders, vs);
+glAttachShader(shaders, gs);
+glAttachShader(shaders, ps);
+
+// Y finalmente se linka y asocia al cauce
+glLinkProgram(shaders);
+glUseProgram(shaders);
+
+// A partir de aquí dibujar la escena con OpenGL
+
+{% endhighlight %}
+<p>	Las funciones <code>glCreateShader()</code>, <code>glShaderSource()</code>, <code>glCompileShader()</code>, etc., forman parte de <b>OpenGL 2.1 o posterior</b>. Lo más cómodo es descargar <b>GLEW</b> e incluir al inicio de nuestro módulo de código el archivo de cabecera <code>glew.h</code>. Éste contiene una serie de marcos que se encargarán de convertir las llamadas a las anteriores funciones en la invocación adecuada a la extensión que corresponda.</p>
+<p>Con esta breve entrada pongo punto y final a esta extensa serie introductoria sobre la programación de <i>shaders</i>, en la que he abordado desde los fundamentos básicos de cada tipo de <i>shader</i> hasta su desarrollo en la práctica con ejemplos sencillos, pasando por el análisis de los lenguajes disponibles y algunas herramientas. En el margen derecho tienes la sección <b>Curso sobre <i>shaders</i></b> que te permite acceder a todas las entradas de esta series.</p>
