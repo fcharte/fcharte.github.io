@@ -1,0 +1,23 @@
+---
+layout: post
+title: Cómo programar un <i>pixel shader</i> sencillo<br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+p>	Los PS son programas con una estructura muy similar a la de los VS, si bien los parámetros de entrada y salida sobre los que trabaja son diferentes. La finalidad de un PS básicamente es la de definir el color que tendrá un fragmento o pre-píxel, normalmente usando información procedente de la geometría, texturas, etc.</p>
+
+<p>	El color de entrada se recibe en el parámetro <code>gl_Color</code>, que no debe confundirse con el parámetro del mismo nombre existente en los VS. Este parámetro contiene el color obtenido a través de una interpolación en la que intervienen los <i>varying</i> <code>gl_FrontColor</code> y <code>gl_BackColor</code>, normalmente establecidos por el VS, y la orientación que tenga la geometría a la que corresponde el fragmento.</p>
+
+
+
+
+<p>	Los parámetros de salida del PS serán dos: <code>gl_FragColor</code> y <code>gl_FragDepth</code>. El primero indica el color a aplicar al fragmento, mientras que el segundo determina el valor que se escribirá en el buffer de profundidad.</p>
+
+<p>	El caso más sencillo de PS es aquél en el que se asigna un valor constante al color de cada fragmento. Tomando como punto de partida el estado en el que se encuentra <b>Shader Maker</b> cuando es iniciado, el código del PS sería el que puede verse en la parte derecha de la figura inferior: la asignación a <code>gl_FragColor</code> de un vector constante. En el panel de la izquierda se ve el efecto sobre la famosa tetera: al tener todos los puntos el mismo color, no se aprecian bordes ni profundidad.</p>
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/ps1.png" alt="PS que asigna un color constante a cada fragmento" /></p>
+
+<p>	Lo habitual es que a <code>gl_FragColor</code> se le asigne el <i>varying</i> <code>gl_Color</code>, es decir, el color obtenido de la interpolación antes citada. Manipulando ese <code>gl_Color</code>, por ejemplo aplicando un factor multiplicativo, sería posible suavizar o potenciar los colores, según el parámetro empleado.</p>
+
+<p>	Los efectos más interesantes se obtienen, como veremos en la próxima entrega, comunicando el PS con el VS. De esta forma es posible definir esquemas de coloreado e iluminación a medida. En la web es posible encontrar, por ejemplo, <i>shaders</i> que aplican el conocido esquema de <a href="http://en.wikipedia.org/wiki/Phong_shading">iluminación de Phong</a> usando un VS conjuntamente con un PS.</p>
