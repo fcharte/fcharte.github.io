@@ -1,91 +1,91 @@
 ---
 layout: post
-title: CÛmo programar un <i>vertex shader</i> simple<br/><p class="author">by Francisco Charte.</p>
+title: C√≥mo programar un <i>vertex shader</i> simple<br/><p class="author">by Francisco Charte.</p>
 toc: true
 numbersections: true
 ---
 
-<p>	Un <i>vertex shader</i> es un programa que recibe como entrada una serie de argumentos y genera unos resultados, casi como cualquier programa de ordenador. Su objetivo general es transformar vÈrtices, si bien puede tambiÈn influir en otros par·metros como el color o las coordenadas de textura.</p>
+<p>	Un <i>vertex shader</i> es un programa que recibe como entrada una serie de argumentos y genera unos resultados, casi como cualquier programa de ordenador. Su objetivo general es transformar v√©rtices, si bien puede tambi√©n influir en otros par√°metros como el color o las coordenadas de textura.</p>
 
-<p class="nota">En esta entrada y las siguientes utilizarÈ el lenguaje OGLSL para escribir los <i>shaders</i>, al ser Èste el lenguaje asociado a OpenGL, que es la API gr·fica m·s utilizada, y ser tambiÈn multiplataforma, algo que no se aplica por ejemplo a DirectX y HLSL.<br />
+<p class="nota">En esta entrada y las siguientes utilizar√© el lenguaje OGLSL para escribir los <i>shaders</i>, al ser √©ste el lenguaje asociado a OpenGL, que es la API gr√°fica m√°s utilizada, y ser tambi√©n multiplataforma, algo que no se aplica por ejemplo a DirectX y HLSL.<br />
 
-Para codificar y probar los distintos ejemplos usarÈ la herramienta <b>Shader Maker</b> (ver descripciÛn de herramientas en tutorial previo), simplemente porque est· m·s actualizada que <b>ShaderDesigner</b> y permite trabajar con GS, una posibilidad que no ofrece este ˙ltimo programa.</p>
+Para codificar y probar los distintos ejemplos usar√© la herramienta <b>Shader Maker</b> (ver descripci√≥n de herramientas en tutorial previo), simplemente porque est√° m√°s actualizada que <b>ShaderDesigner</b> y permite trabajar con GS, una posibilidad que no ofrece este √∫ltimo programa.</p>
 
-<h2>Par·metros de entrada</h2>
+<h2>Par√°metros de entrada</h2>
 
-<p>Desde un VS se tiene acceso a los siguientes par·metros de entrada:</p>
+<p>Desde un VS se tiene acceso a los siguientes par√°metros de entrada:</p>
 <ul class="enumeracion">
-<li><code>	gl_Vertex</code>: Es un vector en coordenadas uniformes (4 elementos) que representa al vÈrtice que debe procesar el <i>shader</i>.
-<li><code>	gl_Normal</code>: Vector con las coordenadas 3D de la normal asociada al vÈrtice.
-<li><code>	gl_Color</code>: Se trata de un vector con los cuatro componentes (R,G,B,A) del color del vÈrtice.
-<li><code>	gl_MultiTexCoordN</code>: Contiene las coordenadas de textura de la unidad de textura N. En el hardware actual existen m˙ltiples unidades de textura. Es habitual que N oscile entre 0 y 7.
+<li><code>	gl_Vertex</code>: Es un vector en coordenadas uniformes (4 elementos) que representa al v√©rtice que debe procesar el <i>shader</i>.
+<li><code>	gl_Normal</code>: Vector con las coordenadas 3D de la normal asociada al v√©rtice.
+<li><code>	gl_Color</code>: Se trata de un vector con los cuatro componentes (R,G,B,A) del color del v√©rtice.
+<li><code>	gl_MultiTexCoordN</code>: Contiene las coordenadas de textura de la unidad de textura N. En el hardware actual existen m√∫ltiples unidades de textura. Es habitual que N oscile entre 0 y 7.
 </ul>
 
-<p>	Adem·s de la informaciÛn relativa al vÈrtice que debe procesarse, el VS tambiÈn tiene acceso a una serie de datos invariantes, procedentes de OpenGL y que no puede modificar, conocidos como <i>uniforms</i>. Los m·s relevantes son:</p>
+<p>	Adem√°s de la informaci√≥n relativa al v√©rtice que debe procesarse, el VS tambi√©n tiene acceso a una serie de datos invariantes, procedentes de OpenGL y que no puede modificar, conocidos como <i>uniforms</i>. Los m√°s relevantes son:</p>
 <ul class="enumeracion">
-<li><code>	gl_ProjectionMatrix</code>: Matriz de proyecciÛn. Es la matriz 4x4 habitual.
+<li><code>	gl_ProjectionMatrix</code>: Matriz de proyecci√≥n. Es la matriz 4x4 habitual.
 <li><code>	gl_ModelViewMatrix</code>: Matriz de modelo-vista.
-<li><code>	gl_ModelViewProjectionMatrix</code>: Matriz con el producto de las dos anteriores. Permite proyectar los puntos sin necesidad de realizar el producto de proyecciÛn y vista por cada vÈrtice existente.
-<li><code>	gl_NormalMatrix</code>: Matriz 4x4 obtenida a travÈs de la trasposiciÛn y c·lculo de inversa de la matriz modelo-vista. Se utiliza para la transformaciÛn de la normal.
+<li><code>	gl_ModelViewProjectionMatrix</code>: Matriz con el producto de las dos anteriores. Permite proyectar los puntos sin necesidad de realizar el producto de proyecci√≥n y vista por cada v√©rtice existente.
+<li><code>	gl_NormalMatrix</code>: Matriz 4x4 obtenida a trav√©s de la trasposici√≥n y c√°lculo de inversa de la matriz modelo-vista. Se utiliza para la transformaci√≥n de la normal.
 </ul>
 
-<h2>Par·metros de salida</h2>
-<p>	El ˙nico resultado que obligatoriamente debe generar un VS es el vÈrtice, transformado o no, que se enviar· a las siguientes etapas del cauce gr·fico. El par·metro al que debe asignarse dicho vÈrtice es <code>gl_Position</code> y, al igual que <code>gl_Vertex</code>, es un vector con cuatro elementos, es decir, la posiciÛn se establece en coordenadas homogÈneas.</p>
+<h2>Par√°metros de salida</h2>
+<p>	El √∫nico resultado que obligatoriamente debe generar un VS es el v√©rtice, transformado o no, que se enviar√° a las siguientes etapas del cauce gr√°fico. El par√°metro al que debe asignarse dicho v√©rtice es <code>gl_Position</code> y, al igual que <code>gl_Vertex</code>, es un vector con cuatro elementos, es decir, la posici√≥n se establece en coordenadas homog√©neas.</p>
 
-<p>	Adem·s el VS tambiÈn puede modificar otros datos, compartidos con los PS y GS, denominados genÈricamente <i>varyings</i>. Gracias a ellos puede influir en el color que se asociar· al vÈrtice y las coordenadas de textura. Dichos elementos variables son los siguientes:</p>
+<p>	Adem√°s el VS tambi√©n puede modificar otros datos, compartidos con los PS y GS, denominados gen√©ricamente <i>varyings</i>. Gracias a ellos puede influir en el color que se asociar√° al v√©rtice y las coordenadas de textura. Dichos elementos variables son los siguientes:</p>
 
 <ul class="enumeracion">
-<li><code>	gl_FrontColor</code>: Color que se asignar· a la cara delantera de la primitiva.
-<li><code>	gl_BackColor</code>: Color que se asignar· a la cara trasera de la primitiva.
+<li><code>	gl_FrontColor</code>: Color que se asignar√° a la cara delantera de la primitiva.
+<li><code>	gl_BackColor</code>: Color que se asignar√° a la cara trasera de la primitiva.
 <li><code>gl_TexCoord[N]</code>: Coordenadas para la textura N-sima. 
 </ul>
 
-<p>	Los tres par·metros son vectores de cuatro elementos, los dos primeros en formato (R,G,B,A) y el tercero en coordenadas homogÈneas, como (X,Y,Z,W).</p>
+<p>	Los tres par√°metros son vectores de cuatro elementos, los dos primeros en formato (R,G,B,A) y el tercero en coordenadas homog√©neas, como (X,Y,Z,W).</p>
 
-<p class="nota">Los <i>varying</i> son campos que permiten compartir informaciÛn entre los diferentes <i>shaders</i> de un programa, pero no tienen una incidencia directa sobre el resultado final aplicado a la geometrÌa. La asignaciÛn de un color a <coe>gl_FrontColor</code> por parte del VS, por ejemplo, no se traduce en la asignaciÛn de ese color al pÌxel final. Ser· decisiÛn del PS, posiblemente a partir del par·metro recibido en <code>gl_FrontColor</code>, el color que finalmente se utilice.</p>
+<p class="nota">Los <i>varying</i> son campos que permiten compartir informaci√≥n entre los diferentes <i>shaders</i> de un programa, pero no tienen una incidencia directa sobre el resultado final aplicado a la geometr√≠a. La asignaci√≥n de un color a <coe>gl_FrontColor</code> por parte del VS, por ejemplo, no se traduce en la asignaci√≥n de ese color al p√≠xel final. Ser√° decisi√≥n del PS, posiblemente a partir del par√°metro recibido en <code>gl_FrontColor</code>, el color que finalmente se utilice.</p>
 
-<h2>ComposiciÛn del VS</h2>
-<p>	Conociendo exclusivamente los par·metros de entrada y salida que puede utilizar un VS, ya es posible escribir uno sencillo que, por ejemplo, lleve a cabo una transformaciÛn fija sobre los vÈrtices de una geometrÌa. El objetivo es duplicar el tamaÒo en el eje Z y reducirlo a la mitad en el eje X.</p>
+<h2>Composici√≥n del VS</h2>
+<p>	Conociendo exclusivamente los par√°metros de entrada y salida que puede utilizar un VS, ya es posible escribir uno sencillo que, por ejemplo, lleve a cabo una transformaci√≥n fija sobre los v√©rtices de una geometr√≠a. El objetivo es duplicar el tama√±o en el eje Z y reducirlo a la mitad en el eje X.</p>
 
-<p>	El ejecutar el programa Shader Maker se inicia un proyecto con unos <i>shaders</i> b·sicos. Con la opciÛn <b>Test Model</b> se modifica el modelo sobre el que se probar·n. En este caso he elegido un cubo, de forma que el aspecto inicial es el que puede verse en la figura inferior.</p>
+<p>	El ejecutar el programa Shader Maker se inicia un proyecto con unos <i>shaders</i> b√°sicos. Con la opci√≥n <b>Test Model</b> se modifica el modelo sobre el que se probar√°n. En este caso he elegido un cubo, de forma que el aspecto inicial es el que puede verse en la figura inferior.</p>
 
 <p style="text-align:center"><image src="http://www.fcharte.com/imagenes/vertex1.png" alt="Aspecto inicial del cubo, sin aplicar el VS" /></p>
 
-<p>	Usando el ratÛn sobre el ·rea de visualizaciÛn es posible tanto rotar el modelo como hacer zoom. Es importante que la opciÛn <b>Use GLSL Program</b>, el primer <i>check-box</i> que hay en el apartado <b>Geometry Processing</b>, estÈ marcado, de lo contrario no se usarÌan los <i>shaders</i> para generar la imagen.</p>
+<p>	Usando el rat√≥n sobre el √°rea de visualizaci√≥n es posible tanto rotar el modelo como hacer zoom. Es importante que la opci√≥n <b>Use GLSL Program</b>, el primer <i>check-box</i> que hay en el apartado <b>Geometry Processing</b>, est√© marcado, de lo contrario no se usar√≠an los <i>shaders</i> para generar la imagen.</p>
 
-<p>	A continuaciÛn modificaremos el cÛdigo que aparece en la p·gina <b>Vertex Shader</b> del editor. El cÛdigo quedar· asÌ:</p>
+<p>	A continuaci√≥n modificaremos el c√≥digo que aparece en la p√°gina <b>Vertex Shader</b> del editor. El c√≥digo quedar√° as√≠:</p>
 {% highlight c %}
 
 void main()
 {
     vec4 v = gl_Vertex; // Tomamos el vertice de origen
 
-    // Reducimos dimensiÛn en eje X
+    // Reducimos dimensi√≥n en eje X
     v.x = v.x * 0.5;
     // y duplicamos en eje Z
     v.z = v.z * 2;
 
-    // Se aplica establece el vÈrtice transformado como posiciÛn
+    // Se aplica establece el v√©rtice transformado como posici√≥n
     gl_Position    = gl_ModelViewProjectionMatrix * v;
 
-    // Par·metros de comunicaciÛn del VS con el PS, se dejan
+    // Par√°metros de comunicaci√≥n del VS con el PS, se dejan
     // tal cual
     gl_FrontColor  = gl_Color;
     gl_TexCoord[0] = gl_MultiTexCoord0;
 }
 {% endhighlight %}
 
-<p>	Como puede verse, el cÛdigo se asemeja en gran medida a cualquier programa escrito en C. Existe una funciÛn <code>main()</code>, que contiene las sentencias a ejecutar; se declaran variables como <code>v</code>, de tipo <code>vec4</code>, y se realizan operaciones de asignaciÛn y producto. El operador <code>*</code> en este contexto, sin embargo, no realiza siempre un producto escalar entre dos n˙meros. En la sentencia <code>gl_Position = ...</code> se est· llevando a cabo el producto de dos matrices: la de modelo-vista-proyecciÛn por la matriz de una fila y cuatro columnas que representa al vÈrtice.</p>
+<p>	Como puede verse, el c√≥digo se asemeja en gran medida a cualquier programa escrito en C. Existe una funci√≥n <code>main()</code>, que contiene las sentencias a ejecutar; se declaran variables como <code>v</code>, de tipo <code>vec4</code>, y se realizan operaciones de asignaci√≥n y producto. El operador <code>*</code> en este contexto, sin embargo, no realiza siempre un producto escalar entre dos n√∫meros. En la sentencia <code>gl_Position = ...</code> se est√° llevando a cabo el producto de dos matrices: la de modelo-vista-proyecci√≥n por la matriz de una fila y cuatro columnas que representa al v√©rtice.</p>
 
-<p>	Una vez escrito el cÛdigo del <i>shader</i>, hay que hacer clic en el botÛn <b>Compile and Link</b> para compilarlo y vincularlo al programa que genera la imagen. En ese momento podr· verse que el cubo se convierte en un paralelepÌpedo (vÈase la figura inferior). Marcando y desmarcando la opciÛn <b>Use GLSL Program</b> se puede activar/desactivar, respectivamente, el uso del VS, viendo asÌ la imagen original sin <i>shaders</i> y la que se genera con Èstos.</p>
+<p>	Una vez escrito el c√≥digo del <i>shader</i>, hay que hacer clic en el bot√≥n <b>Compile and Link</b> para compilarlo y vincularlo al programa que genera la imagen. En ese momento podr√° verse que el cubo se convierte en un paralelep√≠pedo (v√©ase la figura inferior). Marcando y desmarcando la opci√≥n <b>Use GLSL Program</b> se puede activar/desactivar, respectivamente, el uso del VS, viendo as√≠ la imagen original sin <i>shaders</i> y la que se genera con √©stos.</p>
 
-<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/vertex2.png" alt="CÛdigo del VS y efecto que genera sobre la escena" /></p>
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/vertex2.png" alt="C√≥digo del VS y efecto que genera sobre la escena" /></p>
 
-<p class="nota">Las ˙ltimas dos sentencias del VS proceden del esqueleto que genera Shader Maker, siendo su finalidad entregar un color y coordenadas de textura al PS. …ste los utiliza para realizar su trabajo, por lo que de eliminarse no funcionar· correctamente.</p>
+<p class="nota">Las √∫ltimas dos sentencias del VS proceden del esqueleto que genera Shader Maker, siendo su finalidad entregar un color y coordenadas de textura al PS. √âste los utiliza para realizar su trabajo, por lo que de eliminarse no funcionar√° correctamente.</p>
 
-<p>	El efecto que se consigue no es nada espectacular. Sin embargo, si se analiza quÈ est· ocurriendo al activar el VS es f·cil deducir algunos aspectos interesantes:</p>
+<p>	El efecto que se consigue no es nada espectacular. Sin embargo, si se analiza qu√© est√° ocurriendo al activar el VS es f√°cil deducir algunos aspectos interesantes:</p>
 <ul class="enumeracion">
-<li>	El programa que se ha escrito act˙a sobre un ˙nico vÈrtice, que recibe como entrada en <code>gl_Vertex</code>, y genera un ˙nico resultado, en <code>gl_Position</code>. El resto de los vÈrtices de la geometrÌa, por tanto, no influyen en el c·lculo del vÈrtice que est· procesando el VS en un momento dado.
-<li>Una vez compilado y enviado a la GPU, el VS realmente se ejecuta en paralelo sobre un conjunto de vÈrtices de la geometrÌa. En este caso concreto la transformaciÛn de los vÈrtices del cubo se lleva a cabo en un ˙nico ciclo, ya que existen tan solo ocho vÈrtices y el hardware empleado permitirÌa ejecutar en paralelo varios cientos de vÈrtices. Para conseguir este mismo rendimiento en una CPU habrÌa que crear explÌcitamente m˙ltiples hilos y, en el mejor de los casos, se podrÌan procesar hasta 4 u 8 vÈrtices por ciclo, dependiendo del microprocesador.
-<li>	Aunque en este ejemplo la transformaciÛn aplicada al vÈrtice es constante, siempre se divide y multiplica por 2, nada impide que esos factores sean variables, tal y como se mostrar· en el ejemplo de la prÛxima entrada, permaneced atentos.
+<li>	El programa que se ha escrito act√∫a sobre un √∫nico v√©rtice, que recibe como entrada en <code>gl_Vertex</code>, y genera un √∫nico resultado, en <code>gl_Position</code>. El resto de los v√©rtices de la geometr√≠a, por tanto, no influyen en el c√°lculo del v√©rtice que est√° procesando el VS en un momento dado.
+<li>Una vez compilado y enviado a la GPU, el VS realmente se ejecuta en paralelo sobre un conjunto de v√©rtices de la geometr√≠a. En este caso concreto la transformaci√≥n de los v√©rtices del cubo se lleva a cabo en un √∫nico ciclo, ya que existen tan solo ocho v√©rtices y el hardware empleado permitir√≠a ejecutar en paralelo varios cientos de v√©rtices. Para conseguir este mismo rendimiento en una CPU habr√≠a que crear expl√≠citamente m√∫ltiples hilos y, en el mejor de los casos, se podr√≠an procesar hasta 4 u 8 v√©rtices por ciclo, dependiendo del microprocesador.
+<li>	Aunque en este ejemplo la transformaci√≥n aplicada al v√©rtice es constante, siempre se divide y multiplica por 2, nada impide que esos factores sean variables, tal y como se mostrar√° en el ejemplo de la pr√≥xima entrada, permaneced atentos.
 </ul>

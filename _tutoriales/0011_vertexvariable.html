@@ -1,0 +1,33 @@
+---
+layout: post
+title: Cómo aplicar transformaciones variables en un <i>vertex shader</i><br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>Partiendo del código del VS del tutorial previo de esta serie, es fácil introducir algunos cambios a fin de que la transformación que se aplica a los vértices no sea constante sino variable con el tiempo. Para ello se puede utilizar el parámetro uniforme <code>time</code> (un parámetro al que tiene el acceso el <i>shader</i> y que no puede modificar, procede de la aplicación).</p>
+
+<p>	El código del <i>shader</i>, una vez modificado, sería el siguiente:</p>
+{% highlight c %}
+
+uniform float time; // Tiempo que lleva ejecutándose el shader
+
+void main()
+{
+    vec4 v = gl_Vertex; // Tomamos el vertice de origen
+
+    // Se aplica una transformación variable y periódica
+    v.x = v.x * abs(sin(time)) + 0.1;
+    v.y = v.y * abs(cos(time)) + 0.1;
+
+    // Se aplica establece el vértice transformado como posición
+    gl_Position    = gl_ModelViewProjectionMatrix * v;
+    ...
+{% endhighlight %}
+<p>	La declaración <code>uniform float time</code> al inicio permite al <i>shader</i> acceder al citado parámetro <code>time</code>, en el que la aplicación facilita los segundos que lleva en ejecución. Este dato es suficiente para aplicar una transformación variable y de tipo periódico, gracias a las funciones <code>sin()</code> y <code>cos()</code>. Ambas son de tipo periódico, pero los valores negativos no interesan para este caso, por lo que se obtiene el valor absoluto.</p>
+
+<p>	Al aplicar <code>sin()</code> sobre un eje y <code>cos()</code> sobre otro, lo que se consigue es que mientras la geometría crece en un uno de ellos decrezca en el otro y viceversa. El efecto, del que pueden verse dos capturas puntuales en la figura inferior, es que el cubo (o cualquier otra geometría que se cargue en el programa), se estira y encoge alternativamente en los ejes X e Y.</p>
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/vertex3.png" alt="Captura de dos instantes de la ejecución del VS" /></p>
+
+<p>	En lugar de aplicar un factor meramente multiplicativo a los ejes, que provoca un cambio de tamaño en la geometría, podrían realizar transformaciones de rotación variables en el tiempo, de forma que la escena vaya girando al completo en cualquiera de los ejes o en varios de ellos simultáneamente.</p>
