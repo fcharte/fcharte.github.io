@@ -51,14 +51,14 @@
 <li class="toc-entry toc-h2"><a href="#----------------------------ensamblados-y-módulos--------------------------">
                             Ensamblados y módulos
                           </a></li>
-<li class="toc-entry toc-h4"><a href="#información-sobre-el-ensamblado">Información sobre el ensamblado</a></li>
-<li class="toc-entry toc-h4"><a href="#módulos-que-componen-el-ensamblado">Módulos que componen el ensamblado</a></li>
+<li class="toc-entry toc-h3"><a href="#información-sobre-el-ensamblado">Información sobre el ensamblado</a></li>
+<li class="toc-entry toc-h3"><a href="#módulos-que-componen-el-ensamblado">Módulos que componen el ensamblado</a></li>
 <li class="toc-entry toc-h2"><a href="#----------------------------tipos-definidos-en-un----------------------------ensamblado--------------------------">
                             Tipos definidos en un
                             ensamblado
                           </a></li>
-<li class="toc-entry toc-h4"><a href="#la-clase-type">La clase Type</a></li>
-<li class="toc-entry toc-h4"><a href="#parámetros-de-un-método">Parámetros de un método</a></li>
+<li class="toc-entry toc-h3"><a href="#la-clase-type">La clase Type</a></li>
+<li class="toc-entry toc-h3"><a href="#parámetros-de-un-método">Parámetros de un método</a></li>
 <li class="toc-entry toc-h2"><a href="#----------------------------jerarquía-de-tipos-de-un----------------------------ensamblado--------------------------">
                             Jerarquía de tipos de un
                             ensamblado
@@ -66,8 +66,8 @@
 <li class="toc-entry toc-h2"><a href="#----------------------------uso-dinámico-de-objetos--------------------------">
                             Uso dinámico de objetos
                           </a></li>
-<li class="toc-entry toc-h4"><a href="#la-clase-activator">La clase Activator</a></li>
-<li class="toc-entry toc-h4"><a href="#invocación-dinámica">Invocación dinámica</a></li>
+<li class="toc-entry toc-h3"><a href="#la-clase-activator">La clase Activator</a></li>
+<li class="toc-entry toc-h3"><a href="#invocación-dinámica">Invocación dinámica</a></li>
 <li class="toc-entry toc-h2"><a href="#----------------------------resumen--------------------------">
                             Resumen
                           </a></li>
@@ -168,8 +168,8 @@
                           leyendo ciertas propiedades. También podemos enumerar
                           todos los módulos que lo componen, como veremos de
                           inmediato.</p>
-                          <h4>
-<a id="información-sobre-el-ensamblado" class="anchor" href="#informaci%C3%B3n-sobre-el-ensamblado" aria-hidden="true"><span class="octicon octicon-link"></span></a>Información sobre el ensamblado</h4>
+                          <h3>
+<a id="información-sobre-el-ensamblado" class="anchor" href="#informaci%C3%B3n-sobre-el-ensamblado" aria-hidden="true"><span class="octicon octicon-link"></span></a>Información sobre el ensamblado</h3>
                           <p class="TextoNormal">Un ensamblado tiene un nombre,
                           una localización física, un punto de entrada, etc.
                           Todos éstos son datos que podemos recuperar sirviéndonos
@@ -189,23 +189,25 @@
     <span class="c1">// Obtenemos el objeto Assembly que representa
 </span>    <span class="c1">// al ensamblado que contiene este mismo código
 </span>    <span class="n">Assembly</span> <span class="n">EsteEnsamblado</span> <span class="p">=</span> 
-      <span class="n">Assembly</span><span class="p">.</span><span class="nf">GetExecutingAssembly</span><span class="p">();&amp;</span><span class="n">nbsp</span><span class="p">;&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>    <span class="c1">// Mostramos por la consola el nombre, localización 
+      <span class="n">Assembly</span><span class="p">.</span><span class="nf">GetExecutingAssembly</span><span class="p">()</span>    <span class="c1">// Mostramos por la consola el nombre, localización 
 </span>    <span class="c1">// y otras propiedades
-</span>    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Nombre</span> <span class="n">del</span> <span class="n">ensamblado</span><span class="p">:</span> <span class="p">{</span><span class="m">0</span><span class="p">}&amp;</span><span class="n">quot</span><span class="p">;,</span> 
-      <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">FullName</span><span class="p">);&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
-    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Localizaci</span><span class="err">ó</span><span class="n">n</span> <span class="n">f</span><span class="err">í</span><span class="n">sica</span><span class="p">:</span> <span class="p">{</span><span class="m">0</span><span class="p">}&amp;</span><span class="n">quot</span><span class="p">;,</span> 
-      <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">Location</span><span class="p">);&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
-    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">CodeBase</span><span class="p">:</span> <span class="p">{</span><span class="m">0</span><span class="p">}&amp;</span><span class="n">quot</span><span class="p">;,</span> 
+</span>    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Nombre del ensamblado: {0}"</span><span class="p">,</span> 
+      <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">FullName</span><span class="p">);</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Localización física: {0}"</span><span class="p">,</span> 
+      <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">Location</span><span class="p">);</span>
+	<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"CodeBase: {0}"</span><span class="p">,</span> 
       <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">CodeBase</span><span class="p">);</span>
-    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Est</span><span class="err">á</span> <span class="n">en</span> <span class="n">la</span> <span class="n">cach</span><span class="err">é</span> <span class="n">de</span> <span class="n">ensamblados</span><span class="p">:</span> <span class="p">{</span><span class="m">0</span><span class="p">}&amp;</span><span class="n">quot</span><span class="p">;,</span> 
-      <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">GlobalAssemblyCache</span><span class="p">);&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
+	<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Está en la caché de ensamblados: {0}"</span><span class="p">,</span> 
+      <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">GlobalAssemblyCache</span><span class="p">);</span>
 
     <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
-    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">EntryPoint</span><span class="p">:</span> <span class="p">{</span><span class="m">0</span><span class="p">}&amp;</span><span class="n">quot</span><span class="p">;,</span> 
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"EntryPoint: {0}"</span><span class="p">,</span> 
       <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">EntryPoint</span><span class="p">);</span>
   <span class="p">}</span>
-<span class="p">}&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span></code></pre></figure>
+<span class="p">}</span></code></pre></figure>
 
                           <p class="Listado">Tras obtener una referencia al
                           objeto <b>Assembly</b> que representa al ensamblado
@@ -235,9 +237,8 @@
                           sentencia siguiente:</p>
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp">                          
 <span class="n">EsteEnsamblado</span> <span class="p">=</span> <span class="n">Assembly</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span>
-  <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">System</span><span class="p">.</span><span class="n">Windows</span><span class="p">.</span><span class="n">Forms</span><span class="p">,</span><span class="n">version</span><span class="p">=</span><span class="m">1.0</span><span class="p">.</span><span class="m">3300.0</span><span class="p">,</span> <span class="n">culture</span><span class="p">=</span><span class="n">neutral</span><span class="p">,&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="p">+</span>
-  <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">PublicKeyToken</span><span class="p">=</span><span class="n">b77a5c561934e089</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span></code></pre></figure>
+  <span class="s">"System.Windows.Forms,version=1.0.3300.0, culture=neutral,"</span> <span class="p">+</span>
+  <span class="s">"PublicKeyToken=b77a5c561934e089"</span><span class="p">);</span></code></pre></figure>
 
                           <p class="TextoNormal">En este caso se recupera el
                           ensamblado <b>System.Windows.Forms</b>, pero de manera
@@ -251,8 +252,8 @@
                           <b>Figura 2.</b> Información sobre el ensamblado <b>System.Windows.Forms</b>.<p>
                           </p>
                           </p>
-                          <h4>
-<a id="módulos-que-componen-el-ensamblado" class="anchor" href="#m%C3%B3dulos-que-componen-el-ensamblado" aria-hidden="true"><span class="octicon octicon-link"></span></a>Módulos que componen el ensamblado</h4>
+                          <h3>
+<a id="módulos-que-componen-el-ensamblado" class="anchor" href="#m%C3%B3dulos-que-componen-el-ensamblado" aria-hidden="true"><span class="octicon octicon-link"></span></a>Módulos que componen el ensamblado</h3>
                           <p class="TextoNormal">La clase <b>Assembly</b>
                           dispone de varios métodos que nos permiten obtener un
                           cierto módulo de los que componen el ensamblado o
@@ -272,8 +273,7 @@
                           compuesto de un solo módulo.</p>
                           
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">foreach</span><span class="p">(</span><span class="n">Module</span> <span class="n">UnModulo</span> <span class="k">in</span> <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="nf">GetModules</span><span class="p">())</span>
-      <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">UnModulo</span><span class="p">.</span><span class="n">Name</span><span class="p">);&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span></code></pre></figure>
+      <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">UnModulo</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span></code></pre></figure>
                           <p class="PieFigura"><img border="0" src="http://fcharte.com/assets/img/rttinet/03.jpg" width="669" height="338"><br>
                           <b>Figura 3.</b> Mostramos la lista de módulos que
                           componen el ensamblado.</p>
@@ -312,8 +312,8 @@
                           u objeto mediante el método <b>GetType()</b> definido
                           en la clase <b>Object</b>, ascendiente común de todos
                           los tipos existentes en Visual C# .NET.</p>
-                          <h4>
-<a id="la-clase-type" class="anchor" href="#la-clase-type" aria-hidden="true"><span class="octicon octicon-link"></span></a>La clase Type</h4>
+                          <h3>
+<a id="la-clase-type" class="anchor" href="#la-clase-type" aria-hidden="true"><span class="octicon octicon-link"></span></a>La clase Type</h3>
                           <p class="TextoNormal">A pesar de estar definida en el
                           ámbito <b>System</b> y ser una clase fundamental para
                           el funcionamiento de los diseñadores y editores de
@@ -439,8 +439,8 @@
                           sea <b>NestedType</b> nos encontramos con la definición
                           de un nuevo tipo. Es lo que ocurre, por ejemplo,
                           cuando una clase alberga la definición de otra clase.</p>
-                          <h4>
-<a id="parámetros-de-un-método" class="anchor" href="#par%C3%A1metros-de-un-m%C3%A9todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Parámetros de un método</h4>
+                          <h3>
+<a id="parámetros-de-un-método" class="anchor" href="#par%C3%A1metros-de-un-m%C3%A9todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Parámetros de un método</h3>
                           <p class="TextoNormal">En caso de que tengamos
                           información sobre un método, los métodos de acceso
                           de una propiedad o un constructor, puede interesarnos
@@ -515,7 +515,7 @@
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp">						  
 <span class="k">namespace</span> <span class="nn">JerarquiaTipos</span>
 <span class="p">{</span>
-<span class="k">using</span> <span class="nn">System.Reflection</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Reflection</span><span class="p">;</span>
 <span class="c1">// Una enumeración
 </span>  <span class="k">public</span> <span class="k">enum</span> <span class="n">Dias</span>
   <span class="p">{</span>
@@ -526,7 +526,7 @@
     <span class="n">Viernes</span><span class="p">,</span>
     <span class="n">Sabado</span><span class="p">,</span>
     <span class="n">Domingo</span><span class="p">,</span>
-  <span class="p">}&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+  <span class="p">}</span>
 
   <span class="c1">// y una estructura para tener algunos tipos
 </span>  <span class="c1">// en el ensamblado 
@@ -537,7 +537,7 @@
       <span class="n">ID</span> <span class="p">=</span> <span class="n">mIDe</span><span class="p">;</span>
       <span class="n">Nombre</span> <span class="p">=</span> <span class="n">mNombre</span><span class="p">;</span>
       <span class="n">Telefono</span> <span class="p">=</span> <span class="n">mTelefono</span><span class="p">;</span>
-    <span class="p">}&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+    <span class="p">}</span>
 	<span class="k">public</span> <span class="kt">int</span> <span class="n">ID</span><span class="p">;</span>
     <span class="k">public</span> <span class="kt">string</span> <span class="n">Nombre</span><span class="p">;</span>
     <span class="k">public</span> <span class="kt">string</span> <span class="n">Telefono</span><span class="p">;</span>
@@ -545,12 +545,12 @@
   
   <span class="k">public</span> <span class="k">class</span> <span class="nc">Form1</span> <span class="p">:</span> <span class="n">System</span><span class="p">.</span><span class="n">Windows</span><span class="p">.</span><span class="n">Forms</span><span class="p">.</span><span class="n">Form</span>
   <span class="p">{</span>
-    <span class="k">private</span> <span class="n">System</span><span class="p">.</span><span class="n">Windows</span><span class="p">.</span><span class="n">Forms</span><span class="p">.</span><span class="n">TreeView</span> <span class="n">treeView1</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">System</span><span class="p">.</span><span class="n">Windows</span><span class="p">.</span><span class="n">Forms</span><span class="p">.</span><span class="n">TreeView</span> <span class="n">treeView1</span><span class="p">;</span>
 	<span class="c1">// Al abrirse el formulario
 </span>    <span class="k">private</span> <span class="k">void</span> <span class="nf">Form1_Load</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">System</span><span class="p">.</span><span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
     <span class="p">{</span>
       <span class="c1">// obtenemos una referencia al ensamblado
-</span>      <span class="n">Assembly</span> <span class="n">EsteEnsamblado</span> <span class="p">=</span> <span class="n">Assembly</span><span class="p">.</span><span class="nf">Load</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">JerarquiaTipos</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);</span>
+</span>      <span class="n">Assembly</span> <span class="n">EsteEnsamblado</span> <span class="p">=</span> <span class="n">Assembly</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="s">"JerarquiaTipos"</span><span class="p">);</span>
 	  <span class="c1">// y añadimos su nombre como raíz
 </span>      <span class="n">TreeNode</span> <span class="n">Nodo</span> <span class="p">=</span> <span class="n">treeView1</span><span class="p">.</span><span class="n">Nodes</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">FullName</span><span class="p">);</span>
 	  <span class="c1">// Enumeramos todos sus tipos 
@@ -564,9 +564,9 @@
       <span class="c1">// añadimos un nodo hijo al árbol con el nombre 
 </span>      <span class="c1">// y el tipo base
 </span>      <span class="n">TreeNode</span> <span class="n">Hijo</span> <span class="p">=</span> <span class="n">Nodo</span><span class="p">.</span><span class="n">Nodes</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Tipo</span><span class="p">.</span><span class="n">Name</span> <span class="p">+</span>
-        <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="n">Inherits</span> <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="p">+</span> <span class="n">Tipo</span><span class="p">.</span><span class="n">BaseType</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
+        <span class="s">" Inherits "</span> <span class="p">+</span> <span class="n">Tipo</span><span class="p">.</span><span class="n">BaseType</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
 		<span class="nf">EnumeraMiembros</span><span class="p">(</span><span class="n">Hijo</span><span class="p">,</span> <span class="n">Tipo</span><span class="p">);</span> <span class="c1">// y enumeramos sus miembros
-</span>    <span class="p">}&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+</span>    <span class="p">}</span>
 	
 	<span class="c1">// Por cada miembro de los existentes en una clase
 </span>    <span class="k">private</span> <span class="k">void</span> <span class="nf">EnumeraMiembros</span><span class="p">(</span><span class="n">TreeNode</span> <span class="n">Nodo</span><span class="p">,</span> <span class="n">Type</span> <span class="n">Tipo</span><span class="p">)</span>
@@ -575,14 +575,14 @@
 </span>      <span class="k">foreach</span><span class="p">(</span><span class="n">MemberInfo</span> <span class="n">Info</span> <span class="k">in</span> <span class="n">Tipo</span><span class="p">.</span><span class="nf">GetMembers</span><span class="p">())</span>
       <span class="p">{</span>
         <span class="c1">// añadiendo su nombre y el tipo de miembro
-</span>        <span class="n">TreeNode</span> <span class="n">Hijo</span> <span class="p">=</span> <span class="n">Nodo</span><span class="p">.</span><span class="n">Nodes</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Info</span><span class="p">.</span><span class="n">Name</span> <span class="p">+</span> <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="p">+</span>
-          <span class="n">Info</span><span class="p">.</span><span class="n">MemberType</span><span class="p">.</span><span class="nf">ToString</span><span class="p">()</span> <span class="p">+</span> <span class="p">&amp;</span><span class="n">quot</span><span class="p">;)&amp;</span><span class="n">quot</span><span class="p">;);</span>
+</span>        <span class="n">TreeNode</span> <span class="n">Hijo</span> <span class="p">=</span> <span class="n">Nodo</span><span class="p">.</span><span class="n">Nodes</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Info</span><span class="p">.</span><span class="n">Name</span> <span class="p">+</span> <span class="s">" ("</span> <span class="p">+</span>
+          <span class="n">Info</span><span class="p">.</span><span class="n">MemberType</span><span class="p">.</span><span class="nf">ToString</span><span class="p">()</span> <span class="p">+</span> <span class="s">")"</span><span class="p">);</span>
 		  <span class="c1">// si el miembro es un método
-</span>  <span class="p">&amp;</span><span class="n">nbsp</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;</span><span class="k">if</span><span class="p">(</span><span class="n">Info</span><span class="p">.</span><span class="n">MemberType</span> <span class="p">==</span> <span class="n">MemberTypes</span><span class="p">.</span><span class="n">Method</span><span class="p">)</span>
+</span>          <span class="k">if</span><span class="p">(</span><span class="n">Info</span><span class="p">.</span><span class="n">MemberType</span> <span class="p">==</span> <span class="n">MemberTypes</span><span class="p">.</span><span class="n">Method</span><span class="p">)</span>
           <span class="c1">// enumeramos los parámetros
 </span>          <span class="nf">EnumeraParametros</span><span class="p">(</span><span class="n">Hijo</span><span class="p">,</span> <span class="n">Info</span><span class="p">);</span>
       <span class="p">}</span>
-    <span class="p">}&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+    <span class="p">}</span>
 	
 	<span class="c1">// Por cada parámetro existente en un método
 </span>    <span class="k">private</span> <span class="k">void</span> <span class="nf">EnumeraParametros</span><span class="p">(</span><span class="n">TreeNode</span> <span class="n">Nodo</span><span class="p">,</span>
@@ -592,7 +592,7 @@
 </span>      <span class="k">foreach</span><span class="p">(</span><span class="n">ParameterInfo</span> <span class="n">Info</span> <span class="k">in</span> 
         <span class="p">((</span><span class="n">MethodInfo</span> <span class="p">)</span><span class="n">InfoMetodo</span><span class="p">).</span><span class="nf">GetParameters</span><span class="p">())</span>
         <span class="c1">// añadiendo su nombre y tipo
-</span>        <span class="n">Nodo</span><span class="p">.</span><span class="n">Nodes</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Info</span><span class="p">.</span><span class="n">Name</span> <span class="p">+</span> <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="p">-</span> <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="p">+</span> 
+</span>        <span class="n">Nodo</span><span class="p">.</span><span class="n">Nodes</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Info</span><span class="p">.</span><span class="n">Name</span> <span class="p">+</span> <span class="s">" - "</span> <span class="p">+</span> 
           <span class="n">Info</span><span class="p">.</span><span class="n">ParameterType</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -655,8 +655,8 @@
                           Como no existe esa posibilidad, tendremos que recurrir
                           al <i>late binding</i> o enlace tardío o en fase de
                           ejecución.</p>
-                          <h4>
-<a id="la-clase-activator" class="anchor" href="#la-clase-activator" aria-hidden="true"><span class="octicon octicon-link"></span></a>La clase Activator</h4>
+                          <h3>
+<a id="la-clase-activator" class="anchor" href="#la-clase-activator" aria-hidden="true"><span class="octicon octicon-link"></span></a>La clase Activator</h3>
                           <p class="TextoNormal">El primer paso para poder
                           utilizar una clase mediante enlace en fase de ejecución,
                           creándola y accediendo a sus miembros de manera dinámica,
@@ -688,14 +688,13 @@
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp">                          
 <span class="c1">// obtenemos una referencia al ensamblado
 </span>    <span class="n">Assembly</span> <span class="n">Ensamblado</span> <span class="p">=</span> <span class="n">Assembly</span><span class="p">.</span><span class="nf">LoadFrom</span><span class="p">(</span>
-      <span class="p">&amp;</span><span class="n">quot</span><span class="p">;..</span><span class="err">\\</span><span class="p">..</span><span class="err">\\</span><span class="p">..</span><span class="err">\\</span><span class="n">Formulario</span><span class="err">\\</span><span class="n">bin</span><span class="err">\\</span><span class="n">debug</span><span class="err">\\</span><span class="n">Formulario</span><span class="p">.</span><span class="n">dll</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);</span>
+      <span class="s">"..\\..\\..\\Formulario\\bin\\debug\\Formulario.dll"</span><span class="p">);</span>
 
     <span class="c1">// y localizamos el tipo que nos interesa
-</span>    <span class="n">Type</span> <span class="n">Clase</span> <span class="p">=</span> <span class="n">Ensamblado</span><span class="p">.</span><span class="nf">GetType</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Formulario</span><span class="p">.</span><span class="n">Formulario</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);</span>
+</span>    <span class="n">Type</span> <span class="n">Clase</span> <span class="p">=</span> <span class="n">Ensamblado</span><span class="p">.</span><span class="nf">GetType</span><span class="p">(</span><span class="s">"Formulario.Formulario"</span><span class="p">);</span>
 
     <span class="c1">// utilizándolo para crear un objeto
-</span>    <span class="n">Object</span> <span class="n">Objeto</span> <span class="p">=</span> <span class="n">Activator</span><span class="p">.</span><span class="nf">CreateInstance</span><span class="p">(</span><span class="n">Clase</span><span class="p">);&amp;</span><span class="n">nbsp</span><span class="p">;&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span></code></pre></figure>
+</span>    <span class="n">Object</span> <span class="n">Objeto</span> <span class="p">=</span> <span class="n">Activator</span><span class="p">.</span><span class="nf">CreateInstance</span><span class="p">(</span><span class="n">Clase</span><span class="p">)</span></code></pre></figure>
                           <p class="TextoNormal">Observe que el tipo de la
                           variable <b>Objeto</b> es <b>Object</b> y no <b>Formulario</b>.
                           No podríamos usar el tipo <b>Formulario</b> como tal
@@ -710,8 +709,8 @@
                             que cuente con un solo método, llamado <b>Saludos()</b>,
                             que se limite a mostrar un mensaje.</p>
                           </blockquote>
-                          <h4>
-<a id="invocación-dinámica" class="anchor" href="#invocaci%C3%B3n-din%C3%A1mica" aria-hidden="true"><span class="octicon octicon-link"></span></a>Invocación dinámica</h4>
+                          <h3>
+<a id="invocación-dinámica" class="anchor" href="#invocaci%C3%B3n-din%C3%A1mica" aria-hidden="true"><span class="octicon octicon-link"></span></a>Invocación dinámica</h3>
                           <p class="TextoNormal">Disponiendo de una referencia a
                           nuestro objeto en la variable <b>Objeto</b>, podríamos
                           invocar al método <b>Saludos()</b> o, puesto que <b>Formulario</b>
@@ -738,19 +737,18 @@
                           formulario con el título modificado.</p>
                           
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">// Obtenemos una referencia a un método
-</span>  <span class="n">MethodInfo</span> <span class="n">Metodo</span> <span class="p">=</span> <span class="n">Clase</span><span class="p">.</span><span class="nf">GetMethod</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Saludos</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);</span>
+</span>  <span class="n">MethodInfo</span> <span class="n">Metodo</span> <span class="p">=</span> <span class="n">Clase</span><span class="p">.</span><span class="nf">GetMethod</span><span class="p">(</span><span class="s">"Saludos"</span><span class="p">);</span>
   <span class="n">Metodo</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="n">Objeto</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span> <span class="c1">// y lo llamamos
 </span>
   <span class="c1">// Obtenemos una referencia a una propiedad
-</span><span class="p">&amp;</span><span class="n">nbsp</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;</span><span class="n">PropertyInfo</span> <span class="n">Propiedad</span> <span class="p">=</span> <span class="n">Clase</span><span class="p">.</span><span class="nf">GetProperty</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Text</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);</span>
+</span>  <span class="n">PropertyInfo</span> <span class="n">Propiedad</span> <span class="p">=</span> <span class="n">Clase</span><span class="p">.</span><span class="nf">GetProperty</span><span class="p">(</span><span class="s">"Text"</span><span class="p">);</span>
 
   <span class="c1">// y modificamos su valor
-</span>  <span class="n">Propiedad</span><span class="p">.</span><span class="nf">SetValue</span><span class="p">(</span><span class="n">Objeto</span><span class="p">,</span> <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Nuevo</span> <span class="n">t</span><span class="err">í</span><span class="n">tulo</span> <span class="n">de</span> <span class="n">la</span> <span class="n">ventana</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;,</span> <span class="k">null</span><span class="p">);</span>
+</span>  <span class="n">Propiedad</span><span class="p">.</span><span class="nf">SetValue</span><span class="p">(</span><span class="n">Objeto</span><span class="p">,</span> <span class="s">"Nuevo título de la ventana"</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
 
   <span class="c1">// Cambiamos la referencia a otro método
-</span>  <span class="n">Metodo</span> <span class="p">=</span> <span class="n">Clase</span><span class="p">.</span><span class="nf">GetMethod</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Show</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);</span>
-  <span class="n">Metodo</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="n">Objeto</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span> <span class="c1">// y lo llamamos&amp;nbsp;&lt;o:p&gt;
-</span><span class="p">&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span></code></pre></figure>
+</span>  <span class="n">Metodo</span> <span class="p">=</span> <span class="n">Clase</span><span class="p">.</span><span class="nf">GetMethod</span><span class="p">(</span><span class="s">"Show"</span><span class="p">);</span>
+  <span class="n">Metodo</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="n">Objeto</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span> <span class="p">//</span> <span class="n">y</span> <span class="n">lo</span> <span class="n">llamamos</span></code></pre></figure>
                           <p class="TextoNormal">En este ejemplo hemos asumido
                           que el ensamblado <b>Formulario.dl</b>l contenía un
                           tipo <b>Formulario</b> en el ámbito <b>Formulario</b>
