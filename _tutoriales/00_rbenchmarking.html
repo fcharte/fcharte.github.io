@@ -1,0 +1,217 @@
+---
+layout: post
+title: Tutorial sobre análisis de rendimiento de tareas en R<br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<style>
+pre { background-color: #EEEEEE; color: #000000; }
+.highlight pre { background-color: #DDDDDD; color: #000000; }
+</style>
+
+<p>This document compares the performance in doing a task by means of different approaches in R. For doing so, the <code>microbenchmark</code> package is used, measuring the time spent by each approach. The results are shown numerically and plotting them using <code>ggplot2</code>. The numeric table shows relative performances, with the best method as <code>1.0</code> and the others showing the number of times which they are worse than the former.</p>
+<p>The goal is to elucidate which is the best method to accomplish a certain task.</p>
+<h2><a id="user-content-index" class="anchor" href="#index" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Index</h2>
+<ul>
+<li><a href="#DataframeStrings">Generating a data.frame containing character data with and without <code>stringsAsFactors</code></a></li>
+<li><a href="#GrowingLists">Growing list vs preallocated list vs <code>lapply</code></a></li>
+<li><a href="#ListOperators"><code>$</code> vs <code>[[</code> operator</a></li>
+<li><a href="#CompareVectors">Comparison of two vector values</a></li>
+<li><a href="#SourcevsCompiled">R source code vs R compiled code vs C++ code</a></li>
+<li><a href="#ReducevsVectorized"><code>Reduce</code> vs vectorized functions</a></li>
+</ul>
+<h2><a id="user-content--generating-a-dataframe-containing-character-data-with-and-without-stringsasfactors" class="anchor" href="#-generating-a-dataframe-containing-character-data-with-and-without-stringsasfactors" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="user-content-DataframeStrings"> Generating a data.frame containing character data with and without stringsAsFactors</a></h2><a name="user-content-DataframeStrings">
+<p>With this code I want to test the difference between using <code>stringsAsFactors = TRUE</code> versus <code>stringsAsFactors = FALSE</code> while creating a new data.frame.</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">numElements</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">1e6</span>
+<span class="pl-smi">someStrings</span> <span class="pl-k">&lt;-</span> sapply(<span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">25</span>, <span class="pl-k">function</span>(<span class="pl-smi">x</span>) paste(sample(c(<span class="pl-c1">letters</span>, <span class="pl-c1">LETTERS</span>), <span class="pl-c1">10</span>, <span class="pl-v">replace</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>), <span class="pl-v">collapse</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>))
+
+<span class="pl-smi">aNumericVector</span> <span class="pl-k">&lt;-</span> runif(<span class="pl-smi">numElements</span>)
+<span class="pl-smi">aStringVector</span> <span class="pl-k">&lt;-</span> sample(<span class="pl-smi">someStrings</span>, <span class="pl-smi">numElements</span>, <span class="pl-v">replace</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>)
+<span class="pl-smi">bStringVector</span> <span class="pl-k">&lt;-</span> sample(<span class="pl-smi">someStrings</span>, <span class="pl-smi">numElements</span>, <span class="pl-v">replace</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>)
+
+<span class="pl-smi">result</span> <span class="pl-k">&lt;-</span> microbenchmark(
+    <span class="pl-k">data.frame</span>(<span class="pl-smi">aNumericVector</span>, <span class="pl-smi">aStringVector</span>, <span class="pl-smi">bStringVector</span>, <span class="pl-v">stringsAsFactors</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>),
+    <span class="pl-k">data.frame</span>(<span class="pl-smi">aNumericVector</span>, <span class="pl-smi">aStringVector</span>, <span class="pl-smi">bStringVector</span>, <span class="pl-v">stringsAsFactors</span> <span class="pl-k">=</span> <span class="pl-c1">FALSE</span>)
+)</pre></div>
+<pre><code>## Unit: relative
+##                expr     min       lq     mean  median       uq      max
+##  stringsAsFactors=T 320.012 307.7241 304.4763 255.215 364.2376 378.7762
+##  stringsAsFactors=F   1.000   1.0000   1.0000   1.000   1.0000   1.0000
+##  neval
+##    100
+##    100
+</code></pre>
+<p><img src="https://github.com/fcharte/RBenchmarkings/raw/master/figure/unnamed-chunk-1-1.png" alt="" style="max-width:100%;"></p>
+<h3><a id="user-content-conclusion" class="anchor" href="#conclusion" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h3>
+<p>Generating a <code>data.frame</code> containing character columns is quicker when <code>stringsAsFactors = FALSE</code> is used. Nonetheless, it may be taken into account that this option implies the use of more memory, as character strings are stored individually instead of as numeric values referencing the factor levels. For this same reason, further operations such as sorting by a character column can take more time (compared with sorting by a factor column).</p>
+</a><h2><a id="user-content-growing-list-vs-preallocated-list-vs-lapply" class="anchor" href="#growing-list-vs-preallocated-list-vs-lapply" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="user-content-DataframeStrings"></a><a name="user-content-GrowingLists">Growing list vs preallocated list vs lapply</a></h2><a name="user-content-GrowingLists">
+<p>With the code shown below I want to test the differences between creating a list growing it, preallocating the elements, and using the <code>lapply</code> function.</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">numElements</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">1e4</span>
+
+<span class="pl-smi">result</span> <span class="pl-k">&lt;-</span> microbenchmark(
+  { <span class="pl-smi">v1</span> <span class="pl-k">&lt;-</span> <span class="pl-k">list</span>() ; <span class="pl-k">for</span>(<span class="pl-smi">i</span> <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-smi">numElements</span>) <span class="pl-smi">v1</span>[[<span class="pl-smi">i</span>]] <span class="pl-k">&lt;-</span> <span class="pl-smi">someStrings</span> },
+  { <span class="pl-smi">v2</span> <span class="pl-k">&lt;-</span> vector(<span class="pl-s"><span class="pl-pds">'</span>list<span class="pl-pds">'</span></span>, <span class="pl-smi">numElements</span>) ; <span class="pl-k">for</span>(<span class="pl-smi">i</span> <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-smi">numElements</span>) <span class="pl-smi">v2</span>[[<span class="pl-smi">i</span>]] <span class="pl-k">&lt;-</span> <span class="pl-smi">someStrings</span> },
+  { <span class="pl-smi">v3</span> <span class="pl-k">&lt;-</span> lapply(<span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-smi">numElements</span>, <span class="pl-k">function</span>(<span class="pl-smi">i</span>) <span class="pl-smi">someStrings</span>)}
+)</pre></div>
+<pre><code>## Unit: relative
+##               expr       min         lq       mean     median         uq
+##         Empty list 99.312841 110.056732 101.092425 108.351391 105.734737
+##  Preallocated list  3.523006   3.497653   3.502606   3.449916   3.530715
+##             lapply  1.000000   1.000000   1.000000   1.000000   1.000000
+##       max neval
+##  82.68170   100
+##  11.73394   100
+##   1.00000   100
+</code></pre>
+<p><img src="https://github.com/fcharte/RBenchmarkings/raw/master/figure/unnamed-chunk-2-1.png" alt="" style="max-width:100%;"></p>
+<h3><a id="user-content-conclusion-1" class="anchor" href="#conclusion-1" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h3>
+<p>There is no doubt that growing the list as items are added is a bad idea, since this method is much slower than the other two. The differences between preallocating the list and then populating it with a <code>for</code> loop or generating it with the <code>lapply</code> function are not as large, but certainly <code>lapply</code> has the advantage.</p>
+<p>The result should be the same while working with a vector or a data.frame, instead of a list.</p>
+</a><h2><a id="user-content--vs--operator" class="anchor" href="#-vs--operator" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="user-content-GrowingLists"></a><a name="user-content-ListOperators">$ vs [[ operator</a></h2><a name="user-content-ListOperators">
+<p>The <code>$</code> operator is constantly used in R code to access lists and data.frames elements by name. The operator <code>[</code> could be used to do the same task, using numeric indexes instead. Is there any performance difference between them?</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">aList</span> <span class="pl-k">&lt;-</span> <span class="pl-k">list</span>( <span class="pl-v">a</span> <span class="pl-k">=</span> <span class="pl-c1">5</span>, <span class="pl-v">b</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>list<span class="pl-pds">'</span></span>, <span class="pl-v">c</span> <span class="pl-k">=</span> <span class="pl-k">list</span>(<span class="pl-v">c1</span> <span class="pl-k">=</span> <span class="pl-c1">25</span>))
+
+<span class="pl-smi">result</span> <span class="pl-k">&lt;-</span> microbenchmark(
+  { c(<span class="pl-smi">aList</span><span class="pl-k">$</span><span class="pl-smi">a</span>, <span class="pl-smi">aList</span><span class="pl-k">$</span><span class="pl-smi">b</span>, <span class="pl-smi">aList</span><span class="pl-k">$</span><span class="pl-smi">c</span><span class="pl-k">$</span><span class="pl-smi">c1</span>) }, 
+  { c(<span class="pl-smi">aList</span>[[<span class="pl-c1">1</span>]], <span class="pl-smi">aList</span>[[<span class="pl-c1">2</span>]], <span class="pl-smi">aList</span>[[<span class="pl-c1">2</span>]][[<span class="pl-c1">1</span>]]) }
+)</pre></div>
+<pre><code>## Unit: relative
+##         expr      min       lq     mean   median       uq       max neval
+##   $ operator 1.750341 1.999318 1.648986 1.800327 1.799346 0.9032428   100
+##  [[ operator 1.000000 1.000000 1.000000 1.000000 1.000000 1.0000000   100
+</code></pre>
+<p><img src="https://github.com/fcharte/RBenchmarkings/raw/master/figure/unnamed-chunk-3-1.png" alt="" style="max-width:100%;"></p>
+<h3><a id="user-content-conclusion-2" class="anchor" href="#conclusion-2" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h3>
+<p>Although the difference between the two operators is very tight, it should be taken into account if we use these operators inside a loop or any other repetitve structure. Multiply the small difference by the number of times the operator is used during the program execution to assess if the effort worth it.</p>
+</a><h2><a id="user-content-comparison-of-two-vector-values" class="anchor" href="#comparison-of-two-vector-values" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="user-content-ListOperators"></a><a name="user-content-CompareVectors">Comparison of two vector values</a></h2><a name="user-content-CompareVectors">
+<p>Assume that you want to know which items in a vector <code>v</code> (values) have higher values than the corresponding items (by position) in another vector <code>t</code> (threshold). The goal is setting to 0 those values. This is a task that can be accomplished in several ways, for instance:</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-en">fgen</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>() runif(<span class="pl-smi">numElements</span>, <span class="pl-c1">1</span>, <span class="pl-c1">10</span>)
+<span class="pl-smi">v</span> <span class="pl-k">&lt;-</span> fgen() 
+<span class="pl-smi">t</span> <span class="pl-k">&lt;-</span> fgen()
+
+<span class="pl-smi">result</span> <span class="pl-k">&lt;-</span> microbenchmark(
+  { <span class="pl-k">for</span>(<span class="pl-smi">i</span> <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">:</span>length(<span class="pl-smi">v</span>)) <span class="pl-k">if</span>(<span class="pl-smi">v</span>[<span class="pl-smi">i</span>] <span class="pl-k">&gt;</span> <span class="pl-smi">t</span>[<span class="pl-smi">i</span>]) <span class="pl-smi">v</span>[<span class="pl-smi">i</span>] <span class="pl-k">&lt;-</span> <span class="pl-c1">0</span> },
+  { <span class="pl-smi">v</span> <span class="pl-k">&lt;-</span> mapply(<span class="pl-k">function</span>(<span class="pl-smi">a</span>,<span class="pl-smi">b</span>) <span class="pl-k">if</span>(<span class="pl-smi">a</span> <span class="pl-k">&gt;</span> <span class="pl-smi">b</span>) <span class="pl-c1">0</span> <span class="pl-k">else</span> <span class="pl-smi">a</span>, <span class="pl-smi">v</span>, <span class="pl-smi">t</span>) },
+  { <span class="pl-smi">v</span>[which(<span class="pl-smi">v</span> <span class="pl-k">&gt;</span> <span class="pl-smi">t</span>)] <span class="pl-k">&lt;-</span> <span class="pl-c1">0</span> },
+  { <span class="pl-smi">v</span>[<span class="pl-smi">v</span> <span class="pl-k">&gt;</span> <span class="pl-smi">t</span>] <span class="pl-k">&lt;-</span> <span class="pl-c1">0</span> },
+  { <span class="pl-smi">v</span> <span class="pl-k">&lt;-</span> ifelse(<span class="pl-smi">v</span> <span class="pl-k">&gt;</span> <span class="pl-smi">t</span>, <span class="pl-c1">0</span>, <span class="pl-smi">v</span>) }
+)</pre></div>
+<pre><code>## Unit: relative
+##    expr        min         lq       mean     median         uq        max
+##     for 143.970820 143.186430 131.953767 131.256246 138.412731 106.010333
+##  mapply 393.804541 439.768151 410.576911 385.978346 405.311462 589.016210
+##   which   1.000000   1.000000   1.000000   1.000000   1.000000   1.000000
+##   v &gt; t   5.333333   4.986675   4.288649   4.246307   4.177645   3.478734
+##  ifelse  37.382439  35.266623  33.990739  29.547565  30.619796  74.242364
+##  neval
+##    100
+##    100
+##    100
+##    100
+##    100
+</code></pre>
+<p><img src="https://github.com/fcharte/RBenchmarkings/raw/master/figure/unnamed-chunk-4-1.png" alt="" style="max-width:100%;"></p>
+<p>As can be seen, <code>mapply</code> produces the worst performance, followed by the <code>for</code> loop. The quickest way to do the work is almost the simplest one, using the <code>which</code> function. This function returns the indexes of elements affected, while  with the expression <code>v[v &gt; t] &lt;- 0</code> an array of the same length than <code>v</code> and <code>t</code> is obtained and all their elements are tested to see if they are <code>TRUE</code> or <code>FALSE</code> before the assignment.</p>
+<p>Simple functions can be vectorized by means of the <code>Vectorize</code> function in the base R package. Let us see how this approach performs against the best one of the previous tests:</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">v</span> <span class="pl-k">&lt;-</span> fgen() 
+<span class="pl-smi">t</span> <span class="pl-k">&lt;-</span> fgen()
+<span class="pl-en">f</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-smi">a</span>, <span class="pl-smi">b</span>) <span class="pl-k">if</span>(<span class="pl-smi">a</span> <span class="pl-k">&gt;</span> <span class="pl-smi">b</span>) <span class="pl-c1">0</span> <span class="pl-k">else</span> <span class="pl-smi">a</span>
+<span class="pl-smi">vf</span> <span class="pl-k">&lt;-</span> Vectorize(<span class="pl-smi">f</span>)
+
+<span class="pl-smi">result</span> <span class="pl-k">&lt;-</span> microbenchmark(
+  { <span class="pl-smi">v</span>[which(<span class="pl-smi">v</span> <span class="pl-k">&gt;</span> <span class="pl-smi">t</span>)] <span class="pl-k">&lt;-</span> <span class="pl-c1">0</span> },
+  { <span class="pl-smi">v</span> <span class="pl-k">&lt;-</span> vf(<span class="pl-smi">v</span>, <span class="pl-smi">t</span>) }
+)</pre></div>
+<pre><code>## Unit: relative
+##       expr      min       lq    mean  median       uq     max neval
+##      which   1.0000   1.0000   1.000   1.000   1.0000   1.000   100
+##  Vectorize 416.5791 389.8873 401.682 401.581 389.6696 394.292   100
+</code></pre>
+<p><img src="https://github.com/fcharte/RBenchmarkings/raw/master/figure/unnamed-chunk-5-1.png" alt="" style="max-width:100%;"></p>
+<h3><a id="user-content-conclusion-3" class="anchor" href="#conclusion-3" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h3>
+<p>When it comes to apply some change to those items in a vector that satisfy a certain restriction, it seems that firstly obtaining the indexes, with the <code>which</code> function, and then making the change is the most efficient way of those compared here.</p>
+</a><h2><a id="user-content-r-source-code-vs-r-compiled-code-vs-c-code" class="anchor" href="#r-source-code-vs-r-compiled-code-vs-c-code" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="user-content-CompareVectors"></a><a name="user-content-SourcevsCompiled">R source code vs R compiled code vs C++ code</a></h2><a name="user-content-SourcevsCompiled">
+<p>Sometimes it is not easy to translate a loop into a vectorized expression or a call to <code>apply</code>. For instance, this happens when the operation to be made in a cycle depens on the result of a previous iteration. In these cases the loop R function containing the loop can be translated to bytecode, by means of the <code>cmpfun</code> function of the <code>compiler</code> package. Another alternative would be implementing that loop in C++ taking advantage of the <code>Rcpp</code> package. But, is it worth it?</p>
+<p>Let us compare the performance of the same task implemented as a R function, as a compiled R function and as a C++ function:</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">numElements</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">1e5</span>
+<span class="pl-smi">v</span> <span class="pl-k">&lt;-</span> fgen() 
+<span class="pl-smi">t</span> <span class="pl-k">&lt;-</span> fgen()
+
+<span class="pl-en">f</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-smi">v</span>, <span class="pl-smi">t</span>) <span class="pl-k">for</span>(<span class="pl-smi">i</span> <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">:</span>length(<span class="pl-smi">v</span>)) <span class="pl-k">if</span>(<span class="pl-smi">v</span>[<span class="pl-smi">i</span>] <span class="pl-k">&gt;</span> <span class="pl-smi">t</span>[<span class="pl-smi">i</span>]) <span class="pl-smi">v</span>[<span class="pl-smi">i</span>] <span class="pl-k">&lt;-</span> <span class="pl-c1">0</span>
+<span class="pl-smi">fc</span> <span class="pl-k">&lt;-</span> cmpfun(<span class="pl-smi">f</span>)
+cppFunction(<span class="pl-s"><span class="pl-pds">'</span></span>
+<span class="pl-s">    void fCpp(NumericVector v, NumericVector t) {</span>
+<span class="pl-s">      for(int i = 0; i &lt; v.size(); i++)</span>
+<span class="pl-s">         v[i] = v[i] &gt; t[i] ? 0 : v[i];</span>
+<span class="pl-s">    }</span>
+<span class="pl-s"><span class="pl-pds">'</span></span>)
+
+<span class="pl-smi">result</span> <span class="pl-k">&lt;-</span> microbenchmark(f(<span class="pl-smi">v</span>, <span class="pl-smi">t</span>), fc(<span class="pl-smi">v</span>, <span class="pl-smi">t</span>), fCpp(<span class="pl-smi">v</span>, <span class="pl-smi">t</span>))</pre></div>
+<pre><code>## Unit: relative
+##        expr       min        lq      mean    median        uq       max
+##    R source 148.50908 142.68063 145.23261 139.38388 139.51544 146.35978
+##  R compiled  39.12494  40.27761  41.52429  40.69591  41.57373  83.49558
+##        Rcpp   1.00000   1.00000   1.00000   1.00000   1.00000   1.00000
+##  neval
+##    100
+##    100
+##    100
+</code></pre>
+<p><img src="https://github.com/fcharte/RBenchmarkings/raw/master/figure/unnamed-chunk-6-1.png" alt="" style="max-width:100%;"></p>
+<p>As can be seen the C++ function, embedded into R code with the <code>cppFunction</code>, is considerably quicker than the other two alternatives. Even compiling to bytecode, without the effort of installing the <code>Rcpp</code> package, can be worth it.</p>
+<p>Would be the C++ implementation of this task quicker than the <code>which</code> function based solution proposed in an earlier section? Let us see:</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">v</span> <span class="pl-k">&lt;-</span> fgen() 
+<span class="pl-smi">t</span> <span class="pl-k">&lt;-</span> fgen()
+
+cppFunction(<span class="pl-s"><span class="pl-pds">'</span></span>
+<span class="pl-s">    void fCpp(NumericVector v, NumericVector t) {</span>
+<span class="pl-s">      for(int i = 0; i &lt; v.size(); i++)</span>
+<span class="pl-s">         v[i] = v[i] &gt; t[i] ? 0 : v[i];</span>
+<span class="pl-s">    }</span>
+<span class="pl-s"><span class="pl-pds">'</span></span>)
+
+<span class="pl-smi">result</span> <span class="pl-k">&lt;-</span> microbenchmark(<span class="pl-smi">v</span>[which(<span class="pl-smi">v</span> <span class="pl-k">&gt;</span> <span class="pl-smi">t</span>)] <span class="pl-k">&lt;-</span> <span class="pl-c1">0</span>, fCpp(<span class="pl-smi">v</span>, <span class="pl-smi">t</span>))</pre></div>
+<pre><code>## Unit: relative
+##   expr      min       lq     mean   median       uq      max neval
+##  which 1.173733 1.206826 4.280313 1.632834 3.949873 85.94283   100
+##   Rcpp 1.000000 1.000000 1.000000 1.000000 1.000000  1.00000   100
+</code></pre>
+<p><img src="https://github.com/fcharte/RBenchmarkings/raw/master/figure/unnamed-chunk-7-1.png" alt="" style="max-width:100%;"></p>
+<p>Although the improvement provided by the C++ function over <code>which</code> is not impressive, certainly we can save some time if we are comfortable writing C++ code.</p>
+</a><h2><a id="user-content-reduce-vs-vectorized-functions" class="anchor" href="#reduce-vs-vectorized-functions" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="user-content-SourcevsCompiled"></a><a name="user-content-ReducevsVectorized">Reduce vs vectorized functions</a></h2><a name="user-content-ReducevsVectorized">
+<p>The <code>Reduce</code> function is used to reduce the values stored into a vector by applying the same function to every item and the previous accumulated result. However, sometimes there are better ways to do the same. For instance, <code>Reduce</code> shouldn't be used to obtain the sum of a vector:</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">numElements</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">1e5</span>
+<span class="pl-smi">v</span> <span class="pl-k">&lt;-</span> fgen()
+
+<span class="pl-smi">result</span> <span class="pl-k">&lt;-</span> microbenchmark(sum(<span class="pl-smi">v</span>), Reduce(<span class="pl-s"><span class="pl-pds">'</span>+<span class="pl-pds">'</span></span>, <span class="pl-smi">v</span>))</pre></div>
+<pre><code>## Unit: relative
+##            expr      min       lq     mean  median       uq      max neval
+##          sum(v)   1.0000   1.0000   1.0000   1.000   1.0000   1.0000   100
+##  Reduce("+", v) 280.3035 282.3651 271.0383 255.496 249.5048 427.1206   100
+</code></pre>
+<p><img src="https://github.com/fcharte/RBenchmarkings/raw/master/figure/unnamed-chunk-8-1.png" alt="" style="max-width:100%;"></p>
+<p>Although the difference is remarkably smaller, <code>Reduce</code> is also slower than the <code>prod</code> function:</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">result</span> <span class="pl-k">&lt;-</span> microbenchmark(prod(<span class="pl-smi">v</span>), Reduce(<span class="pl-s"><span class="pl-pds">'</span>*<span class="pl-pds">'</span></span>, <span class="pl-smi">v</span>))</pre></div>
+<pre><code>## Unit: relative
+##            expr      min       lq     mean   median      uq      max neval
+##         prod(v) 1.000000 1.000000 1.000000 1.000000 1.00000 1.000000   100
+##  Reduce("*", v) 2.646571 2.727265 2.870891 2.780134 2.78997 7.104513   100
+</code></pre>
+<p><img src="https://github.com/fcharte/RBenchmarkings/raw/master/figure/unnamed-chunk-9-1.png" alt="" style="max-width:100%;"></p>
+<p>Sometimes <code>Reduce</code> is used because we aren't aware that a certain function is already vectorized. This is the case of the <code>paste</code> function, which is able to join a vector of strings without any iteration:</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">numElements</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">1e4</span>
+<span class="pl-smi">aStringVector</span> <span class="pl-k">&lt;-</span> sample(<span class="pl-smi">someStrings</span>, <span class="pl-smi">numElements</span>, <span class="pl-v">replace</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>)
+<span class="pl-smi">result</span> <span class="pl-k">&lt;-</span> microbenchmark(paste(<span class="pl-smi">aStringVector</span>, <span class="pl-v">collapse</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span>), Reduce(<span class="pl-smi">paste</span>, <span class="pl-smi">aStringVector</span>))</pre></div>
+<pre><code>## Unit: relative
+##    expr      min       lq     mean   median      uq      max neval
+##   paste    1.000    1.000    1.000    1.000    1.00    1.000   100
+##  Reduce 4037.178 4017.092 4155.169 4202.428 4369.06 3992.414   100
+</code></pre>
+<p><img src="https://github.com/fcharte/RBenchmarkings/raw/master/figure/unnamed-chunk-10-1.png" alt="" style="max-width:100%;"></p>
+<h3><a id="user-content-conclusion-4" class="anchor" href="#conclusion-4" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h3>
+<p>In general, <code>Reduce</code> is a solution to apply an operation to a vector of values when no other alternatives are available. Functions already available in R to do the same task are always more efficient, as can be seen in the previous tests.</p>
+</a></article>
+  </div>
+
+</div>
