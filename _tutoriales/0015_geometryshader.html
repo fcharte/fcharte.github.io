@@ -1,0 +1,69 @@
+---
+layout: post
+title: Cómo programar un <i>geometry shader</i><br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>	Los GS son programas algo más complejos que los VS y PS. A diferencia de éstos, no reciben como entrada un único vértice/fragmento ni tampoco tienen que limitarse a emitir un vértice/fragmento. Un GS se ejecuta una vez por cada primitiva a procesar: punto, línea o triángulo. El resultado de su ejecución es un número variable de primitivas de salida, entre 0 y un máximo que depende actualmente del hardware que se utilice.</p>
+
+<h2>Parámetros de entrada</h2>
+<p>	Cuando se ejecuta un GS éste sabe que debe procesar una primitiva gráfica que, como ya se ha indicado, puede ser un punto, una línea o un triángulo. El tipo de primitiva lo conocerá consultando <code>gl_VerticesIn</code>, un entero que será 1, 2 ó 3, como sería de esperar.</p>
+
+
+
+<p>	La posición de cada uno de esos vértices está almacenada en el campo <code>gl_PositionIn[N]</code>, un vector que tendrá tantos elementos como indique <code>gl_VerticesIn</code>. Esos vértices ya han pasado por el VS, algo que debe tenerse en cuenta en caso de que se hayan aplicado transformaciones.</p>
+<p>	Al igual que los vértices, el GS también recibe información sobre el color y las coordenadas de textura en los parámetros <code>gl_FrontColorIn[N]</code>, <code>gl_BackColorIn[N]</code> y <code>gl_TexCoordIn[N][M]</code>, donde <code>M</code> sería el número de texturas utilizadas y como máximo será <code>gl_MaxTextureCoords</code>.</p>
+
+<h2>Parámetros de salida</h2>
+<p>	Para generar el resultado que interese el GS puede utilizar la información de entrada, actuando sobre los vértices de la primitiva original, o bien ignorarla completamente y generar una nueva geometría. Para ello utilizará dos funciones <code>EmitVertex()</code> y <code>EndPrimitive()</code>.</p>
+<p>	Antes de llamar a <code>EmitVertex()</code> hay que asignar a <code>gl_Position</code> la posición del vértice que va a enviarse al cauce gráfico. Es posible enviar de manera sucesiva uno, dos o tres vértices, dependiendo del tipo de primitiva a generar. Tras cada conjunto de vértices ha de invocarse a la función <code>EndPrimitive()</code>.</p>
+<p>	Además de emitir los vértices, el GS también puede establecer parámetros como el color o las coordenadas de textura, justo antes de llamar a <code>EmitVertex()</code>, usando los campos <code>gl_FrontColor</code>, <code>gl_BackColor</code> y <code>gl_TexCoord</code>, como haría un VS.</p>
+
+<h2>Un GS sencillo</h2>
+<p>	En OGLSL un <i>shader</i> de este tipo debe comenzar siempre con dos líneas en las que se especifique la versión del lenguaje OGLSL y la extensión a usar, tal como las siguientes:</p>
+{% highlight c %}
+
+#version 120
+#extension GL_EXT_geometry_shader4 : enable
+
+{% endhighlight %}
+<p>	Tras ellas se introduciría la habitual función <code>main()</code> con el código del <i>shader</i>.</p>
+<p>	El GS cuyo código aparece a continuación tiene el objetivo de generar, por cada vértice de un triángulo de entrada, otros tantos triángulos, con las coordenadas ligeramente desplazadas. Además se asigna un color diferente a cada vértice del triángulo de salida. De esta forma se consigue que la geometría original se convierta en una matriz tridimensional de triángulos, un efecto muy sencillo de implementar y bastante llamativo.</p>
+{% highlight c %}
+
+void main( void )
+{
+ // Las primitivas de entrada serán triángulos, 3 vértices
+ for(int i = 0; i < 3; i++) {
+   vec4 punto=gl_PositionIn[i];
+   vec4 color = vec4 (1,1,1,1);
+
+   // Por cada vértice se emite un nuevo triángulo
+   gl_FrontColor=vec4(1,0,0,1)*color;
+   gl_Position = gl_ModelViewProjectionMatrix*punto;
+   EmitVertex();
+
+   // con sus vértices ligeramente desplazados
+   gl_FrontColor=vec4(0,1,0,1)*color;
+   gl_Position = gl_ModelViewProjectionMatrix*(
+         punto+vec4(0.5,0.5,0,0));
+   EmitVertex();
+
+   // y con un color en cada vértice
+   gl_FrontColor=vec4(0,0,1,1)*color;
+   gl_Position = gl_ModelViewProjectionMatrix*(
+         punto+vec4(0.5,-0.5,0,0));
+   EmitVertex();
+
+   EndPrimitive();
+ }
+}
+
+{% endhighlight %}
+<p>	En la figura siguiente puede apreciarse el efecto del GS sobre un cubo y una esfera.</p>
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/gs.png" title="El GS en funcionamiento sobre dos geometrías distintas" /></p>
+
+<p>	Los GS permiten implementar algoritmos realmente elaborados, como puede ser la teselación de una superficie a partir de unos puntos de control, la obtención y dibujo de las tangentes a una curva, etc. El límite prácticamente lo impone la propia imaginación.</p>
+<p>	Es posible combinar los distintos <i>shaders</i> desarrollados como ejemplo, de manera que se calcule la intensidad de la incidencia de la luz en el VS, después se generen los triángulos a partir de los vértices en el GS y finalmente se les aplique el coloreado en el PS.</p>
