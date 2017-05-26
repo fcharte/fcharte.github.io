@@ -1,0 +1,374 @@
+<H2>
+                            Qué es un servicio Windows&nbsp;
+                          </H2>
+                          <P>
+                            Las aplicaciones que podemos ejecutar nativamente sobre las actuales versiones 
+                            de Windows podemos agruparlas en tres categorías fundamentales: consola, con 
+                            interfaz de usuario y servicios. &nbsp;Las primeras están basadas en texto y 
+                            utilizan una ventana de consola para efectuar su trabajo. En el segundo grupo 
+                            tienen cabida todas las aplicaciones <EM>tradicionales</EM> que estamos 
+                            acostumbrados a utilizar diariamente, aquellas que usan cuadros de diálogo, 
+                            ventanas u otro recurso visual como interfaz de usuario. Estos dos grupos de 
+                            aplicaciones tienen puntos en común: normalmente son iniciadas a demanda del 
+                            usuario y, además, se ejecutan durante un espacio de tiempo determinado que no 
+                            tiene, necesariamente, que coincidir con todo el tiempo que el sistema está en 
+                            funcionamiento.
+                          </P>
+                          <P>
+                            El tercer grupo lo forman los servicios de Windows o, simplemente, <STRONG><FONT size="1">
+                                servicios</FONT></STRONG>. Estas aplicaciones tienen una serie de 
+                            características que le diferencian claramente de los dos grupos que acaban de 
+                            describirse:
+                          </P>
+                          <UL>
+                            <LI>
+                              Los servicios suelen iniciarse automáticamente al poner en marcha el sistema, 
+                              sin necesidad siquiera de que el usuario inicie una sesión interactiva.</LI>
+                            <LI>
+                              Por regla general los servicios no cuentan con una interfaz de usuario. Se 
+                              ejecutan de manera <EM>silenciosa</EM> sin interferir en las tareas habituales 
+                              del usuario.</LI>
+                            <LI>
+                              Un servicio se mantiene en ejecución, normalmente,&nbsp;todo el tiempo que el 
+                              sistema está en funcionamiento.</LI>
+                          </UL>
+                          <P>
+                            Los servicios se encargan de tareas fundamentales para cada sistema en 
+                            particular, manteniendo en funcionamiento aplicaciones como <EM>Internet 
+                              Information Server</EM>, <EM>SQL Server </EM>o el detector de dispositivos <EM>Plug&amp;Play</EM>. 
+                            La mayoría de ellos se inician automáticamente en cuanto se pone el sistema en 
+                            marcha, deteniéndose sólo al cerrar éste.
+                          </P>
+                          <H3>
+                            Administración de servicios
+                          </H3>
+                          <P>
+                            Windows NT, Windows 2000 y Windows XP disponen de un <EM>applet</EM>, podrá 
+                            encontrarlo normalmente en la carpeta <STRONG><FONT size="1">Herramientas 
+                                administrativas</FONT></STRONG> del <STRONG><FONT size="1">Panel de Control</FONT></STRONG>, 
+                            cuya finalidad es facilitar la administración de los servicios que haya 
+                            instalados en el sistema. El aspecto de esta utilidad puede diferir según la 
+                            versión del sistema operativo que estemos usando pero, independientemente de la 
+                            apariencia, las operaciones disponibles serán las mismas: configurar el 
+                            servicio y controlarlo.
+                          </P>
+                          <P>
+                            Por configurar un servicio se entiende el establecimiento de los parámetros que 
+                            determinan el modo en que debe iniciarse, la cuenta que utilizará para ello o 
+                            el método de recuperación en caso de caída si es que es posible esa 
+                            recuperación. Toda esta información puede editarse
+                          gracias a una página de propiedades.
+                          </P>
+                          <P><img border="0" src="01.jpg" width="723" height="550"><br>
+                          <b>Figura 1. </b>La consola de administración de
+                          servicios en <i>Windows XP Professional</i>
+                          </P>
+                          <P>Desde esta consola de administración podemos
+                          conocer el estado actual del servicio, así como
+                          modificarlo. Según se aprecia en la figura 1, podemos
+                          servirnos de las opciones del menú emergente para
+                          detener, iniciar, pausar o reiniciar cualquier
+                          servicio.&nbsp;
+                          </P>
+                          <h3>Controladores de servicios
+                          </h3>
+                          <P>La consola de administración de servicios es una
+                          herramienta de propósito general y, salvo
+                          excepciones, sólo el administrador del sistema
+                          tendrá acceso a ella ya que los cambios que pudieran
+                          efectuarse no sólo afectarían a los servicios
+                          concretos manipulados, sino incluso al funcionamiento
+                          general del ordenador.&nbsp;
+                          </P>
+                          <P>Ciertas aplicaciones que funcionan como servicios,
+                          como los mencionados <i>Internet Information Server</i>
+                          y <i>SQL Server</i>, disponen de controladores
+                          específicos que facilitan el inicio y detención del
+                          servicio. En el caso concreto de <i>SQL Server</i>,
+                          por ejemplo, ese controlador aparece como un icono en
+                          el bandeja de la <b>Barra de tareas</b>, también
+                          conocida como <i>área de notificación</i>.&nbsp;En
+                          la figura 2 puede ver ese área con el icono del
+                          controlador de <i>SQL Server 2000</i>. Al pulsar el
+                          botón secundario del ratón sobre él tenemos acceso
+                          a un menú de opciones mediante el cual, según se
+                          aprecia en dicha figura, podemos efectuar las
+                          operaciones de control típicas en cualquier servicio.
+                          </P>
+                          <P><img border="0" src="02.jpg" width="496" height="200"><br>
+                          <b>Figura 2. </b>Controlador de <i>SQL Server 2000</i>
+                          en el área de notificación de la barra de tareas de
+                          Windows
+                          </P>
+                          <P>La existencia de estos controladores específicos
+                          evita que el usuario tenga que acceder a la consola de
+                          administración mostrada en el punto anterior,
+                          dándole acceso tan sólo a las operaciones que
+                          necesitaría para operar sobre esa aplicación en
+                          concreto.&nbsp;
+                          </P>
+                          <H32>
+                            Clases .NET para controlar un
+                          servicio
+                          </H2>
+                          <P>La biblioteca de clases de la plataforma .NET
+                          cuenta con un impresionante número de clases
+                          prefabricadas agrupadas en decenas de ámbitos con
+                          nombre. Uno de esos ámbitos es <b>System.ServiceProcess</b>
+                          y en él encontramos clases cuya finalidad es la
+                          implementación, instalación y control de servicios
+                          Windows. Con estas clases podríamos, por tanto, crear
+                          nuestros propios servicios para Windows. En este
+                          momento, no obstante, nuestro objetivo es ver cómo
+                          podemos controlar un servicio ya existente, no cómo
+                          crear uno nuevo.&nbsp;&nbsp;
+                          </P>
+                          <P>Para controlar cualquier servicio no tenemos más
+                          que crear un objeto de la clase <b>ServiceController</b>,
+                          alojada en el mencionado ámbito con nombre. Para
+                          identificar el servicio es preciso asignar el valor
+                          que corresponda a dos propiedades: <b>MachineName</b>
+                          y <b>ServiceName</b>. Como puede suponer, la primera
+                          identifica el ordenador en que se ejecuta el servicio
+                          (es posible controlar servicios remotos) y la segunda
+                          el servicio en sí. Suponiendo que tuviésemos en
+                          funcionamiento <i>SQL Server 2000</i> en un ordenador
+                          identificado como <i>Orion</i>, habría que dar el
+                          valor <b>Orion</b> a <b>MachineName</b> y el valor <b>MSSQLServer</b>
+                          a <b>ServiceName</b>.
+                          </P>
+                          <P>Una vez identificado el servicio, podemos usar
+                          ciertas propiedades de la clase <b>ServiceController</b>
+                          para obtener información acerca de él. Las más
+                          interesantes son <b>Status</b>, <b>CanStop</b> y <b>CanPauseAndContinue</b>.
+                          La primera nos indica el estado actual del servicio,
+                          mientras que las otras dos permiten saber si éste
+                          puede ser detenido y pausado. El valor de la propiedad
+                          <b>Status</b> puede ser cualquiera de los enumerados
+                          en la tabla 1. Dichos valores forman parte de la
+                          enumeración <b>ServiceControllerStatus</b>.
+                          </P>
+                          <P><b>Tabla 1. </b>Posibles valores de la propiedad <b>Status</b>
+                          de un objeto <b>ServiceController</b>
+                            <table border="1" cellpadding="5" cellspacing="0" style="BORDER-COLLAPSE: collapse" bordercolor="#c0c0c0" width="68%" id="AutoNumber2">
+                              <tr>
+                                <td width="19%" bgcolor="#c0c0c0">
+                                  <p align="center"><b>Valor</b>
+                                  </p>
+                                </td>
+                                <td width="81%" bgcolor="#c0c0c0">
+                                  <p align="center"><b>Estado del servicio</b>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  Running
+                                </td>
+                                <td width="81%" valign="top">
+                                  En funcionamiento
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  StartPending
+                                </td>
+                                <td width="81%" valign="top">
+                                  Iniciándose
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  Stopped
+                                </td>
+                                <td width="81%" valign="top">
+                                  Detenido
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  StopPending
+                                </td>
+                                <td width="81%" valign="top">
+                                  Deteniéndose
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  Paused
+                                </td>
+                                <td width="81%" valign="top">
+                                  En pausa
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  PausePending
+                                </td>
+                                <td width="81%" valign="top">
+                                  En espera de ser pausado
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  ContinuePending
+                                </td>
+                                <td width="81%" valign="top">
+                                  En espera de ser reanudado
+                                </td>
+                              </tr>
+                            </table>
+                          <p>Antes de leer el valor de la propiedad <b>Status</b>
+                          es recomendable invocar siempre al método <b>Refresh()</b>,
+                          asegurándonos así de que el estado que obtenemos es
+                          el actual y no el que tenía el servicio en el momento
+                          en que se creó el objeto <b>ServiceController</b>.<p>Conociendo
+                          el estado del servicio, actuar sobre él para
+                          modificarlo es tan simple como llamar a los métodos <b>Pause()</b>,
+                          <b>Continue()</b>, <b>Stop()</b> o <b>Start()</b> que
+                          se encargan de pausar, reanudar, detener o iniciar el
+                          funcionamiento del servicio, respectivamente.
+                          <H2>
+                            El explorador de servidores de
+                            Visual Studio .NET
+                          </H2>
+                          <P>Con la información que tenemos hasta ahora no
+                          tendríamos ningún problema en crear una aplicación
+                          que controlase un servicio, por ejemplo <i>SQL Server</i>,
+                          permitiéndonos, por ejemplo, detenerlo o reanudarlo.
+                          Básicamente tendríamos que añadir una referencia al
+                          ensamblado <b>System.ServiceProcess</b> en nuestro
+                          proyecto, crear un objeto <b>ServiceController</b>,
+                          asignar valor a <b>MachineName</b> y <b>ServiceName</b>,
+                          leer el valor de <b>Status</b> y usar los métodos
+                          citados al final del punto anterior para cambiar ese
+                          estado.
+                          </P>
+                          <P>Parte de ese trabajo puede simplificarse de manera
+                          notable gracias a uno de los elementos del entorno de
+                          Visual Studio .NET: el <b>Explorador de servidores</b>.
+                          Esta ventana normalmente permanece auto-ocultada en el
+                          margen izquierdo del entorno, por lo que tendrá que
+                          situar el puntero del ratón sobre la pestaña que la
+                          identifica para hacerla aparecer. Como se aprecia en
+                          la figura 3, en el <b>Explorador de servidores</b>
+                          existen elementos para crear conexiones a bases de
+                          datos, acceder al registro de eventos, colas de
+                          mensajes y, por supuesto, los servicios que haya
+                          instalados en el sistema.
+                          </P>
+                          <P><img border="0" src="03.jpg" width="401" height="629"><br>
+                          <b>Figura 3. </b>Desde el <b>Explorador de servidores</b>
+                          podemos acceder a cualquier servicio Windows
+                          </P>
+                          <P>Si selecciona un servicio cualquiera y observa la
+                          ventana <b>Propiedades</b> verá en ella el estado
+                          actual, nombre del servicio y las operaciones que
+                          están permitidas.
+                          </P>
+                          <P>Lo más interesante para nosotros, como
+                          programadores, es que tenemos la posibilidad de usar
+                          la técnica de arrastrar y soltar desde el <b>Explorador
+                          de servidores</b> a cualquier diseñador que tengamos
+                          abierto, por ejemplo el de formularios Windows. Al
+                          efectuar esa operación, Visual Studio .NET creará
+                          automáticamente un componente <b>ServiceController</b>
+                          y lo configurará para actuar sobre el servicio
+                          seleccionado. No tenemos que escribir código, por
+                          tanto, para crear el objeto e identificar el servicio,
+                          centrándonos tan sólo en la comprobación de su
+                          estado y manipulación.
+                          </P>
+                          <H2>
+                            Desarrollo de un controlador
+                          con Visual Basic .NET
+                          </H2>
+                          <p class="dtH1">Teóricamente ya sabemos cuáles son
+                          los pasos que deberíamos dar para crear una
+                          aplicación que controle un servicio. Dicha
+                          aplicación no tiene específicamente que ser un
+                          controlador de servicio, como el mostrado
+                          anteriormente que actúa sobre <i>SQL Server</i>, sino
+                          una aplicación cualquiera que hace uso de un
+                          determinado servicio y necesita saber si está en
+                          funcionamiento. Suponga, por poner un ejemplo, que ha
+                          escrito una aplicación que debe conectar con <i>SQL
+                          Server</i> para extraer alguna información. Antes de
+                          intentar la conexión podría comprobar si el RDBMS
+                          está o no en funcionamiento y, en caso necesario,
+                          podría ponerlo en marcha.
+                          </p>
+                          <p class="dtH1">Los pasos necesarios para crear esta
+                          aplicación de ejemplo son los siguientes:
+                          </p>
+                          <ol>
+                            <li>
+                              <p class="dtH1">Inicie una nueva aplicación con
+                              Visual Basic .NET seleccionando el elemento <b>Aplicacion
+                              para Windows</b> en el cuadro de diálogo <b>Nuevo
+                              proyecto</b>. Aparecerá un formulario vacío.</li>
+                            <li>
+                              <p class="dtH1">Abra el <b>Explorador de
+                              servidores</b>, despliegue la rama <b>Servicios</b>
+                              de su ordenador y seleccione el servicio que
+                              quiere controlar. Si tiene <i>SQL Server</i>
+                              instalado es el servicio ideal, ya que el
+                              controlador que aparece en la bandeja de la barra
+                              de tareas le permitirá confirmar el cambio de
+                              estado.</li>
+                            <li>
+                              <p class="dtH1">Arrastre el servicio sobre el
+                              formulario y suéltelo. Verá aparecer un
+                              componente, llamado <b>ServiceController1</b>, en
+                              la parte inferior del diseñador.</li>
+                            <li>
+                              <p class="dtH1">Seleccione el componente y recurra
+                              a la ventana <b>Propiedades</b> para cambiar el
+                              nombre. Le llamaremos <b>ControlSQLServer</b>.&nbsp;</li>
+                            <li>
+                              <p class="dtH1">Añada un botón al formulario y
+                              haga doble clic sobre él, insertando el código
+                              siguiente en el método asociado a su evento <b>Clic</b>:</li>
+                          </ol>
+{% highlight vb %}
+
+						  ' Actualizamos el valor de la propiedad Status
+ControlSQLServer.Refresh()
+' Si SQL Server no está en funcionamiento
+If ControlSQLServer.Status &lt;&gt; _
+ServiceProcess.ServiceControllerStatus.Running Then
+        ControlSQLServer.Start() ' lo iniciamos
+        MessageBox.Show(&quot;SQL Server estaba detenido y se ha iniciado&quot;)
+End If
+{% endhighlight %}
+                          <p>Con esto ya tendríamos terminado el ejemplo. No
+                          tenemos más que ejecutarlo y, tras asegurarnos de que
+                          el servicio elegido se encuentra detenido, pulsar el
+                          botón. Aparecerá la ventana con el mensaje y,
+                          transcurridos unos segundos, comprobaremos que el
+                          servicio se ha iniciado. Si pulsamos de nuevo el
+                          botón no habrá un respuesta, ya que al estar el
+                          servicio en funcionamiento el programa no hace nada.
+                                <br>
+                                &nbsp;
+                          </p>
+                          <H2>
+                            Resumen
+                          </H2>
+                          <P>Como ha podido ver en este artículo, crear un
+                          controlador de servicio con Visual Basic .NET es una
+                          tarea realmente sencilla gracias a la existencia del <b>Explorador
+                          de servidores</b> y la clase <b>ServiceController</b>.
+                          Aunque en el ejemplo propuesto nos hemos limitado a
+                          comprobar el estado de un servicio y ponerlo en
+                          marcha, no necesitamos nada más, aparte de un objeto <b>ServiceController</b>,
+                          para obtener una lista de todos los servicios
+                          disponibles, recuperar sus nombres y descripciones,
+                          comprobar el estado y modificarlo. Podríamos, en la
+                          práctica, construir una utilidad de administración
+                          general similar a la existente en Windows. </P>
+                          <P>Dado que esa utilidad de administración general ya
+                          existe, no teniendo sentido crear otra más que por
+                          satisfacción personal, el sentido de usar la clase <b>ServiceController</b>
+                          lo encontraremos a la hora de crear controladores
+                          específicos, especialmente para servicios que hayamos
+                          podido programar nosotros mismos. </P>
