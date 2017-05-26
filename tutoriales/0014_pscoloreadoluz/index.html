@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo usar un &lt;i&gt;pixel shader&lt;/i&gt; para colorear en función de la intensidad de la luz incidente&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo usar un <i>pixel shader</i> para colorear en función de la intensidad de la luz incidente<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+</ul><p>	Los PS no tienen acceso a las propiedades del vértice del que procede un cierto fragmento, como puede ser la normal asociada. Es lógico, ya que no tiene sentido realizar cálculos sobre la geometría para cada uno de los fragmentos de la escena, es mucho más eficiente llevarlos a cabos por vértice, es decir, en el VS.</p>
+
+<p>	Con la pareja de VS-PS desarrollados a continuación se pretende <b>colorear la escena</b> a la que se apliquen usando únicamente <b>cinco colores</b>: blanco, rojo, verde, azul y amarillo. El color asignado a cada fragmento dependerá de la intensidad con la que esté incidiendo la luz en el mismo. Dicha intensidad dependerá de dos parámetros: la posición en que esté situada la luz y la normal de cada vértice de la geometría.</p>
+
+
+
+
+<p>	El trabajo del VS será, precisamente, calcular ese nivel de intensidad, almacenándolo en un parámetro <i>varying</i> para que el PS pueda usarla posteriormente. El código del VS es el mostrado a continuación:</p>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// La dirección de la luz se establecerá externamente
+</span><span class="n">uniform</span> <span class="n">vec3</span> <span class="n">dirLuz</span><span class="p">;</span>
+
+<span class="c1">// Cálculo de la intensidad de luz recibida
+</span><span class="n">varying</span> <span class="kt">float</span> <span class="n">intensidad</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// Producto punto entre la dirección de la luz
+</span>    <span class="c1">// y la normal del vértice que esta procesándose
+</span>    <span class="n">intensidad</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">dirLuz</span><span class="p">,</span> <span class="n">gl_Normal</span><span class="p">);</span>
+
+   <span class="c1">// No se altera la posición
+</span>    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span> <span class="o">*</span> <span class="n">gl_Vertex</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>	Al declarar como <code>uniform</code> el parámetro <code>dirLuz</code>, éste vendrá determinado por la aplicación de forma que la dirección de donde procede la luz pueda alterarse fácilmente.</p>
+
+<p>	La intensidad se calcula mediante el operador <code>dot</code> (producto punto entre vectores), lo cual equivaldría a hallar el coseno del ángulo que forman el rayo incidente de luz y la normal del vértice. El resultado será un valor comprendido entre 0.0 y 1.0, valor que queda almacenado en <code>intensidad</code>.
+
+</p><p>	La última sentencia del VS establece la posición del vértice que, como puede verse, no se altera en ningún momento, sencillamente se le aplica la matriz de modelo-vista y transformación. No habría ningún problema en aplicar también transformaciones como las descritas antes, en los VS de ejemplo de entradas previas.</p>
+
+<p>	En la implementación del PS ignoraremos por completo la información de color almacenada en <code>gl_Color</code> (de hecho en el VS no se ha asignado valor alguno a <code>gl_FrontColor</code> ni <code>gl_BackColor</code>), asignando a <code>gl_FragColor</code> un color u otro dependiendo de la intensidad calculada previamente en el VS.</p>
+
+<p>	Las versiones actuales de VS y PS permiten emplear ciertas estructuras de control, entre ellas condicionales del tipo <code>if-then-else</code> y también bucles <code>for</code> y <code>while</code>. Al codificar el PS será necesario asignar a <code>gl_FragColor</code> un valor  u otro dependiendo de la evaluación del parámetro <code>intensidad</code>, tarea para la que he usado un clásico <code>if-else</code> como se aprecia en el código siguiente:</p>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// Parámetro procedente del VS
+</span><span class="n">varying</span> <span class="kt">float</span> <span class="n">intensidad</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// Dependiendo de la intensidad
+</span>    <span class="k">if</span> <span class="p">(</span><span class="n">intensidad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">95</span><span class="p">)</span> <span class="c1">// se asigna un color blanco
+</span>        <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">intensidad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">75</span><span class="p">)</span> <span class="c1">// rojo
+</span>        <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">intensidad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span> <span class="c1">// verde
+</span>        <span class="n">gl_FragColor</span><span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">intensidad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">25</span><span class="p">)</span> <span class="c1">// azul
+</span>        <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">else</span> <span class="c1">// o amarillo
+</span>        <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>	Una vez compilados y enlazados al programa los <i>shaders</i>, será necesario cargar algún modelo geométrico en la escena, por ejemplo la tetera, y a continuación definir la dirección de la luz. Shader Maker dispone de una página, con el título <b>Uniforms</b>, en la que aparecen los parámetros de comunicación entre los <i>shaders</i> y la aplicación, de forma que sea posible modificarlos durante la ejecución.</p>
+
+<p>	En la figura inferior puede verse el resultado de la ejecución de estos <i>shaders</i>. Rotando la tetera, así como alterando la dirección de la luz con los controles que hay en la parte inferior, el coloreado va cambiando de manera continua.</p>
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/ps2.png" title="Al cambiar la posición de la luz se alteran los colores de la tetera"></image></p>
+
+<p>La aplicación de texturas en un PS es tan sencilla como el uso del color interpolado que se almacena en <code>gl_Color</code>. No hay más que tomar las coordenadas de textura y usarlas para recuperar el color de la textura, con una sentencia del tipo <code>gl_FragColor = texture2D(textura, gl_TexCoord[0].st)</code>.</p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
