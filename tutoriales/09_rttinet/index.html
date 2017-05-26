@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo recuperar información de tipos en ejecución en la plataforma .NET&lt;/i&gt;&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+<link href="data:text/css,pre%20%2Eoperator%2C%0Apre%20%2Eparen%20%7B%0A%20color%3A%20rgb%28104%2C%20118%2C%20135%29%0A%7D%0A%0Apre%20%2Eliteral%20%7B%0A%20color%3A%20%23990073%0A%7D%0A%0Apre%20%2Enumber%20%7B%0A%20color%3A%20%23099%3B%0A%7D%0A%0Apre%20%2Ecomment%20%7B%0A%20color%3A%20%23998%3B%0A%20font%2Dstyle%3A%20italic%0A%7D%0A%0Apre%20%2Ekeyword%20%7B%0A%20color%3A%20%23900%3B%0A%20font%2Dweight%3A%20bold%0A%7D%0A%0Apre%20%2Eidentifier%20%7B%0A%20color%3A%20rgb%280%2C%200%2C%200%29%3B%0A%7D%0A%0Apre%20%2Estring%20%7B%0A%20color%3A%20%23d14%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://assets-cdn.github.com/assets/frameworks-148da7a2b8b9ad739a5a0b8b68683fed4ac7e50ce8185f17d86aa05e75ed376e.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo recuperar información de tipos en ejecución en la plataforma .NET</i><br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#----------------------------introducción--------------------------">
+                            Introducción 
+                          </a></li>
+<li class="toc-entry toc-h2"><a href="#----------------------------servicios-de-reflexión--------------------------">
+                            Servicios de reflexión
+                          </a></li>
+<li class="toc-entry toc-h2"><a href="#----------------------------ensamblados-y-módulos--------------------------">
+                            Ensamblados y módulos
+                          </a></li>
+<li class="toc-entry toc-h4"><a href="#información-sobre-el-ensamblado">Información sobre el ensamblado</a></li>
+<li class="toc-entry toc-h4"><a href="#módulos-que-componen-el-ensamblado">Módulos que componen el ensamblado</a></li>
+<li class="toc-entry toc-h2"><a href="#----------------------------tipos-definidos-en-un----------------------------ensamblado--------------------------">
+                            Tipos definidos en un
+                            ensamblado
+                          </a></li>
+<li class="toc-entry toc-h4"><a href="#la-clase-type">La clase Type</a></li>
+<li class="toc-entry toc-h4"><a href="#parámetros-de-un-método">Parámetros de un método</a></li>
+<li class="toc-entry toc-h2"><a href="#----------------------------jerarquía-de-tipos-de-un----------------------------ensamblado--------------------------">
+                            Jerarquía de tipos de un
+                            ensamblado
+                          </a></li>
+<li class="toc-entry toc-h2"><a href="#----------------------------uso-dinámico-de-objetos--------------------------">
+                            Uso dinámico de objetos
+                          </a></li>
+<li class="toc-entry toc-h4"><a href="#la-clase-activator">La clase Activator</a></li>
+<li class="toc-entry toc-h4"><a href="#invocación-dinámica">Invocación dinámica</a></li>
+<li class="toc-entry toc-h2"><a href="#----------------------------resumen--------------------------">
+                            Resumen
+                          </a></li>
+</ul><h2 class="dtH1">
+<a id="----------------------------introducción--------------------------" class="anchor" href="#----------------------------introducci%C3%B3n--------------------------" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+                            <a name="Punto1"></a>Introducción 
+                          </h2>
+                          <p class="TextoNormal">La meta información, o
+                          información tipos, es generada automáticamente para
+                          todos los tipos de datos en el momento de la compilación.
+                          Parte de esa información es intrínseca al propio
+                          tipo de dato: enumeración, estructura, clase, etc.,
+                          siendo posible añadir otra mediante el uso de
+                          atributos. Éstos se emplean para indicar características
+                          concretas de un componente o un servicio Web,
+                          delimitándose entre corchetes o entre los caracteres
+                          &lt; y &gt; según el lenguaje en que trabajemos.</p>
+                          Nuestro objetivo, en este artículo, es aprender a
+                          recuperar esa meta información durante la ejecución
+                          de un programa. La mayoría de los programas no
+                          necesitan dicha información, pero puede ser muy útil
+                          en ciertos casos, especialmente cuando una aplicación
+                          va a operar sobre elementos cuyas características
+                          desconoce de antemano. El diseñador de formularios
+                          Windows, por poner un ejemplo que seguramente conoce
+                          suficientemente, no tiene posibilidad alguna de
+                          conocer las propiedades y eventos de todos los
+                          componentes que pudieran desarrollarse y, en la práctica,
+                          no lo necesita, ya que puede obtener esa información
+                          cuando la necesita. Eso es lo que nos interesa saber a
+                          nosotros, cómo obtenerla cuando sea precisa.
+                          <p>El código de ejemplo de este artículo está
+                          escrito en lenguaje C#, pero el uso de los servicios
+                          es extensible a cualquiera de los lenguajes .NET, como
+                          Visual Basic .NET, JScript .NET, Visual C++ .NET o J#
+                          .NET.</p>
+                          <h2 class="dtH1">
+<a id="----------------------------servicios-de-reflexión--------------------------" class="anchor" href="#----------------------------servicios-de-reflexi%C3%B3n--------------------------" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+                            <a name="Punto2"></a>Servicios de reflexión
+                          </h2>
+                          <p class="TextoNormal">A la hora de obtener información
+                          sobre tipos en ejecución nos tendremos que servir de
+                          los servicios de reflexión de la plataforma .NET,
+                          cuyas clases encontraremos en el ámbito <b>System.Reflection</b>.
+                          En este ámbito encontramos clases que podríamos
+                          denominar de primer nivel, como <b>Module</b> o <b>Assembly</b>,
+                          y otras cuya finalidad es ofrecer información sobre
+                          un determinado elemento, como <b>MemberInfo</b>, <b>ParameterInfo</b>
+                          o <b>EventInfo</b>. Otra clase fundamental en este
+                          contexto, aunque se encuentra en el ámbito <b>System</b>
+                          al ser básica para la plataforma, es <b>Type</b>.</p>
+                          <p class="TextoNormal">Ya sabemos que todos los
+                          objetos con los que tratamos en Visual C# .NET están,
+                          directa o indirectamente, derivados de <b>System.Object</b>,
+                          incluso los tipos de datos que almacenan un valor y no
+                          una referencia. La clase <b>Object</b> dispone, entre
+                          otros, de un método llamado <b>GetType()</b> que
+                          devuelve un objeto <b>Type</b> con información sobre
+                          el objeto en cuestión. Así, es fácil recuperar
+                          información a partir de una variable o una propiedad,
+                          por ejemplo.</p>
+                          <p class="TextoNormal">Vamos a comenzar, no obstante,
+                          en un nivel bastante más alto que el de las variables
+                          o propiedades que pueda contener un objeto,
+                          concretamente al nivel de los ensamblados y los módulos
+                          que los componen. Después iremos descendiendo rama a
+                          rama hasta llegar al detalle máximo como puede ser la
+                          lista de parámetros de un método.</p>
+                          Aunque en este artículo vamos a ocuparnos
+                          principalmente de los servicios que nos permiten
+                          recuperar información sobre los tipos, utilizando
+                          ciertos servicios del ámbito <b>System.Reflection</b>
+                          podemos también crear esa información. Son los
+                          servicios utilizados por los compiladores y otras
+                          herramientas.<h2 class="dtH1">
+<a id="----------------------------ensamblados-y-módulos--------------------------" class="anchor" href="#----------------------------ensamblados-y-m%C3%B3dulos--------------------------" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+                            <a name="Punto3"></a>Ensamblados y módulos
+                          </h2>
+                          <p class="TextoNormal">Cada vez que compilamos un
+                          proyecto en Visual C# .NET estamos generando un
+                          ensamblado, generalmente compuesto de un solo módulo
+                          que puede ser un ejecutable o una biblioteca. Las
+                          propiedades de ese ensamblado, y las acciones que
+                          pueden efectuarse sobre él, están representadas por
+                          un objeto de la clase <b>Assembly</b>, alojada en el
+                          ámbito <b>System.Reflection</b>. Normalmente
+                          obtendremos un objeto de esa clase mediante dos
+                          mecanismos distintos: el método estático <b>GetExecutingAssembly()</b>,
+                          que nos entrega el objeto que representa al ensamblado
+                          en el que se encuentra el código que está ejecutándose,
+                          o bien los métodos <b>Load()</b> y <b>LoadFrom()</b>,
+                          también estáticos, que nos permiten abrir cualquier
+                          ensamblado obteniendo un objeto <b>Assembly</b> con su
+                          información.</p>
+                          <p class="TextoNormal">Disponiendo de un objeto <b>Assembly</b>,
+                          recuperado con cualquiera de los métodos anteriores,
+                          podemos obtener información diversa acerca de él
+                          leyendo ciertas propiedades. También podemos enumerar
+                          todos los módulos que lo componen, como veremos de
+                          inmediato.</p>
+                          <h4>
+<a id="información-sobre-el-ensamblado" class="anchor" href="#informaci%C3%B3n-sobre-el-ensamblado" aria-hidden="true"><span class="octicon octicon-link"></span></a>Información sobre el ensamblado</h4>
+                          <p class="TextoNormal">Un ensamblado tiene un nombre,
+                          una localización física, un punto de entrada, etc.
+                          Todos éstos son datos que podemos recuperar sirviéndonos
+                          de las propiedades de la clase <b>Assembly</b>. Para
+                          verlo en la práctica nos serviremos de una sencilla
+                          aplicación de consola en la que incluiremos el código
+                          siguiente:</p>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">// Para poder utilizar los servicios de reflexión
+</span><span class="k">using</span> <span class="nn">System.Reflection</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>
+                          
+<span class="k">class</span> <span class="nc">Aplicaci</span><span class="err">ó</span><span class="n">n</span>
+<span class="p">{</span>
+  <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
+  <span class="p">{</span>
+    <span class="c1">// Obtenemos el objeto Assembly que representa
+</span>    <span class="c1">// al ensamblado que contiene este mismo código
+</span>    <span class="n">Assembly</span> <span class="n">EsteEnsamblado</span> <span class="p">=</span> 
+      <span class="n">Assembly</span><span class="p">.</span><span class="nf">GetExecutingAssembly</span><span class="p">();&amp;</span><span class="n">nbsp</span><span class="p">;&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>    <span class="c1">// Mostramos por la consola el nombre, localización 
+</span>    <span class="c1">// y otras propiedades
+</span>    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Nombre</span> <span class="n">del</span> <span class="n">ensamblado</span><span class="p">:</span> <span class="p">{</span><span class="m">0</span><span class="p">}&amp;</span><span class="n">quot</span><span class="p">;,</span> 
+      <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">FullName</span><span class="p">);&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Localizaci</span><span class="err">ó</span><span class="n">n</span> <span class="n">f</span><span class="err">í</span><span class="n">sica</span><span class="p">:</span> <span class="p">{</span><span class="m">0</span><span class="p">}&amp;</span><span class="n">quot</span><span class="p">;,</span> 
+      <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">Location</span><span class="p">);&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">CodeBase</span><span class="p">:</span> <span class="p">{</span><span class="m">0</span><span class="p">}&amp;</span><span class="n">quot</span><span class="p">;,</span> 
+      <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">CodeBase</span><span class="p">);</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Est</span><span class="err">á</span> <span class="n">en</span> <span class="n">la</span> <span class="n">cach</span><span class="err">é</span> <span class="n">de</span> <span class="n">ensamblados</span><span class="p">:</span> <span class="p">{</span><span class="m">0</span><span class="p">}&amp;</span><span class="n">quot</span><span class="p">;,</span> 
+      <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">GlobalAssemblyCache</span><span class="p">);&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>
+
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">EntryPoint</span><span class="p">:</span> <span class="p">{</span><span class="m">0</span><span class="p">}&amp;</span><span class="n">quot</span><span class="p">;,</span> 
+      <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">EntryPoint</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span></code></pre></figure>
+
+                          <p class="Listado">Tras obtener una referencia al
+                          objeto <b>Assembly</b> que representa al ensamblado
+                          actual, el que contiene el código que está ejecutándose,
+                          usamos las propiedades <b>FullName</b>, <b>Location</b>,
+                          <b>CodeBase</b>, <b>GlobalAssemblyCache </b>y <b>EntryPoint</b>
+                          para recuperar el nombre del ensamblado, su localización
+                          física, saber si está o no en la caché global de
+                          ensamblados del sistema y conocer el punto de entrada
+                          que se ejecuta al iniciar el ensamblado. El resultado
+                          obtenido, al ejecutar este programa, será similar al
+                          de la figura 1. En ella puede ver que el nombre
+                          completo incluye la versión del ensamblado, así como
+                          que éste no se encuentra en la GAC (<i>Global
+                          Assembly Cache</i>) y que el punto de entrada es el método
+                          <b>Main()</b>.</p>
+                          <p class="PieFigura"><img border="0" src="http://fcharte.com/assets/img/rttinet/01.jpg" width="669" height="338"><br>
+                          <b>Figura 1.</b> Información sobre el ensamblado que
+                          contiene el propio ejemplo.</p>
+                          <p class="TextoNormal">Si en lugar de sobre el
+                          ensamblado que contiene el ejemplo desea información
+                          sobre otro cualquiera, puede usar el método <b>Load()</b>
+                          para recuperarlo. Éste necesita el nombre del
+                          ensamblado, en caso de ser privado a nuestra aplicación,
+                          o bien una referencia completa incluyendo versión,
+                          cultura y la clave pública, como se ve en la
+                          sentencia siguiente:</p>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp">                          
+<span class="n">EsteEnsamblado</span> <span class="p">=</span> <span class="n">Assembly</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span>
+  <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">System</span><span class="p">.</span><span class="n">Windows</span><span class="p">.</span><span class="n">Forms</span><span class="p">,</span><span class="n">version</span><span class="p">=</span><span class="m">1.0</span><span class="p">.</span><span class="m">3300.0</span><span class="p">,</span> <span class="n">culture</span><span class="p">=</span><span class="n">neutral</span><span class="p">,&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="p">+</span>
+  <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">PublicKeyToken</span><span class="p">=</span><span class="n">b77a5c561934e089</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span></code></pre></figure>
+
+                          <p class="TextoNormal">En este caso se recupera el
+                          ensamblado <b>System.Windows.Forms</b>, pero de manera
+                          análoga podría acceder a cualquier otro ya sea de la
+                          plataforma .NET o de terceros. El resultado, como se
+                          aprecia en la figura 2, es bien distinto. Este
+                          ensamblado sí se encuentra alojado en la GAC y no
+                          tiene un punto de entrada ya que es una biblioteca, no
+                          ejecutable directamente.</p>
+                          <p class="TextoNormal"><img border="0" src="http://fcharte.com/assets/img/rttinet/02.jpg" width="669" height="338"><br>
+                          <b>Figura 2.</b> Información sobre el ensamblado <b>System.Windows.Forms</b>.<p>
+                          </p>
+                          </p>
+                          <h4>
+<a id="módulos-que-componen-el-ensamblado" class="anchor" href="#m%C3%B3dulos-que-componen-el-ensamblado" aria-hidden="true"><span class="octicon octicon-link"></span></a>Módulos que componen el ensamblado</h4>
+                          <p class="TextoNormal">La clase <b>Assembly</b>
+                          dispone de varios métodos que nos permiten obtener un
+                          cierto módulo de los que componen el ensamblado o
+                          bien una lista de todos ellos o todos los que en ese
+                          momento están alojados en memoria. Cada módulo es
+                          representado mediante un objeto de la clase <b>Module</b>.</p>
+                          <p class="TextoNormal">En la clase módulo tan sólo
+                          encontramos cuatro propiedades con información sobre
+                          el módulo. Con ellas podemos conocer el nombre simple
+                          o cualificado, así como obtener el <b>Assembly</b> al
+                          que pertenece el módulo. No necesitamos más para,
+                          simplemente, enumerar los módulos que tiene un
+                          ensamblado conociendo su nombre. Podemos añadir las
+                          tres sentencias siguientes al final del código del
+                          ejemplo anterior para conseguir un resultado como el
+                          de la figura 3. En este caso el ensamblado está
+                          compuesto de un solo módulo.</p>
+                          
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">foreach</span><span class="p">(</span><span class="n">Module</span> <span class="n">UnModulo</span> <span class="k">in</span> <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="nf">GetModules</span><span class="p">())</span>
+      <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">UnModulo</span><span class="p">.</span><span class="n">Name</span><span class="p">);&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span></code></pre></figure>
+                          <p class="PieFigura"><img border="0" src="http://fcharte.com/assets/img/rttinet/03.jpg" width="669" height="338"><br>
+                          <b>Figura 3.</b> Mostramos la lista de módulos que
+                          componen el ensamblado.</p>
+                          En este caso hemos usado el método <b>GetModules()</b>
+                          para enumerar los módulos del ensamblado. También
+                          podemos usar el valor devuelto como un arreglo,
+                          utilizando un índice numérico para acceder a cada
+                          uno de los módulos. El primero, que tiene por índice
+                          cero, es siempre el módulo que podríamos considerar
+                          principal, donde se encuentra el punto de entrada.<h2 class="dtH1">
+<a id="----------------------------tipos-definidos-en-un----------------------------ensamblado--------------------------" class="anchor" href="#----------------------------tipos-definidos-en-un----------------------------ensamblado--------------------------" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+                            <a name="Punto4"></a>Tipos definidos en un
+                            ensamblado
+                          </h2>
+                          <p class="TextoNormal">Un ensamblado es una unidad lógica,
+                          formada por uno o más módulos físicos, en el que
+                          viven los tipos de datos públicos definidos en éstos.
+                          Son tipos las clases, estructuras, enumeraciones,
+                          delegados, etc. Al igual que podemos saber qué módulos
+                          forman un ensamblado, también es fácil conocer la
+                          lista de tipos que hay en su interior, así como
+                          conocer los detalles de cada tipo.</p>
+                          <p class="TextoNormal">En este caso el método que nos
+                          interesa se llama <b>GetTypes()</b> y podemos
+                          encontrarlo tanto en la clase <b>Assembly</b> como en <b>Module</b>.
+                          En el primer caso obtendríamos una lista de los tipos
+                          existentes en el ensamblado, mientras que en el
+                          segundo la lista sería únicamente de los tipos de un
+                          cierto módulo. En nuestro caso, tomando como base el
+                          ejemplo anterior, el resultado sería el mismo dado
+                          que el ensamblado se compone de un solo módulo.</p>
+                          <p class="TextoNormal">Lo que devuelve el método <b>GetTypes()</b>
+                          es un arreglo de objetos de la clase <b>Type</b>. Como
+                          se indicó anteriormente, es posible obtener un objeto
+                          de esa clase con la información de cualquier variable
+                          u objeto mediante el método <b>GetType()</b> definido
+                          en la clase <b>Object</b>, ascendiente común de todos
+                          los tipos existentes en Visual C# .NET.</p>
+                          <h4>
+<a id="la-clase-type" class="anchor" href="#la-clase-type" aria-hidden="true"><span class="octicon octicon-link"></span></a>La clase Type</h4>
+                          <p class="TextoNormal">A pesar de estar definida en el
+                          ámbito <b>System</b> y ser una clase fundamental para
+                          el funcionamiento de los diseñadores y editores de
+                          Visual C# .NET, la clase <b>Type</b> está derivada no
+                          de <b>Object</b> sino de <b>MemberInfo</b>, una clase
+                          que sí se aloja en el ámbito <b>System.Reflection</b>. 
+                          Mientras que <b>MemberInfo</b> está pensada para
+                          facilitar información de los miembros de una clase o
+                          estructura, <b>Type</b> tiene un objetivo más general
+                          y puede utilizarse tanto para obtener datos de una
+                          clase como de cualquiera de sus miembros.</p>
+                          <p class="TextoNormal">Uno de los pocos miembros que <b>Type</b>
+                          hereda de <b>MemberInfo</b> es <b>Name</b>, una
+                          propiedad en la que encontraremos el nombre del tipo.
+                          Generalmente el nombre no nos dirá mucho a menos que
+                          conozcamos el tipo de antemano, caso en el cual no
+                          necesitaríamos los servicios de reflexión de la
+                          plataforma .NET. Mediante una treintena de métodos de
+                          la clase <b>Type</b>, todos ellos siguen la
+                          nomenclatura <b>IsXXXX()</b> y devuelven un valor de
+                          tipo <b>bool</b>, podremos saber si el elemento es una
+                          clase: <b>IsClass()</b>; una interfaz: <b>IsInterface()</b>;
+                          una enumeración: <b>IsEnum()</b>; tiene ámbito público:
+                          <b>IsPublic()</b>; o no: <b>IsNotPublic()</b>, es de
+                          uso final y no puede utilizarse como base: <b>IsSealed()</b>,
+                          etc. Tan sólo tiene que consultar la documentación
+                          de referencia sobre la clase <b>Type</b> para conocer
+                          todos los métodos disponibles.</p>
+                          <p class="TextoNormal">Una vez determinada la
+                          naturaleza del tipo, podemos utilizar los métodos de
+                          la clase <b>Type</b> para recuperar una lista de sus
+                          constructores, miembros, propiedades, métodos,
+                          eventos, etc. También podemos comprobar si el tipo
+                          cuenta con un miembro en concreto. Los métodos que
+                          nos interesan, en este caso, son <b>GetMethods()</b>, <b>GetEvents()</b>,
+                          <b>GetConstructors()</b> y <b>GetProperties()</b>,
+                          para el primer supuesto, o <b>FindMembers()</b> en el
+                          segundo.</p>
+                          <p class="TextoNormal">La información devuelta por
+                          todos esos métodos son objetos de clases como <b>MethodInfo</b>,
+                          <b>EventInfo</b>, <b>ConstructorInfo</b> y <b>PropertyInfo</b>,
+                          que se caracterizan por contar con elementos que nos
+                          permiten determinar, por ejemplo, el tipo de una
+                          propiedad, la lista de parámetros de un método.
+                          Todas esas clases están derivadas de <b>MemberInfo</b>,
+                          por lo que pueden tratarse de manera genérica
+                          determinando el tipo de cada miembro mediante la
+                          propiedad <b>MemberType</b> de <b>MemberInfo</b>. Ésta
+                          puede tener uno de los valores enumerados en la tabla
+                          1. Con un simple condicional podríamos convertir al
+                          tipo adecuado y obtener información específica sobre
+                          él.</p>
+                          <p><b>Tabla 1. </b>Valores de la enumeración <b>MemberTypes</b>
+                            </p><table border="1" cellpadding="5" cellspacing="0" style="BORDER-COLLAPSE: collapse" bordercolor="#c0c0c0" width="68%" id="AutoNumber2">
+                              <tr>
+                                <td width="19%" bgcolor="#c0c0c0">
+                                  <p align="center"><b>Constante</b>
+                                  </p>
+                                </td>
+                                <td width="81%" bgcolor="#c0c0c0">
+                                  <p align="center"><b>El miembro es ...</b>
+                                </p>
+</td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  Constructor
+                                </td>
+                                <td width="81%" valign="top">
+                                  Un constructor
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  Event
+                                </td>
+                                <td width="81%" valign="top">
+                                  Un evento
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  Field
+                                </td>
+                                <td width="81%" valign="top">
+                                  Una variable
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  Method
+                                </td>
+                                <td width="81%" valign="top">
+                                  Un método
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  Property
+                                </td>
+                                <td width="81%" valign="top">
+                                  Una propiedad
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  NestedType
+                                </td>
+                                <td width="81%" valign="top">
+                                  Clase, interfaz, estructura, etc.
+                                </td>
+                              </tr>
+                              <tr>
+                                <td width="19%" valign="top">
+                                  Custom
+                                </td>
+                                <td width="81%" valign="top">
+                                  Personalizado
+                                </td>
+                              </tr>
+                            </table>
+                          <p class="TextoNormal">En caso de que el valor de <b>MemberType</b>
+                          sea <b>NestedType</b> nos encontramos con la definición
+                          de un nuevo tipo. Es lo que ocurre, por ejemplo,
+                          cuando una clase alberga la definición de otra clase.</p>
+                          <h4>
+<a id="parámetros-de-un-método" class="anchor" href="#par%C3%A1metros-de-un-m%C3%A9todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Parámetros de un método</h4>
+                          <p class="TextoNormal">En caso de que tengamos
+                          información sobre un método, los métodos de acceso
+                          de una propiedad o un constructor, puede interesarnos
+                          conocer la lista de parámetros que necesita para ser
+                          invocado. La información de un método se devuelve en
+                          un objeto de clase <b>MethodInfo</b>, mientras que la
+                          de un constructor se entrega en un objeto <b>ConstructorInfo</b>.
+                          Ambos están derivados de la clase <b>MethodBase</b>,
+                          de tal forma que cuentan con muchos elementos en común.</p>
+                          <p class="TextoNormal">Si lo que tenemos es una
+                          propiedad, podemos obtener el objeto <b>MethodInfo</b>
+                          correspondiente a su método de lectura mediante <b>GetGetMethod()</b>
+                          y el de escritura con <b>GetSetMethod()</b>. De esta
+                          forma, nos basta con conocer uno de los métodos de la
+                          clase <b>MethodBase</b>: <b>GetParameters()</b>. Éste
+                          devuelve un arreglo de objetos <b>ParameterInfo</b>,
+                          conteniendo cada uno de ellos el nombre, tipo y
+                          atributos de un parámetro.</p>
+                          Hay que tener en cuenta que todas las clases
+                          mencionadas cuentan con el método <b>GetType()</b> y,
+                          por tanto, podemos obtener su tipo y descubrir
+                          información acerca de ellas de forma dinámica. También
+                          es importante conocer las relaciones entre algunas de
+                          estas clases para conocer las posibles conversiones.
+                          El tipo <b>MemberInfo</b>, por ejemplo, es genérico y
+                          puede contener una referencia a un <b>MethodInfo</b> o
+                          un <b>PropertyInfo</b>, pudiendo convertirse a dichos
+                          tipos mediante el correspondiente operador.
+<h2 class="dtH1">
+<a id="----------------------------jerarquía-de-tipos-de-un----------------------------ensamblado--------------------------" class="anchor" href="#----------------------------jerarqu%C3%ADa-de-tipos-de-un----------------------------ensamblado--------------------------" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+                            <a name="Punto5"></a>Jerarquía de tipos de un
+                            ensamblado
+                          </h2>
+                          <p class="TextoNormal">Como resumen de lo visto hasta
+                          ahora sobre el descubrimiento de tipos en ejecución,
+                          información que deberá complementar con la
+                          referencia de Visual Studio .NET sobre las clases
+                          mencionadas, vamos a desarrollar un sencillo programa
+                          que muestre un árbol jerárquico de los tipos
+                          contenidos en un ensamblado, enumerando también sus
+                          miembros. Nuestro objetivo es obtener un resultado
+                          como el de la figura 4, que corresponde al programa ya
+                          en funcionamiento y mostrando el contenido del
+                          ensamblado <b>JerarquiaTipos</b>. Como se aprecia en
+                          dicha figura, el ensamblado tiene tres tipos de primer
+                          nivel: <b>Dias</b>, <b>Agenda</b> y <b>Form1</b>, que
+                          son una enumeración, una estructura y una clase,
+                          respectivamente. Debajo podemos ver todos sus miembros
+                          y, entre paréntesis, la categoría a la que
+                          pertenece. En el caso de los métodos también se
+                          facilita la lista de parámetros.</p>
+                          <p class="TextoNormal"><img border="0" src="http://fcharte.com/assets/img/rttinet/04.jpg" width="482" height="984"><br>
+                          <b>Figura 4.</b> Vista jerárquica de tipos de un
+                          ensamblado.</p>
+                          <p class="TextoNormal">El componente que ocupa todo el
+                          espacio disponible en la ventana es un <b>TreeView</b>,que
+                          se caracteriza por contar con uno o más nodos de
+                          primer nivel que pueden contener a otros en su
+                          interior. Cada nodo se corresponde con un objeto <b>TreeNode</b>,
+                          clase que dispone de una propiedad, llamada <b>Nodes</b>,
+                          conteniendo la colección de nodos hijo. Existe un método
+                          <b>Add()</b> que se encarga de añadir nuevos nodos y
+                          devolver una referencia a ellos, de tal forma que es fácil
+                          construir un árbol como el de la figura 4.</p>
+                          <p class="TextoNormal">Asumiendo que hemos iniciado
+                          una nueva aplicación basada en formularios Windows e
+                          insertado un control <b>TreeView</b> en su interior,
+                          modificando la propiedad <b>Dock</b> para que ocupe
+                          todo el espacio disponible, el código que deberíamos
+                          introducir sería el siguiente:</p>
+						  
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp">						  
+<span class="k">namespace</span> <span class="nn">JerarquiaTipos</span>
+<span class="p">{</span>
+<span class="k">using</span> <span class="nn">System.Reflection</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+<span class="c1">// Una enumeración
+</span>  <span class="k">public</span> <span class="k">enum</span> <span class="n">Dias</span>
+  <span class="p">{</span>
+    <span class="n">Lunes</span><span class="p">,</span>
+    <span class="n">Martes</span><span class="p">,</span>
+    <span class="n">Mi</span><span class="err">é</span><span class="n">rcoles</span><span class="p">,</span>
+    <span class="n">Jueves</span><span class="p">,</span>
+    <span class="n">Viernes</span><span class="p">,</span>
+    <span class="n">Sabado</span><span class="p">,</span>
+    <span class="n">Domingo</span><span class="p">,</span>
+  <span class="p">}&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+
+  <span class="c1">// y una estructura para tener algunos tipos
+</span>  <span class="c1">// en el ensamblado 
+</span>  <span class="k">public</span> <span class="k">struct</span> <span class="nc">Agenda</span>
+  <span class="p">{</span>
+    <span class="k">public</span> <span class="nf">Agenda</span><span class="p">(</span><span class="kt">int</span> <span class="n">mIDe</span><span class="p">,</span> <span class="kt">string</span> <span class="n">mNombre</span><span class="p">,</span> <span class="kt">string</span> <span class="n">mTelefono</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">ID</span> <span class="p">=</span> <span class="n">mIDe</span><span class="p">;</span>
+      <span class="n">Nombre</span> <span class="p">=</span> <span class="n">mNombre</span><span class="p">;</span>
+      <span class="n">Telefono</span> <span class="p">=</span> <span class="n">mTelefono</span><span class="p">;</span>
+    <span class="p">}&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+	<span class="k">public</span> <span class="kt">int</span> <span class="n">ID</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Nombre</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Telefono</span><span class="p">;</span>
+  <span class="p">}</span>
+  
+  <span class="k">public</span> <span class="k">class</span> <span class="nc">Form1</span> <span class="p">:</span> <span class="n">System</span><span class="p">.</span><span class="n">Windows</span><span class="p">.</span><span class="n">Forms</span><span class="p">.</span><span class="n">Form</span>
+  <span class="p">{</span>
+    <span class="k">private</span> <span class="n">System</span><span class="p">.</span><span class="n">Windows</span><span class="p">.</span><span class="n">Forms</span><span class="p">.</span><span class="n">TreeView</span> <span class="n">treeView1</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+	<span class="c1">// Al abrirse el formulario
+</span>    <span class="k">private</span> <span class="k">void</span> <span class="nf">Form1_Load</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">System</span><span class="p">.</span><span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="c1">// obtenemos una referencia al ensamblado
+</span>      <span class="n">Assembly</span> <span class="n">EsteEnsamblado</span> <span class="p">=</span> <span class="n">Assembly</span><span class="p">.</span><span class="nf">Load</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">JerarquiaTipos</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);</span>
+	  <span class="c1">// y añadimos su nombre como raíz
+</span>      <span class="n">TreeNode</span> <span class="n">Nodo</span> <span class="p">=</span> <span class="n">treeView1</span><span class="p">.</span><span class="n">Nodes</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">EsteEnsamblado</span><span class="p">.</span><span class="n">FullName</span><span class="p">);</span>
+	  <span class="c1">// Enumeramos todos sus tipos 
+</span>      <span class="k">foreach</span><span class="p">(</span><span class="n">Type</span> <span class="n">Tipo</span> <span class="k">in</span> <span class="n">EsteEnsamblado</span><span class="p">.</span><span class="nf">GetTypes</span><span class="p">())</span>
+        <span class="nf">EnumeraTipos</span><span class="p">(</span><span class="n">Nodo</span><span class="p">,</span> <span class="n">Tipo</span><span class="p">);</span>
+    <span class="p">}</span>
+	
+	<span class="c1">// Por cada tipo que exista
+</span>    <span class="k">private</span> <span class="k">void</span> <span class="nf">EnumeraTipos</span><span class="p">(</span><span class="n">TreeNode</span> <span class="n">Nodo</span><span class="p">,</span> <span class="n">Type</span> <span class="n">Tipo</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="c1">// añadimos un nodo hijo al árbol con el nombre 
+</span>      <span class="c1">// y el tipo base
+</span>      <span class="n">TreeNode</span> <span class="n">Hijo</span> <span class="p">=</span> <span class="n">Nodo</span><span class="p">.</span><span class="n">Nodes</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Tipo</span><span class="p">.</span><span class="n">Name</span> <span class="p">+</span>
+        <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="n">Inherits</span> <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="p">+</span> <span class="n">Tipo</span><span class="p">.</span><span class="n">BaseType</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
+		<span class="nf">EnumeraMiembros</span><span class="p">(</span><span class="n">Hijo</span><span class="p">,</span> <span class="n">Tipo</span><span class="p">);</span> <span class="c1">// y enumeramos sus miembros
+</span>    <span class="p">}&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+	
+	<span class="c1">// Por cada miembro de los existentes en una clase
+</span>    <span class="k">private</span> <span class="k">void</span> <span class="nf">EnumeraMiembros</span><span class="p">(</span><span class="n">TreeNode</span> <span class="n">Nodo</span><span class="p">,</span> <span class="n">Type</span> <span class="n">Tipo</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="c1">// Enumeramos todos los miembros
+</span>      <span class="k">foreach</span><span class="p">(</span><span class="n">MemberInfo</span> <span class="n">Info</span> <span class="k">in</span> <span class="n">Tipo</span><span class="p">.</span><span class="nf">GetMembers</span><span class="p">())</span>
+      <span class="p">{</span>
+        <span class="c1">// añadiendo su nombre y el tipo de miembro
+</span>        <span class="n">TreeNode</span> <span class="n">Hijo</span> <span class="p">=</span> <span class="n">Nodo</span><span class="p">.</span><span class="n">Nodes</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Info</span><span class="p">.</span><span class="n">Name</span> <span class="p">+</span> <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="p">+</span>
+          <span class="n">Info</span><span class="p">.</span><span class="n">MemberType</span><span class="p">.</span><span class="nf">ToString</span><span class="p">()</span> <span class="p">+</span> <span class="p">&amp;</span><span class="n">quot</span><span class="p">;)&amp;</span><span class="n">quot</span><span class="p">;);</span>
+		  <span class="c1">// si el miembro es un método
+</span>  <span class="p">&amp;</span><span class="n">nbsp</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;</span><span class="k">if</span><span class="p">(</span><span class="n">Info</span><span class="p">.</span><span class="n">MemberType</span> <span class="p">==</span> <span class="n">MemberTypes</span><span class="p">.</span><span class="n">Method</span><span class="p">)</span>
+          <span class="c1">// enumeramos los parámetros
+</span>          <span class="nf">EnumeraParametros</span><span class="p">(</span><span class="n">Hijo</span><span class="p">,</span> <span class="n">Info</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+	
+	<span class="c1">// Por cada parámetro existente en un método
+</span>    <span class="k">private</span> <span class="k">void</span> <span class="nf">EnumeraParametros</span><span class="p">(</span><span class="n">TreeNode</span> <span class="n">Nodo</span><span class="p">,</span>
+      <span class="n">MemberInfo</span> <span class="n">InfoMetodo</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="c1">// Enumeramos todos los parámetros
+</span>      <span class="k">foreach</span><span class="p">(</span><span class="n">ParameterInfo</span> <span class="n">Info</span> <span class="k">in</span> 
+        <span class="p">((</span><span class="n">MethodInfo</span> <span class="p">)</span><span class="n">InfoMetodo</span><span class="p">).</span><span class="nf">GetParameters</span><span class="p">())</span>
+        <span class="c1">// añadiendo su nombre y tipo
+</span>        <span class="n">Nodo</span><span class="p">.</span><span class="n">Nodes</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Info</span><span class="p">.</span><span class="n">Name</span> <span class="p">+</span> <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="p">-</span> <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="p">+</span> 
+          <span class="n">Info</span><span class="p">.</span><span class="n">ParameterType</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+                          <p>El código prácticamente está auto-documentado
+                          con los comentarios que se han introducido. Uno de los
+                          pocos puntos destacables es la llamada al método <b>EnumeraParametros()</b>
+                          desde <b>EnumeraMiembros()</b>. En éste último se
+                          dispone de un objeto de clase <b>MemberInfo</b> con
+                          información genérica sobre el tipo de miembro,
+                          objeto que se entrega al primero. En dicho método se
+                          efectúa una conversión de <b>MemberInfo</b> a <b>MethodInfo</b>
+                          para poder así recuperar la lista de parámetros.
+                          Esto es posible, lógicamente, porque la variable <b>Info</b>
+                          del método <b>EnumeraMiembros()</b> aunque es de tipo
+                          <b>MemberInfo</b> apunta a un objeto <b>MethodInfo</b>,
+                          hecho que hemos comprobado mediante la propiedad <b>MemberType</b>.
+                          Si ésta no contuviese el valor <b>MemberTypes.Method</b>
+                          la citada conversión provocaría una excepción.</p>
+                          <h2 class="dtH1">
+<a id="----------------------------uso-dinámico-de-objetos--------------------------" class="anchor" href="#----------------------------uso-din%C3%A1mico-de-objetos--------------------------" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+                            <a name="Punto6"></a>Uso dinámico de objetos
+                          </h2>
+                          <p class="TextoNormal">Si la información recuperada
+                          durante la ejecución tan sólo nos sirviera para
+                          mostrarla al usuario, lo cierto es que su utilidad sería
+                          mínima. Una aplicación que usa los servicios de
+                          reflexión para recuperar información generalmente la
+                          utiliza con otro fin, no para mostrarla al usuario,
+                          como puede ser el acceso dinámico a los objetos, sin
+                          conocer previamente su localización ni tipo.</p>
+                          <p class="TextoNormal">Algunas de las clases citadas
+                          en los puntos previos, como <b>MethodInfo</b> y <b>PropertyInfo</b>,
+                          disponen de miembros que facilitan su invocación,
+                          recuperación o modificación de valor. <b>MethodInfo</b>,
+                          por ejemplo, cuenta con un método llamado <b>Invoke()</b>
+                          que efectúa una llamada al método representado sobre
+                          un objeto que debemos facilitar como parámetro. De
+                          manera análoga, <b>PropertyInfo</b> cuenta con los métodos
+                          <b>GetValue()</b> y <b>SetValue()</b> cuya finalidad
+                          es fácil suponer.</p>
+                          <p class="TextoNormal">En la mayoría de aplicaciones,
+                          si queremos utilizar un cierto objeto, por ejemplo un
+                          formulario, definimos éste en un módulo del mismo
+                          proyecto o, como mucho, accedemos a una clase alojada
+                          en una biblioteca de enlace dinámico cuya referencia
+                          hemos importado. En definitiva, el entorno conoce el
+                          tipo del objeto a crear y usar, de tal forma que
+                          permite crearlo y acceder a sus métodos y propiedades
+                          sin ningún problema.</p>
+                          <p class="TextoNormal">Las dificultades surgen cuando
+                          los objetos a usar no tienen tipos conocidos durante
+                          el desarrollo de la aplicación, por ejemplo porque se
+                          vayan a facilitar posteriormente en forma de
+                          bibliotecas fácilmente actualizables. ¿Cómo podemos
+                          crear un objeto de una clase sin disponer de una
+                          referencia a ella durante la fase de desarrollo? En
+                          ese caso usaríamos lo que se denomina <i>early
+                          binding</i> o enlace temprano o en fase de compilación.
+                          Como no existe esa posibilidad, tendremos que recurrir
+                          al <i>late binding</i> o enlace tardío o en fase de
+                          ejecución.</p>
+                          <h4>
+<a id="la-clase-activator" class="anchor" href="#la-clase-activator" aria-hidden="true"><span class="octicon octicon-link"></span></a>La clase Activator</h4>
+                          <p class="TextoNormal">El primer paso para poder
+                          utilizar una clase mediante enlace en fase de ejecución,
+                          creándola y accediendo a sus miembros de manera dinámica,
+                          es crear un objeto a partir de esa clase. Ése es el
+                          cometido de los métodos estáticos de la clase <b>Activator</b>,
+                          que podemos usar tanto para crear objetos locales como
+                          remotos, así como para recuperar referencias a
+                          objetos que ya están ejecutándose en algún punto.</p>
+                          <p class="TextoNormal">Los dos métodos que más nos
+                          interesan de esta clase son <b>CreateInstance()</b> y <b>CreateInstanceFrom()</b>.
+                          El primero de ellos crea un objeto de una clase a
+                          partir de su información de tipo, que deberemos
+                          facilitar mediante un objeto <b>Type</b>. Ya sabemos
+                          que podemos abrir un ensamblado y enumerar todos sus
+                          tipos, por lo que no tendríamos más que entregar
+                          esos tipos a <b>CreateInstance()</b> para crear
+                          objetos. El segundo método, <b>CreateInstanceFrom()</b>,
+                          necesita dos parámetros: el nombre de un ensamblado y
+                          el nombre de la clase que vamos a usar para crear el
+                          objeto. En un solo paso se abre el ensamblado,
+                          localiza el tipo y crea el objeto, sin necesidad de
+                          pasos previos.</p>
+                          <p class="TextoNormal">Asumiendo que hemos creado una
+                          biblioteca de clases y alojado en ella una clase
+                          llamada <b>Formulario</b> en el ámbito Formulario,
+                          podríamos usar el código siguiente, en otro proyecto
+                          alojado en la misma carpeta, para abrir el ensamblado,
+                          recuperar una referencia al tipo y crear el objeto.</p>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp">                          
+<span class="c1">// obtenemos una referencia al ensamblado
+</span>    <span class="n">Assembly</span> <span class="n">Ensamblado</span> <span class="p">=</span> <span class="n">Assembly</span><span class="p">.</span><span class="nf">LoadFrom</span><span class="p">(</span>
+      <span class="p">&amp;</span><span class="n">quot</span><span class="p">;..</span><span class="err">\\</span><span class="p">..</span><span class="err">\\</span><span class="p">..</span><span class="err">\\</span><span class="n">Formulario</span><span class="err">\\</span><span class="n">bin</span><span class="err">\\</span><span class="n">debug</span><span class="err">\\</span><span class="n">Formulario</span><span class="p">.</span><span class="n">dll</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);</span>
+
+    <span class="c1">// y localizamos el tipo que nos interesa
+</span>    <span class="n">Type</span> <span class="n">Clase</span> <span class="p">=</span> <span class="n">Ensamblado</span><span class="p">.</span><span class="nf">GetType</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Formulario</span><span class="p">.</span><span class="n">Formulario</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);</span>
+
+    <span class="c1">// utilizándolo para crear un objeto
+</span>    <span class="n">Object</span> <span class="n">Objeto</span> <span class="p">=</span> <span class="n">Activator</span><span class="p">.</span><span class="nf">CreateInstance</span><span class="p">(</span><span class="n">Clase</span><span class="p">);&amp;</span><span class="n">nbsp</span><span class="p">;&lt;</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span></code></pre></figure>
+                          <p class="TextoNormal">Observe que el tipo de la
+                          variable <b>Objeto</b> es <b>Object</b> y no <b>Formulario</b>.
+                          No podríamos usar el tipo <b>Formulario</b> como tal
+                          ya que en el proyecto no existe ninguna referencia a
+                          él, por eso utilizamos una referencia genérica a un
+                          objeto, sin conocer nada más de él.</p>
+                          <blockquote>
+                            <p class="Nota"><b>Nota:</b> Para poder probar el código
+                            anterior, y el del punto siguiente, cree una
+                            biblioteca de clases y defina en ella una clase
+                            llamada <b>Formulario</b> derivada de <b>Form</b> y
+                            que cuente con un solo método, llamado <b>Saludos()</b>,
+                            que se limite a mostrar un mensaje.</p>
+                          </blockquote>
+                          <h4>
+<a id="invocación-dinámica" class="anchor" href="#invocaci%C3%B3n-din%C3%A1mica" aria-hidden="true"><span class="octicon octicon-link"></span></a>Invocación dinámica</h4>
+                          <p class="TextoNormal">Disponiendo de una referencia a
+                          nuestro objeto en la variable <b>Objeto</b>, podríamos
+                          invocar al método <b>Saludos()</b> o, puesto que <b>Formulario</b>
+                          es una clase derivada de <b>Form</b>, modificar
+                          cualquiera de las propiedades e invocar a cualquier método
+                          heredado. No podemos, sin embargo, escribir sentencias
+                          tales como <b>Objeto.Visible = true</b>, ya que <b>Objeto</b>
+                          es de tipo <b>Object</b> y en dicho tipo no existe la
+                          propiedad <b>Visible</b>.</p>
+                          <p class="TextoNormal">La variable <b>Clase</b>
+                          definida en el anterior fragmento de código,
+                          conteniendo la información de tipo de nuestro objeto,
+                          puede ser utilizada para obtener datos sobre los métodos
+                          y propiedades de la clase, tan sólo tendríamos que
+                          usar <b>GetMethod()</b> y <b>GetProperty()</b>, en
+                          este caso, para obtener un objeto <b>MethodInfo </b>o <b>PropertyInfo
+                          </b>con información sobre el método o propiedad que
+                          nos interese.</p>
+                          <p class="TextoNormal">En el código siguiente se
+                          utiliza esta técnica para invocar a los métodos <b>Saludos()</b>
+                          y <b>Show()</b>, así como para modificar el valor de
+                          la propiedad <b>Text</b>. Al ejecutar el código
+                          aparecerá primero un mensaje y, a continuación, el
+                          formulario con el título modificado.</p>
+                          
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">// Obtenemos una referencia a un método
+</span>  <span class="n">MethodInfo</span> <span class="n">Metodo</span> <span class="p">=</span> <span class="n">Clase</span><span class="p">.</span><span class="nf">GetMethod</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Saludos</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);</span>
+  <span class="n">Metodo</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="n">Objeto</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span> <span class="c1">// y lo llamamos
+</span>
+  <span class="c1">// Obtenemos una referencia a una propiedad
+</span><span class="p">&amp;</span><span class="n">nbsp</span><span class="p">;&amp;</span><span class="n">nbsp</span><span class="p">;</span><span class="n">PropertyInfo</span> <span class="n">Propiedad</span> <span class="p">=</span> <span class="n">Clase</span><span class="p">.</span><span class="nf">GetProperty</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Text</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);</span>
+
+  <span class="c1">// y modificamos su valor
+</span>  <span class="n">Propiedad</span><span class="p">.</span><span class="nf">SetValue</span><span class="p">(</span><span class="n">Objeto</span><span class="p">,</span> <span class="p">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Nuevo</span> <span class="n">t</span><span class="err">í</span><span class="n">tulo</span> <span class="n">de</span> <span class="n">la</span> <span class="n">ventana</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;,</span> <span class="k">null</span><span class="p">);</span>
+
+  <span class="c1">// Cambiamos la referencia a otro método
+</span>  <span class="n">Metodo</span> <span class="p">=</span> <span class="n">Clase</span><span class="p">.</span><span class="nf">GetMethod</span><span class="p">(&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">Show</span><span class="p">&amp;</span><span class="n">quot</span><span class="p">;);</span>
+  <span class="n">Metodo</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="n">Objeto</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span> <span class="c1">// y lo llamamos&amp;nbsp;&lt;o:p&gt;
+</span><span class="p">&lt;/</span><span class="n">o</span><span class="p">:</span><span class="n">p</span><span class="p">&gt;</span></code></pre></figure>
+                          <p class="TextoNormal">En este ejemplo hemos asumido
+                          que el ensamblado <b>Formulario.dl</b>l contenía un
+                          tipo <b>Formulario</b> en el ámbito <b>Formulario</b>
+                          y que dicho tipo, una clase, dispone de ciertos métodos
+                          y propiedades. En la práctica, sin embargo, podemos
+                          usar los métodos explicados anteriormente para
+                          conocer los tipos que hay en el ensamblado,
+                          identificar los métodos y propiedades, así como sus
+                          tipos, e invocarlos realmente sin conocerlos de manera
+                          previa. No obstante, sólo con lo que hemos hecho
+                          tenemos un programa que muestra un formulario alojado
+                          en una biblioteca de enlace dinámico sin contar con
+                          un enlace en la fase de diseño. Esto nos permite
+                          modificar esa biblioteca siempre que nos interese, por
+                          ejemplo modificando el diseño del formulario o la
+                          definición del método <b>Saludos()</b>, sin por ello
+                          tener que recompilar la aplicación principal. Bastaría
+                          con redistribuir la biblioteca para actualizar el
+                          programa, siempre que se conserve el nombre del tipo.</p>
+                          <blockquote>
+                            <p class="Nota"><b>Nota:</b> En lugar de facilitar
+                            al método <b>LoadFrom()</b> de la clase <b>Assembly</b>
+                            una constante, con el camino y nombre de la
+                            biblioteca, también existe la posibilidad de
+                            permitir seleccionar al usuario la biblioteca o que
+                            ésta venga determinada por algún parámetro de
+                            configuración.</p>
+                          </blockquote>
+                          <h2 class="dtH1">
+<a id="----------------------------resumen--------------------------" class="anchor" href="#----------------------------resumen--------------------------" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+                            <a name="Punto7"></a>Resumen
+                          </h2>
+                          <p class="TextoNormal">Mediante las técnicas que
+                          hemos conocido en este artículo podemos conocer en
+                          ejecución objetos y elementos que en fase de diseño
+                          no se conocían, obteniendo información sobre clases,
+                          enumeraciones, estructuras, métodos, propiedades,
+                          eventos y, en general, todos los componentes de un
+                          ensamblado. Estos servicios son los que utilizan los
+                          propios diseñadores de Visual C# .NET para, por
+                          ejemplo, facilitar una lista de miembros cuando en el
+                          editor se introduce el nombre de un objeto o enumerar
+                          las propiedades en la ventana Propiedades.</p>
+                          Lo más interesante de estos servicios, a menos que
+                          vayamos a crear algún diseñador o herramienta
+                          similar, es que nos permiten utilizar objetos de forma
+                          dinámica, sin conocerlos de antemano, aportando mucha
+                          flexibilidad al diseño de una aplicación. Hemos
+                          visto cómo es posible usar un elemento alojado en una
+                          biblioteca, biblioteca que podría actualizarse
+                          siempre que fuese necesario sin afectar a la aplicación
+                          principal.
+
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
