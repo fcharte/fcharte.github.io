@@ -21,8 +21,8 @@ numbersections: true
                             funcionamiento.
                           </P>
                           <P>
-                            El tercer grupo lo forman los servicios de Windows o, simplemente, <STRONG><FONT size="1">
-                                servicios</FONT></STRONG>. Estas aplicaciones tienen una serie de 
+                            El tercer grupo lo forman los servicios de Windows o, simplemente, <STRONG>
+                                servicios</STRONG>. Estas aplicaciones tienen una serie de 
                             características que le diferencian claramente de los dos grupos que acaban de 
                             describirse:
                           </P>
@@ -50,8 +50,8 @@ numbersections: true
                           </H3>
                           <P>
                             Windows NT, Windows 2000 y Windows XP disponen de un <EM>applet</EM>, podrá 
-                            encontrarlo normalmente en la carpeta <STRONG><FONT size="1">Herramientas 
-                                administrativas</FONT></STRONG> del <STRONG><FONT size="1">Panel de Control</FONT></STRONG>, 
+                            encontrarlo normalmente en la carpeta <STRONG>Herramientas 
+                                administrativas</STRONG> del <STRONG>Panel de Control</STRONG>, 
                             cuya finalidad es facilitar la administración de los servicios que haya 
                             instalados en el sistema. El aspecto de esta utilidad puede diferir según la 
                             versión del sistema operativo que estemos usando pero, independientemente de la 
@@ -65,7 +65,7 @@ numbersections: true
                             recuperación. Toda esta información puede editarse
                           gracias a una página de propiedades.
                           </P>
-                          <P><img border="0" src="01.jpg" width="723" height="550"><br>
+                          <P><img border="0" src="{{ '/assets/img/servb/01.jpg' | absolute_url }}" width="723" height="550"><br>
                           <b>Figura 1. </b>La consola de administración de
                           servicios en <i>Windows XP Professional</i>
                           </P>
@@ -101,7 +101,7 @@ numbersections: true
                           aprecia en dicha figura, podemos efectuar las
                           operaciones de control típicas en cualquier servicio.
                           </P>
-                          <P><img border="0" src="02.jpg" width="496" height="200"><br>
+                          <P><img border="0" src="{{ '/assets/img/servb/01.jpg' | absolute_url }}" width="496" height="200"><br>
                           <b>Figura 2. </b>Controlador de <i>SQL Server 2000</i>
                           en el área de notificación de la barra de tareas de
                           Windows
@@ -262,7 +262,7 @@ numbersections: true
                           mensajes y, por supuesto, los servicios que haya
                           instalados en el sistema.
                           </P>
-                          <P><img border="0" src="03.jpg" width="401" height="629"><br>
+                          <P><img border="0" src="{{ '/assets/img/servb/01.jpg' | absolute_url }}.jpg" width="401" height="629"><br>
                           <b>Figura 3. </b>Desde el <b>Explorador de servidores</b>
                           podemos acceder a cualquier servicio Windows
                           </P>
@@ -337,7 +337,7 @@ numbersections: true
                           </ol>
 {% highlight vb %}
 
-						  ' Actualizamos el valor de la propiedad Status
+' Actualizamos el valor de la propiedad Status
 ControlSQLServer.Refresh()
 ' Si SQL Server no está en funcionamiento
 If ControlSQLServer.Status &lt;&gt; _
