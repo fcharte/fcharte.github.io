@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo programar un &lt;i&gt;geometry shader&lt;/i&gt;&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo programar un <i>geometry shader</i><br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#parámetros-de-entrada">Parámetros de entrada</a></li>
+<li class="toc-entry toc-h2"><a href="#parámetros-de-salida">Parámetros de salida</a></li>
+<li class="toc-entry toc-h2"><a href="#un-gs-sencillo">Un GS sencillo</a></li>
+</ul><p>	Los GS son programas algo más complejos que los VS y PS. A diferencia de éstos, no reciben como entrada un único vértice/fragmento ni tampoco tienen que limitarse a emitir un vértice/fragmento. Un GS se ejecuta una vez por cada primitiva a procesar: punto, línea o triángulo. El resultado de su ejecución es un número variable de primitivas de salida, entre 0 y un máximo que depende actualmente del hardware que se utilice.</p>
+
+<h2>
+<a id="parámetros-de-entrada" class="anchor" href="#par%C3%A1metros-de-entrada" aria-hidden="true"><span class="octicon octicon-link"></span></a>Parámetros de entrada</h2>
+<p>	Cuando se ejecuta un GS éste sabe que debe procesar una primitiva gráfica que, como ya se ha indicado, puede ser un punto, una línea o un triángulo. El tipo de primitiva lo conocerá consultando <code>gl_VerticesIn</code>, un entero que será 1, 2 ó 3, como sería de esperar.</p>
+
+
+
+<p>	La posición de cada uno de esos vértices está almacenada en el campo <code>gl_PositionIn[N]</code>, un vector que tendrá tantos elementos como indique <code>gl_VerticesIn</code>. Esos vértices ya han pasado por el VS, algo que debe tenerse en cuenta en caso de que se hayan aplicado transformaciones.</p>
+<p>	Al igual que los vértices, el GS también recibe información sobre el color y las coordenadas de textura en los parámetros <code>gl_FrontColorIn[N]</code>, <code>gl_BackColorIn[N]</code> y <code>gl_TexCoordIn[N][M]</code>, donde <code>M</code> sería el número de texturas utilizadas y como máximo será <code>gl_MaxTextureCoords</code>.</p>
+
+<h2>
+<a id="parámetros-de-salida" class="anchor" href="#par%C3%A1metros-de-salida" aria-hidden="true"><span class="octicon octicon-link"></span></a>Parámetros de salida</h2>
+<p>	Para generar el resultado que interese el GS puede utilizar la información de entrada, actuando sobre los vértices de la primitiva original, o bien ignorarla completamente y generar una nueva geometría. Para ello utilizará dos funciones <code>EmitVertex()</code> y <code>EndPrimitive()</code>.</p>
+<p>	Antes de llamar a <code>EmitVertex()</code> hay que asignar a <code>gl_Position</code> la posición del vértice que va a enviarse al cauce gráfico. Es posible enviar de manera sucesiva uno, dos o tres vértices, dependiendo del tipo de primitiva a generar. Tras cada conjunto de vértices ha de invocarse a la función <code>EndPrimitive()</code>.</p>
+<p>	Además de emitir los vértices, el GS también puede establecer parámetros como el color o las coordenadas de textura, justo antes de llamar a <code>EmitVertex()</code>, usando los campos <code>gl_FrontColor</code>, <code>gl_BackColor</code> y <code>gl_TexCoord</code>, como haría un VS.</p>
+
+<h2>
+<a id="un-gs-sencillo" class="anchor" href="#un-gs-sencillo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Un GS sencillo</h2>
+<p>	En OGLSL un <i>shader</i> de este tipo debe comenzar siempre con dos líneas en las que se especifique la versión del lenguaje OGLSL y la extensión a usar, tal como las siguientes:</p>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#version 120
+#extension GL_EXT_geometry_shader4 : enable</span></code></pre></figure>
+<p>	Tras ellas se introduciría la habitual función <code>main()</code> con el código del <i>shader</i>.</p>
+<p>	El GS cuyo código aparece a continuación tiene el objetivo de generar, por cada vértice de un triángulo de entrada, otros tantos triángulos, con las coordenadas ligeramente desplazadas. Además se asigna un color diferente a cada vértice del triángulo de salida. De esta forma se consigue que la geometría original se convierta en una matriz tridimensional de triángulos, un efecto muy sencillo de implementar y bastante llamativo.</p>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span>
+<span class="p">{</span>
+ <span class="c1">// Las primitivas de entrada serán triángulos, 3 vértices
+</span> <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+   <span class="n">vec4</span> <span class="n">punto</span><span class="o">=</span><span class="n">gl_PositionIn</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+   <span class="n">vec4</span> <span class="n">color</span> <span class="o">=</span> <span class="n">vec4</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+
+   <span class="c1">// Por cada vértice se emite un nuevo triángulo
+</span>   <span class="n">gl_FrontColor</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">color</span><span class="p">;</span>
+   <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span><span class="o">*</span><span class="n">punto</span><span class="p">;</span>
+   <span class="n">EmitVertex</span><span class="p">();</span>
+
+   <span class="c1">// con sus vértices ligeramente desplazados
+</span>   <span class="n">gl_FrontColor</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">color</span><span class="p">;</span>
+   <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span><span class="o">*</span><span class="p">(</span>
+         <span class="n">punto</span><span class="o">+</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">));</span>
+   <span class="n">EmitVertex</span><span class="p">();</span>
+
+   <span class="c1">// y con un color en cada vértice
+</span>   <span class="n">gl_FrontColor</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">color</span><span class="p">;</span>
+   <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span><span class="o">*</span><span class="p">(</span>
+         <span class="n">punto</span><span class="o">+</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span><span class="o">-</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">));</span>
+   <span class="n">EmitVertex</span><span class="p">();</span>
+
+   <span class="n">EndPrimitive</span><span class="p">();</span>
+ <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+<p>	En la figura siguiente puede apreciarse el efecto del GS sobre un cubo y una esfera.</p>
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/gs.png" title="El GS en funcionamiento sobre dos geometrías distintas"></image></p>
+
+<p>	Los GS permiten implementar algoritmos realmente elaborados, como puede ser la teselación de una superficie a partir de unos puntos de control, la obtención y dibujo de las tangentes a una curva, etc. El límite prácticamente lo impone la propia imaginación.</p>
+<p>	Es posible combinar los distintos <i>shaders</i> desarrollados como ejemplo, de manera que se calcule la intensidad de la incidencia de la luz en el VS, después se generen los triángulos a partir de los vértices en el GS y finalmente se les aplique el coloreado en el PS.</p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
