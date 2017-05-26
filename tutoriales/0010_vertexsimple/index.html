@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo programar un &lt;i&gt;vertex shader&lt;/i&gt; simple&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo programar un <i>vertex shader</i> simple<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#parámetros-de-entrada">Parámetros de entrada</a></li>
+<li class="toc-entry toc-h2"><a href="#parámetros-de-salida">Parámetros de salida</a></li>
+<li class="toc-entry toc-h2"><a href="#composición-del-vs">Composición del VS</a></li>
+</ul><p>	Un <i>vertex shader</i> es un programa que recibe como entrada una serie de argumentos y genera unos resultados, casi como cualquier programa de ordenador. Su objetivo general es transformar vértices, si bien puede también influir en otros parámetros como el color o las coordenadas de textura.</p>
+
+<p class="nota">En esta entrada y las siguientes utilizaré el lenguaje OGLSL para escribir los <i>shaders</i>, al ser éste el lenguaje asociado a OpenGL, que es la API gráfica más utilizada, y ser también multiplataforma, algo que no se aplica por ejemplo a DirectX y HLSL.<br>
+
+Para codificar y probar los distintos ejemplos usaré la herramienta <b>Shader Maker</b> (ver descripción de herramientas en tutorial previo), simplemente porque está más actualizada que <b>ShaderDesigner</b> y permite trabajar con GS, una posibilidad que no ofrece este último programa.</p>
+
+<h2>
+<a id="parámetros-de-entrada" class="anchor" href="#par%C3%A1metros-de-entrada" aria-hidden="true"><span class="octicon octicon-link"></span></a>Parámetros de entrada</h2>
+
+<p>Desde un VS se tiene acceso a los siguientes parámetros de entrada:</p>
+<ul class="enumeracion">
+<li>
+<code>	gl_Vertex</code>: Es un vector en coordenadas uniformes (4 elementos) que representa al vértice que debe procesar el <i>shader</i>.
+</li>
+<li>
+<code>	gl_Normal</code>: Vector con las coordenadas 3D de la normal asociada al vértice.
+</li>
+<li>
+<code>	gl_Color</code>: Se trata de un vector con los cuatro componentes (R,G,B,A) del color del vértice.
+</li>
+<li>
+<code>	gl_MultiTexCoordN</code>: Contiene las coordenadas de textura de la unidad de textura N. En el hardware actual existen múltiples unidades de textura. Es habitual que N oscile entre 0 y 7.
+</li>
+</ul>
+
+<p>	Además de la información relativa al vértice que debe procesarse, el VS también tiene acceso a una serie de datos invariantes, procedentes de OpenGL y que no puede modificar, conocidos como <i>uniforms</i>. Los más relevantes son:</p>
+<ul class="enumeracion">
+<li>
+<code>	gl_ProjectionMatrix</code>: Matriz de proyección. Es la matriz 4x4 habitual.
+</li>
+<li>
+<code>	gl_ModelViewMatrix</code>: Matriz de modelo-vista.
+</li>
+<li>
+<code>	gl_ModelViewProjectionMatrix</code>: Matriz con el producto de las dos anteriores. Permite proyectar los puntos sin necesidad de realizar el producto de proyección y vista por cada vértice existente.
+</li>
+<li>
+<code>	gl_NormalMatrix</code>: Matriz 4x4 obtenida a través de la trasposición y cálculo de inversa de la matriz modelo-vista. Se utiliza para la transformación de la normal.
+</li>
+</ul>
+
+<h2>
+<a id="parámetros-de-salida" class="anchor" href="#par%C3%A1metros-de-salida" aria-hidden="true"><span class="octicon octicon-link"></span></a>Parámetros de salida</h2>
+<p>	El único resultado que obligatoriamente debe generar un VS es el vértice, transformado o no, que se enviará a las siguientes etapas del cauce gráfico. El parámetro al que debe asignarse dicho vértice es <code>gl_Position</code> y, al igual que <code>gl_Vertex</code>, es un vector con cuatro elementos, es decir, la posición se establece en coordenadas homogéneas.</p>
+
+<p>	Además el VS también puede modificar otros datos, compartidos con los PS y GS, denominados genéricamente <i>varyings</i>. Gracias a ellos puede influir en el color que se asociará al vértice y las coordenadas de textura. Dichos elementos variables son los siguientes:</p>
+
+<ul class="enumeracion">
+<li>
+<code>	gl_FrontColor</code>: Color que se asignará a la cara delantera de la primitiva.
+</li>
+<li>
+<code>	gl_BackColor</code>: Color que se asignará a la cara trasera de la primitiva.
+</li>
+<li>
+<code>gl_TexCoord[N]</code>: Coordenadas para la textura N-sima. 
+</li>
+</ul>
+
+<p>	Los tres parámetros son vectores de cuatro elementos, los dos primeros en formato (R,G,B,A) y el tercero en coordenadas homogéneas, como (X,Y,Z,W).</p>
+
+<p class="nota">Los <i>varying</i> son campos que permiten compartir información entre los diferentes <i>shaders</i> de un programa, pero no tienen una incidencia directa sobre el resultado final aplicado a la geometría. La asignación de un color a <coe>gl_FrontColor por parte del VS, por ejemplo, no se traduce en la asignación de ese color al píxel final. Será decisión del PS, posiblemente a partir del parámetro recibido en <code>gl_FrontColor</code>, el color que finalmente se utilice.</coe></p>
+
+<h2>
+<a id="composición-del-vs" class="anchor" href="#composici%C3%B3n-del-vs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Composición del VS</h2>
+<p>	Conociendo exclusivamente los parámetros de entrada y salida que puede utilizar un VS, ya es posible escribir uno sencillo que, por ejemplo, lleve a cabo una transformación fija sobre los vértices de una geometría. El objetivo es duplicar el tamaño en el eje Z y reducirlo a la mitad en el eje X.</p>
+
+<p>	El ejecutar el programa Shader Maker se inicia un proyecto con unos <i>shaders</i> básicos. Con la opción <b>Test Model</b> se modifica el modelo sobre el que se probarán. En este caso he elegido un cubo, de forma que el aspecto inicial es el que puede verse en la figura inferior.</p>
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/vertex1.png" alt="Aspecto inicial del cubo, sin aplicar el VS"></image></p>
+
+<p>	Usando el ratón sobre el área de visualización es posible tanto rotar el modelo como hacer zoom. Es importante que la opción <b>Use GLSL Program</b>, el primer <i>check-box</i> que hay en el apartado <b>Geometry Processing</b>, esté marcado, de lo contrario no se usarían los <i>shaders</i> para generar la imagen.</p>
+
+<p>	A continuación modificaremos el código que aparece en la página <b>Vertex Shader</b> del editor. El código quedará así:</p>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">vec4</span> <span class="n">v</span> <span class="o">=</span> <span class="n">gl_Vertex</span><span class="p">;</span> <span class="c1">// Tomamos el vertice de origen
+</span>
+    <span class="c1">// Reducimos dimensión en eje X
+</span>    <span class="n">v</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">;</span>
+    <span class="c1">// y duplicamos en eje Z
+</span>    <span class="n">v</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">z</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+
+    <span class="c1">// Se aplica establece el vértice transformado como posición
+</span>    <span class="n">gl_Position</span>    <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span> <span class="o">*</span> <span class="n">v</span><span class="p">;</span>
+
+    <span class="c1">// Parámetros de comunicación del VS con el PS, se dejan
+</span>    <span class="c1">// tal cual
+</span>    <span class="n">gl_FrontColor</span>  <span class="o">=</span> <span class="n">gl_Color</span><span class="p">;</span>
+    <span class="n">gl_TexCoord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">gl_MultiTexCoord0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>	Como puede verse, el código se asemeja en gran medida a cualquier programa escrito en C. Existe una función <code>main()</code>, que contiene las sentencias a ejecutar; se declaran variables como <code>v</code>, de tipo <code>vec4</code>, y se realizan operaciones de asignación y producto. El operador <code>*</code> en este contexto, sin embargo, no realiza siempre un producto escalar entre dos números. En la sentencia <code>gl_Position = ...</code> se está llevando a cabo el producto de dos matrices: la de modelo-vista-proyección por la matriz de una fila y cuatro columnas que representa al vértice.</p>
+
+<p>	Una vez escrito el código del <i>shader</i>, hay que hacer clic en el botón <b>Compile and Link</b> para compilarlo y vincularlo al programa que genera la imagen. En ese momento podrá verse que el cubo se convierte en un paralelepípedo (véase la figura inferior). Marcando y desmarcando la opción <b>Use GLSL Program</b> se puede activar/desactivar, respectivamente, el uso del VS, viendo así la imagen original sin <i>shaders</i> y la que se genera con éstos.</p>
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/vertex2.png" alt="Código del VS y efecto que genera sobre la escena"></image></p>
+
+<p class="nota">Las últimas dos sentencias del VS proceden del esqueleto que genera Shader Maker, siendo su finalidad entregar un color y coordenadas de textura al PS. Éste los utiliza para realizar su trabajo, por lo que de eliminarse no funcionará correctamente.</p>
+
+<p>	El efecto que se consigue no es nada espectacular. Sin embargo, si se analiza qué está ocurriendo al activar el VS es fácil deducir algunos aspectos interesantes:</p>
+<ul class="enumeracion">
+<li>	El programa que se ha escrito actúa sobre un único vértice, que recibe como entrada en <code>gl_Vertex</code>, y genera un único resultado, en <code>gl_Position</code>. El resto de los vértices de la geometría, por tanto, no influyen en el cálculo del vértice que está procesando el VS en un momento dado.
+</li>
+<li>Una vez compilado y enviado a la GPU, el VS realmente se ejecuta en paralelo sobre un conjunto de vértices de la geometría. En este caso concreto la transformación de los vértices del cubo se lleva a cabo en un único ciclo, ya que existen tan solo ocho vértices y el hardware empleado permitiría ejecutar en paralelo varios cientos de vértices. Para conseguir este mismo rendimiento en una CPU habría que crear explícitamente múltiples hilos y, en el mejor de los casos, se podrían procesar hasta 4 u 8 vértices por ciclo, dependiendo del microprocesador.
+</li>
+<li>	Aunque en este ejemplo la transformación aplicada al vértice es constante, siempre se divide y multiplica por 2, nada impide que esos factores sean variables, tal y como se mostrará en el ejemplo de la próxima entrada, permaneced atentos.
+</li>
+</ul>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>

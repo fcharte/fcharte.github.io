@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo programar un &lt;i&gt;pixel shader&lt;/i&gt; sencillo&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo programar un <i>pixel shader</i> sencillo<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+</ul>p&gt;	Los PS son programas con una estructura muy similar a la de los VS, si bien los parámetros de entrada y salida sobre los que trabaja son diferentes. La finalidad de un PS básicamente es la de definir el color que tendrá un fragmento o pre-píxel, normalmente usando información procedente de la geometría, texturas, etc.
+
+<p>	El color de entrada se recibe en el parámetro <code>gl_Color</code>, que no debe confundirse con el parámetro del mismo nombre existente en los VS. Este parámetro contiene el color obtenido a través de una interpolación en la que intervienen los <i>varying</i> <code>gl_FrontColor</code> y <code>gl_BackColor</code>, normalmente establecidos por el VS, y la orientación que tenga la geometría a la que corresponde el fragmento.</p>
+
+
+
+
+<p>	Los parámetros de salida del PS serán dos: <code>gl_FragColor</code> y <code>gl_FragDepth</code>. El primero indica el color a aplicar al fragmento, mientras que el segundo determina el valor que se escribirá en el buffer de profundidad.</p>
+
+<p>	El caso más sencillo de PS es aquél en el que se asigna un valor constante al color de cada fragmento. Tomando como punto de partida el estado en el que se encuentra <b>Shader Maker</b> cuando es iniciado, el código del PS sería el que puede verse en la parte derecha de la figura inferior: la asignación a <code>gl_FragColor</code> de un vector constante. En el panel de la izquierda se ve el efecto sobre la famosa tetera: al tener todos los puntos el mismo color, no se aprecian bordes ni profundidad.</p>
+
+<p style="text-align:center"><image src="http://www.fcharte.com/imagenes/ps1.png" alt="PS que asigna un color constante a cada fragmento"></image></p>
+
+<p>	Lo habitual es que a <code>gl_FragColor</code> se le asigne el <i>varying</i> <code>gl_Color</code>, es decir, el color obtenido de la interpolación antes citada. Manipulando ese <code>gl_Color</code>, por ejemplo aplicando un factor multiplicativo, sería posible suavizar o potenciar los colores, según el parámetro empleado.</p>
+
+<p>	Los efectos más interesantes se obtienen, como veremos en la próxima entrega, comunicando el PS con el VS. De esta forma es posible definir esquemas de coloreado e iluminación a medida. En la web es posible encontrar, por ejemplo, <i>shaders</i> que aplican el conocido esquema de <a href="http://en.wikipedia.org/wiki/Phong_shading">iluminación de Phong</a> usando un VS conjuntamente con un PS.</p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>

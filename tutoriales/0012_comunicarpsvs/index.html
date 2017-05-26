@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo comunicar un &lt;i&gt;vertex shader&lt;/i&gt; con un &lt;i&gt;pixel shader&lt;/i&gt;&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo comunicar un <i>vertex shader</i> con un <i>pixel shader</i><br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+</ul><p>Como se apuntó en un tutorial previo, los VS y PS pueden comunicarse a través de parámetros <code>varying</code>. Para ser más exactos habría que decir que el VS puede entregar información al PS, por ejemplo a través de los campos <code>gl_FrontColor</code> y <code>gl_TexCoord[N]</code>. También pueden declararse parámetros <code>varying</code> a medida, declarándolos antes de la función <code>main()</code> con la siguiente sintaxis:
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">varying</span> <span class="n">tipo</span> <span class="n">nombre</span><span class="p">;</span></code></pre></figure>
+</p><p>	Esta declaración se haría tanto en el VS como en el PS, de forma que el segundo pueda leer el valor asignado por el primero.</p>
+<p>	El código siguiente es un ejemplo de VS en el que se modifica el parámetro uniforme <code>gl_FrontColor</code>, usado por el PS que genera por defecto <b>Shader Maker</b> para dar color a los fragmentos. Lo que se hace es aplicar una modificación periódica a cada componente, excepto el canal alfa. En este caso la posición de los vértices no se altera.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">uniform</span> <span class="kt">float</span> <span class="n">time</span><span class="p">;</span> <span class="c1">// Tiempo que lleva ejecutándose el shader
+</span>
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">vec4</span> <span class="n">v</span> <span class="o">=</span> <span class="n">gl_Vertex</span><span class="p">;</span> <span class="c1">// Tomamos el vertice de origen
+</span>
+    <span class="c1">// Se aplica establece el vértice transformado como posición
+</span>    <span class="n">gl_Position</span>    <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span> <span class="o">*</span> <span class="n">gl_Vertex</span><span class="p">;</span>
+
+    <span class="c1">// Se aplica una transformación variable y periódica
+</span>    <span class="n">v</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">abs</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">time</span><span class="p">))</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">v</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">abs</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">time</span><span class="p">))</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">v</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">z</span> <span class="o">*</span> <span class="n">abs</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">time</span><span class="p">))</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">;</span>
+
+    <span class="c1">// Modificamos el color que se aplicara a las primitivas
+</span>    <span class="n">gl_FrontColor</span>  <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">xyz</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span></code></pre></figure>
+
+	<p>	Al ejecutar este <i>shader</i> se verá cómo el color aplicado a la geometría va cambiando, algo que no es posible apreciar en una captura de pantalla. En el caso del cubo se produce una suave transición en los colores de cada esquina, variando del verde al robo, magenta, azul, negro, etc.</p>
+
+<p>En la próxima entrega abordaremos el desarrollo de nuestro primer <i>pixel shader</i>.</p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
