@@ -1,0 +1,40 @@
+---
+layout: post
+title: Cómo comunicar un <i>vertex shader</i> con un <i>pixel shader</i><br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>Como se apuntó en un tutorial previo, los VS y PS pueden comunicarse a través de parámetros <code>varying</code>. Para ser más exactos habría que decir que el VS puede entregar información al PS, por ejemplo a través de los campos <code>gl_FrontColor</code> y <code>gl_TexCoord[N]</code>. También pueden declararse parámetros <code>varying</code> a medida, declarándolos antes de la función <code>main()</code> con la siguiente sintaxis:
+{% highlight c %}
+
+varying tipo nombre;
+
+{% endhighlight %}
+<p>	Esta declaración se haría tanto en el VS como en el PS, de forma que el segundo pueda leer el valor asignado por el primero.</p>
+<p>	El código siguiente es un ejemplo de VS en el que se modifica el parámetro uniforme <code>gl_FrontColor</code>, usado por el PS que genera por defecto <b>Shader Maker</b> para dar color a los fragmentos. Lo que se hace es aplicar una modificación periódica a cada componente, excepto el canal alfa. En este caso la posición de los vértices no se altera.</p>
+
+{% highlight c %}
+
+uniform float time; // Tiempo que lleva ejecutándose el shader
+
+void main()
+{
+    vec4 v = gl_Vertex; // Tomamos el vertice de origen
+
+    // Se aplica establece el vértice transformado como posición
+    gl_Position    = gl_ModelViewProjectionMatrix * gl_Vertex;
+
+    // Se aplica una transformación variable y periódica
+    v.x = v.x * abs(sin(time)) + 0.1;
+    v.y = v.y * abs(cos(time)) + 0.1;
+    v.z = v.z * abs(sin(time)) + 0.1;
+
+    // Modificamos el color que se aplicara a las primitivas
+    gl_FrontColor  = vec4(v.xyz,1.0);
+
+{% endhighlight %}
+
+	<p>	Al ejecutar este <i>shader</i> se verá cómo el color aplicado a la geometría va cambiando, algo que no es posible apreciar en una captura de pantalla. En el caso del cubo se produce una suave transición en los colores de cada esquina, variando del verde al robo, magenta, azul, negro, etc.</p>
+
+<p>En la próxima entrega abordaremos el desarrollo de nuestro primer <i>pixel shader</i>.</p>
