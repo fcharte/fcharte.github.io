@@ -85,6 +85,9 @@ pre, code {
   background-color: #f8f8f2;
   color: #272822; }
 
+pre.r {
+  background-color: #EEEEEE; }
+
 figure.highlight {
   margin: 0; }
 
