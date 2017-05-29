@@ -117,3 +117,6 @@ p.nota {
   margin: 40px;
   padding: 10px;
   background: #CCCCCC; }
+
+table {
+  border: 1px solid silver; }
