@@ -430,13 +430,13 @@ end;
  
 function TAboutPropertyEditor.GetValue;
 begin // Devolvemos el texto que aparecerá en el Inspector de objetos
-    Result := '(c) Mundo Delphi - 1999';
+    Result := '(c) Componente Delphi - 1999';
 end;
  
 procedure TAboutPropertyEditor.Edit;
 begin // mostramos la ventana 'About'
     Application.MessageBox('TSelectFolderDialog' + #13 +
-        '(c) Mundo Delphi - 1999', 'About ...',
+        '(c) Componente Delphi - 1999', 'About ...',
         MB_OK Or MB_ICONINFORMATION);
 End;
  
@@ -470,7 +470,7 @@ end;
 
 <p style="text-align:center"><image src="{{ '/assets/img/selectfolder/PropiedadesComponentes.png' | absolute_url }}" title="Figura 3. Propiedades y menú emergente del componente TSelectFolderDialog" /></p>
 
-<p>Si quiere algo más elaborado, no tiene mas que aprovechar los eventos del componente y escribir algo de código. En el paquete de código de la revista encontrará, junto al componente, una demostración simple de su uso. Con un mínimo de código, se utiliza el componente para elegir una carpeta, un ordenador o una impresora desde el mismo programa. Además, se aprovecha el evento <code>OnSelChanged</code> para recuperar el icono del elemento elegido, disponiéndolo como icono del formulario.
+<p>Si quiere algo más elaborado, no tiene mas que aprovechar los eventos del componente y escribir algo de código. Con un mínimo de código, se utiliza el componente para elegir una carpeta, un ordenador o una impresora desde el mismo programa. Además, se aprovecha el evento <code>OnSelChanged</code> para recuperar el icono del elemento elegido, disponiéndolo como icono del formulario.
 
 <p style="text-align:center"><image src="{{ '/assets/img/selectfolder/Demostracion.png' | absolute_url }}" title="Figura 3. El programa de demostración en funcionamiento" /></p>
 
