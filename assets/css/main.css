@@ -76,6 +76,9 @@ ul.section-nav {
   ul.section-nav .toc-h4 {
     margin-left: 4rem; }
 
+ul {
+  padding: 0.6rem 1rem; }
+
 pre, code {
   font-family: Inconsolata, monospace;
   /* Inverse Monokai colors */
