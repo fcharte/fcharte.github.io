@@ -71,7 +71,7 @@ numbersections: true
 
 <p>Inicia un nuevo proyecto de tipo estándar, inserta en el formulario un botón y haz doble clic sobre él. Añade a la cláusula <code>Uses</code> los módulos <code>ShlObj</code> y <code>Activex</code>, necesarios para usar funciones como <code>SHBrowseForFolder()</code> o <code>SHGetDesktopFolder()</code>. Por último, inserta el código listado a continuación.
 
-{% highlight delphi %}
+{% highlight pascal %}
 
 procedure TForm1.Button1Click(Sender: TObject);
 var
@@ -150,7 +150,7 @@ end;
 <tr><td><code>OKEnabled</code></td><td><code>Bolean</code></td><td>Controla el estado del botón Aceptar</td></tr>
 <tr><td><code>Icon</code></td><td><code>TIcon</code></td><td>Icono asociado al elemento elegido</td></tr>
 <tr><td><code>About</code></td><td><code>String</code></td><td>Típico mensaje ‘Acerca de …’</td></tr>
-
+</table>
 
 <p>Las propiedades <code>Title</code>, <code>Options</code>, <code>StatusText</code>, <code>RootFolder</code>, <code>Path</code> y <code>About</code> estarán disponibles en modo de diseño, accesibles en el Inspector de objetos. El resto, por el contrario, serán propiedades a las que sólo podremos acceder en ejecución. <code>DisplayName</code>, <code>Handle</code> e <code>Icon</code> son propiedades sólo de lectura, mientras que <code>OKEnabled</code> es sólo de escritura.
 
@@ -165,7 +165,7 @@ end;
 
 <p>De los tres eventos que ofrecerá este componente, dos de ellos serán de tipo <code>TNotifyEvent</code>, aportando como único parámetro el conocido <code>Sender</code>. El evento <code>OnSelChanged</code>, sin embargo, además de ese parámetro entregará otro, de tipo <code>String</code>, con el camino correspondiente al elemento elegido. Tras las definiciones de las enumeraciones anteriores, como puede verse en el siguiente listado, definimos un nuevo tipo de evento, al que llamamos <code>TSelChangeEvent</code>.
 
-{% highlight delphi %}
+{% highlight pascal %}
 
 type
   // Enumeración de las opciones aplicables al cuadro de diálogo
@@ -202,7 +202,7 @@ type
 
 <p>Aparte de la clase en el que se define el componente, en el Listado siguiente puede ver que existen otras dos clases adicionales. La primera de ellas, derivada de <code>TPropertyEditor</code>, será el editor de propiedades para la propiedad <code>About</code>. Este editor hará que esa propiedad aparezca en el Inspector de componentes pero sea de sólo lectura, así como que tenga asociada una ventana. La segunda es el editor para el propio componente, que hará aparecer una opción en el menú emergente para poder comprobar su funcionamiento incluso en modo de diseño.
 
-{% highlight delphi %}
+{% highlight pascal %}
 // Clase de definición del componente
   TSelectFolderDialog = class(TComponent)
   private
@@ -287,7 +287,7 @@ type
 
 <p>Las dos partes más importantes de la implementación son el método <code>Execute()</code> y la función de proceso de mensajes o callback. Vamos a centrarnos en estos elementos, cuyo código se muestra en el Listado siguiente.
 
-{% highlight delphi %}
+{% highlight pascal %}
 
 // Al llamar al método Execute() del componente
 function TSelectFolderDialog.Execute: Boolean;
@@ -420,7 +420,7 @@ end;
 <p>Además del propio componente, en nuestro módulo de código principal deberemos también implementar los métodos correspondientes a los dos editores: el de la propiedad About y el del componente. El código, en ambos casos, es muy simple, como puede verse en el Listado siguiente.
 
 
-{% highlight delphi %}
+{% highlight pascal %}
 { TAboutPropertyEditor }
  
 function TAboutPropertyEditor.GetAttributes;
