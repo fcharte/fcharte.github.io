@@ -551,13 +551,13 @@
  
 <span class="k">function</span> <span class="n">TAboutPropertyEditor</span><span class="p">.</span><span class="n">GetValue</span><span class="p">;</span>
 <span class="k">begin</span> <span class="c1">// Devolvemos el texto que aparecerá en el Inspector de objetos
-</span>    <span class="n">Result</span> <span class="p">:=</span> <span class="s">'(c) Mundo Delphi - 1999'</span><span class="p">;</span>
+</span>    <span class="n">Result</span> <span class="p">:=</span> <span class="s">'(c) Componente Delphi - 1999'</span><span class="p">;</span>
 <span class="k">end</span><span class="p">;</span>
  
 <span class="k">procedure</span> <span class="n">TAboutPropertyEditor</span><span class="p">.</span><span class="n">Edit</span><span class="p">;</span>
 <span class="k">begin</span> <span class="c1">// mostramos la ventana 'About'
 </span>    <span class="n">Application</span><span class="p">.</span><span class="n">MessageBox</span><span class="p">(</span><span class="s">'TSelectFolderDialog'</span> <span class="p">+</span> <span class="p">#</span><span class="m">13</span> <span class="p">+</span>
-        <span class="s">'(c) Mundo Delphi - 1999'</span><span class="p">,</span> <span class="s">'About ...'</span><span class="p">,</span>
+        <span class="s">'(c) Componente Delphi - 1999'</span><span class="p">,</span> <span class="s">'About ...'</span><span class="p">,</span>
         <span class="n">MB_OK</span> <span class="k">Or</span> <span class="n">MB_ICONINFORMATION</span><span class="p">);</span>
 <span class="k">End</span><span class="p">;</span>
  
@@ -589,9 +589,9 @@
 <a id="probando-el-componente-tselectfolderdialog" class="anchor" href="#probando-el-componente-tselectfolderdialog" aria-hidden="true"><span class="octicon octicon-link"></span></a>Probando el componente TSelectFolderDialog</h2>
 <p>La forma más simple de comprobar el funcionamiento de este componente, una vez instalado en la Paleta de componentes, consiste en establecer algunas propiedades, desplegar el menú emergente y seleccionar la primera opción disponible, como puede verse en la Figura 3.
 
-</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/selectfolder/PropiedadesComponentes.png" title="Figura 3. Propiedades y menú emergente del componente TSelectFolderDialog"></image></p>
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/selectfolder/PropiedadesComponente.png" title="Figura 3. Propiedades y menú emergente del componente TSelectFolderDialog"></image></p>
 
-<p>Si quiere algo más elaborado, no tiene mas que aprovechar los eventos del componente y escribir algo de código. En el paquete de código de la revista encontrará, junto al componente, una demostración simple de su uso. Con un mínimo de código, se utiliza el componente para elegir una carpeta, un ordenador o una impresora desde el mismo programa. Además, se aprovecha el evento <code>OnSelChanged</code> para recuperar el icono del elemento elegido, disponiéndolo como icono del formulario.
+<p>Si quiere algo más elaborado, no tiene mas que aprovechar los eventos del componente y escribir algo de código. Con un mínimo de código, se utiliza el componente para elegir una carpeta, un ordenador o una impresora desde el mismo programa. Además, se aprovecha el evento <code>OnSelChanged</code> para recuperar el icono del elemento elegido, disponiéndolo como icono del formulario.
 
 </p><p style="text-align:center"><image src="http://fcharte.com/assets/img/selectfolder/Demostracion.png" title="Figura 3. El programa de demostración en funcionamiento"></image></p>
 
