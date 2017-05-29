@@ -1,12 +1,12 @@
 ---
 layout: post
-title: Cómo realizar análisis exploratorio de datos con R</i><br/><p class="author">by Francisco Charte.</p>
+title: CÃ³mo realizar anÃ¡lisis exploratorio de datos con R</i><br/><p class="author">by Francisco Charte.</p>
 toc: true
 numbersections: true
 ---
 
 <div id="analisis-exploratorio-de-datos" class="section level2">
-<p>En este tutorial vamos a trabajar con uno de los conjuntos de datos de ejemplo que incorpora R: <code>iris</code>. En él se facilita información de distintas familias de lirios (flores). Veamos cómo explorar ese conjunto de datos para obtener una visión general de su contenido.</p>
+<p>En este tutorial vamos a trabajar con uno de los conjuntos de datos de ejemplo que incorpora R: <code>iris</code>. En Ã©l se facilita informaciÃ³n de distintas familias de lirios (flores). Veamos cÃ³mo explorar ese conjunto de datos para obtener una visiÃ³n general de su contenido.</p>
 <div id="estructura-del-conjunto-de-datos" class="section level3">
 <h2>Estructura del conjunto de datos</h2>
 <pre class="r"><code>str(iris)  # Resumen de la estructura</code></pre>
@@ -51,10 +51,10 @@ numbersections: true
 ## [137] 3.4 3.1 3.0 3.1 3.1 3.1 2.7 3.2 3.3 3.0 2.5 3.0 3.4 3.0</code></pre>
 </div>
 <div id="obtencion-de-estadisticos-basicos" class="section level3">
-<h2>Obtención de estadísticos básicos</h2>
-<pre class="r"><code>min(iris$Sepal.Width) # Valor mínimo de Sepal.Width</code></pre>
+<h2>ObtenciÃ³n de estadÃ­sticos bÃ¡sicos</h2>
+<pre class="r"><code>min(iris$Sepal.Width) # Valor mÃ­nimo de Sepal.Width</code></pre>
 <pre><code>## [1] 2</code></pre>
-<pre class="r"><code>max(iris$Sepal.Width) # Valor máximo de de Sepal.Width</code></pre>
+<pre class="r"><code>max(iris$Sepal.Width) # Valor mÃ¡ximo de de Sepal.Width</code></pre>
 <pre><code>## [1] 4.4</code></pre>
 <pre class="r"><code>mean(iris$Sepal.Width) # Media de Sepal.Width</code></pre>
 <pre><code>## [1] 3.057333</code></pre>
@@ -62,11 +62,11 @@ numbersections: true
 <pre><code>## [1] 3</code></pre>
 <pre class="r"><code>var(iris$Sepal.Width) # Varianza de Sepal.Width</code></pre>
 <pre><code>## [1] 0.1899794</code></pre>
-<pre class="r"><code>sd(iris$Sepal.Width) # Desviación de Sepal.Width</code></pre>
+<pre class="r"><code>sd(iris$Sepal.Width) # DesviaciÃ³n de Sepal.Width</code></pre>
 <pre><code>## [1] 0.4358663</code></pre>
 </div>
 <div id="estadistica-descriptiva-de-todo-el-conjunto-de-datos" class="section level3">
-<h2>Estadística descriptiva de todo el conjunto de datos</h2>
+<h2>EstadÃ­stica descriptiva de todo el conjunto de datos</h2>
 <pre class="r"><code>summary(iris)</code></pre>
 <pre><code>##   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 ##  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
@@ -84,7 +84,7 @@ numbersections: true
 ## </code></pre>
 </div>
 <div id="calculo-del-coeficiente-de-correlacion" class="section level3">
-<h2>Cálculo del coeficiente de correlación</h2>
+<h2>CÃ¡lculo del coeficiente de correlaciÃ³n</h2>
 <pre class="r"><code>cor(iris$Petal.Length, iris$Petal.Width) # Pearson entre Petal.Length y Petal.Width</code></pre>
 <pre><code>## [1] 0.9628654</code></pre>
 </div>
