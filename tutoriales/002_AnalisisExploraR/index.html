@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo realizar análisis exploratorio de datos con R&lt;/i&gt;&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link href="data:text/css,pre%20%2Eoperator%2C%0Apre%20%2Eparen%20%7B%0A%20color%3A%20rgb%28104%2C%20118%2C%20135%29%0A%7D%0A%0Apre%20%2Eliteral%20%7B%0A%20color%3A%20%23990073%0A%7D%0A%0Apre%20%2Enumber%20%7B%0A%20color%3A%20%23099%3B%0A%7D%0A%0Apre%20%2Ecomment%20%7B%0A%20color%3A%20%23998%3B%0A%20font%2Dstyle%3A%20italic%0A%7D%0A%0Apre%20%2Ekeyword%20%7B%0A%20color%3A%20%23900%3B%0A%20font%2Dweight%3A%20bold%0A%7D%0A%0Apre%20%2Eidentifier%20%7B%0A%20color%3A%20rgb%280%2C%200%2C%200%29%3B%0A%7D%0A%0Apre%20%2Estring%20%7B%0A%20color%3A%20%23d14%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://assets-cdn.github.com/assets/frameworks-148da7a2b8b9ad739a5a0b8b68683fed4ac7e50ce8185f17d86aa05e75ed376e.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo realizar análisis exploratorio de datos con R</i><br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#estructura-del-conjunto-de-datos">Estructura del conjunto de datos</a></li>
+<li class="toc-entry toc-h2"><a href="#obtención-de-estadísticos-básicos">Obtención de estadísticos básicos</a></li>
+<li class="toc-entry toc-h2"><a href="#estadística-descriptiva-de-todo-el-conjunto-de-datos">Estadística descriptiva de todo el conjunto de datos</a></li>
+<li class="toc-entry toc-h2"><a href="#cálculo-del-coeficiente-de-correlación">Cálculo del coeficiente de correlación</a></li>
+<li class="toc-entry toc-h2"><a href="#tabla-de-contingencia-de-dos-variables">Tabla de contingencia de dos variables</a></li>
+</ul><div id="analisis-exploratorio-de-datos" class="section level2">
+<p>En este tutorial vamos a trabajar con uno de los conjuntos de datos de ejemplo que incorpora R: <code>iris</code>. En él se facilita información de distintas familias de lirios (flores). Veamos cómo explorar ese conjunto de datos para obtener una visión general de su contenido.</p>
+<div id="estructura-del-conjunto-de-datos" class="section level3">
+<h2>
+<a id="estructura-del-conjunto-de-datos" class="anchor" href="#estructura-del-conjunto-de-datos" aria-hidden="true"><span class="octicon octicon-link"></span></a>Estructura del conjunto de datos</h2>
+<pre class="r"><code>str(iris)  # Resumen de la estructura</code></pre>
+<pre><code>## 'data.frame':    150 obs. of  5 variables:
+##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code>ncol(iris) # Cantidad de columnas</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>nrow(iris) # Cantidad de filas</code></pre>
+<pre><code>## [1] 150</code></pre>
+<pre class="r"><code>colnames(iris) # Nombres de las columnas</code></pre>
+<pre><code>## [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" 
+## [5] "Species"</code></pre>
+<pre class="r"><code>head(iris) # Ver algunas filas del inicio del conjunto de datos</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
+<pre class="r"><code>tail(iris) # Ver algunas filas del final del conjunto de datos</code></pre>
+<pre><code>##     Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+## 145          6.7         3.3          5.7         2.5 virginica
+## 146          6.7         3.0          5.2         2.3 virginica
+## 147          6.3         2.5          5.0         1.9 virginica
+## 148          6.5         3.0          5.2         2.0 virginica
+## 149          6.2         3.4          5.4         2.3 virginica
+## 150          5.9         3.0          5.1         1.8 virginica</code></pre>
+<pre class="r"><code>iris$Sepal.Width # Ver todos los valores de una de las columnas</code></pre>
+<pre><code>##   [1] 3.5 3.0 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 3.7 3.4 3.0 3.0 4.0 4.4 3.9
+##  [18] 3.5 3.8 3.8 3.4 3.7 3.6 3.3 3.4 3.0 3.4 3.5 3.4 3.2 3.1 3.4 4.1 4.2
+##  [35] 3.1 3.2 3.5 3.6 3.0 3.4 3.5 2.3 3.2 3.5 3.8 3.0 3.8 3.2 3.7 3.3 3.2
+##  [52] 3.2 3.1 2.3 2.8 2.8 3.3 2.4 2.9 2.7 2.0 3.0 2.2 2.9 2.9 3.1 3.0 2.7
+##  [69] 2.2 2.5 3.2 2.8 2.5 2.8 2.9 3.0 2.8 3.0 2.9 2.6 2.4 2.4 2.7 2.7 3.0
+##  [86] 3.4 3.1 2.3 3.0 2.5 2.6 3.0 2.6 2.3 2.7 3.0 2.9 2.9 2.5 2.8 3.3 2.7
+## [103] 3.0 2.9 3.0 3.0 2.5 2.9 2.5 3.6 3.2 2.7 3.0 2.5 2.8 3.2 3.0 3.8 2.6
+## [120] 2.2 3.2 2.8 2.8 2.7 3.3 3.2 2.8 3.0 2.8 3.0 2.8 3.8 2.8 2.8 2.6 3.0
+## [137] 3.4 3.1 3.0 3.1 3.1 3.1 2.7 3.2 3.3 3.0 2.5 3.0 3.4 3.0</code></pre>
+</div>
+<div id="obtencion-de-estadisticos-basicos" class="section level3">
+<h2>
+<a id="obtención-de-estadísticos-básicos" class="anchor" href="#obtenci%C3%B3n-de-estad%C3%ADsticos-b%C3%A1sicos" aria-hidden="true"><span class="octicon octicon-link"></span></a>Obtención de estadísticos básicos</h2>
+<pre class="r"><code>min(iris$Sepal.Width) # Valor mínimo de Sepal.Width</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>max(iris$Sepal.Width) # Valor máximo de de Sepal.Width</code></pre>
+<pre><code>## [1] 4.4</code></pre>
+<pre class="r"><code>mean(iris$Sepal.Width) # Media de Sepal.Width</code></pre>
+<pre><code>## [1] 3.057333</code></pre>
+<pre class="r"><code>median(iris$Sepal.Width) # Mediana de Sepal.Width</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>var(iris$Sepal.Width) # Varianza de Sepal.Width</code></pre>
+<pre><code>## [1] 0.1899794</code></pre>
+<pre class="r"><code>sd(iris$Sepal.Width) # Desviación de Sepal.Width</code></pre>
+<pre><code>## [1] 0.4358663</code></pre>
+</div>
+<div id="estadistica-descriptiva-de-todo-el-conjunto-de-datos" class="section level3">
+<h2>
+<a id="estadística-descriptiva-de-todo-el-conjunto-de-datos" class="anchor" href="#estad%C3%ADstica-descriptiva-de-todo-el-conjunto-de-datos" aria-hidden="true"><span class="octicon octicon-link"></span></a>Estadística descriptiva de todo el conjunto de datos</h2>
+<pre class="r"><code>summary(iris)</code></pre>
+<pre><code>##   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
+##  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
+##  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  
+##  Median :5.800   Median :3.000   Median :4.350   Median :1.300  
+##  Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  
+##  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  
+##  Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  
+##        Species  
+##  setosa    :50  
+##  versicolor:50  
+##  virginica :50  
+##                 
+##                 
+## </code></pre>
+</div>
+<div id="calculo-del-coeficiente-de-correlacion" class="section level3">
+<h2>
+<a id="cálculo-del-coeficiente-de-correlación" class="anchor" href="#c%C3%A1lculo-del-coeficiente-de-correlaci%C3%B3n" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cálculo del coeficiente de correlación</h2>
+<pre class="r"><code>cor(iris$Petal.Length, iris$Petal.Width) # Pearson entre Petal.Length y Petal.Width</code></pre>
+<pre><code>## [1] 0.9628654</code></pre>
+</div>
+<div id="tabla-de-contingencia-de-dos-variables" class="section level3">
+<h2>
+<a id="tabla-de-contingencia-de-dos-variables" class="anchor" href="#tabla-de-contingencia-de-dos-variables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tabla de contingencia de dos variables</h2>
+<pre class="r"><code>table(iris$Petal.Width, iris$Species)</code></pre>
+<pre><code>##      
+##       setosa versicolor virginica
+##   0.1      5          0         0
+##   0.2     29          0         0
+##   0.3      7          0         0
+##   0.4      7          0         0
+##   0.5      1          0         0
+##   0.6      1          0         0
+##   1        0          7         0
+##   1.1      0          3         0
+##   1.2      0          5         0
+##   1.3      0         13         0
+##   1.4      0          7         1
+##   1.5      0         10         2
+##   1.6      0          3         1
+##   1.7      0          1         1
+##   1.8      0          1        11
+##   1.9      0          0         5
+##   2        0          0         6
+##   2.1      0          0         6
+##   2.2      0          0         3
+##   2.3      0          0         8
+##   2.4      0          0         3
+##   2.5      0          0         3</code></pre>
+</div>
+</div>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
