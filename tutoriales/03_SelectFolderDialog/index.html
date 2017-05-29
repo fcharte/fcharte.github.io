@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo crear un componente de selección de carpetas con Delphi&lt;/i&gt;&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link href="data:text/css,pre%20%2Eoperator%2C%0Apre%20%2Eparen%20%7B%0A%20color%3A%20rgb%28104%2C%20118%2C%20135%29%0A%7D%0A%0Apre%20%2Eliteral%20%7B%0A%20color%3A%20%23990073%0A%7D%0A%0Apre%20%2Enumber%20%7B%0A%20color%3A%20%23099%3B%0A%7D%0A%0Apre%20%2Ecomment%20%7B%0A%20color%3A%20%23998%3B%0A%20font%2Dstyle%3A%20italic%0A%7D%0A%0Apre%20%2Ekeyword%20%7B%0A%20color%3A%20%23900%3B%0A%20font%2Dweight%3A%20bold%0A%7D%0A%0Apre%20%2Eidentifier%20%7B%0A%20color%3A%20rgb%280%2C%200%2C%200%29%3B%0A%7D%0A%0Apre%20%2Estring%20%7B%0A%20color%3A%20%23d14%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://assets-cdn.github.com/assets/frameworks-148da7a2b8b9ad739a5a0b8b68683fed4ac7e50ce8185f17d86aa05e75ed376e.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo crear un componente de selección de carpetas con Delphi</i><br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#cuadros-de-diálogo-de-uso-común">Cuadros de diálogo de uso común</a></li>
+<li class="toc-entry toc-h2"><a href="#uso-de-shbrowseforfolder">Uso de SHBrowseForFolder()</a></li>
+<li class="toc-entry toc-h2"><a href="#lista-de-identificadores">Lista de identificadores</a></li>
+<li class="toc-entry toc-h2"><a href="#funcionamiento-básico">Funcionamiento básico</a></li>
+<li class="toc-entry toc-h2"><a href="#la-función-de-procesamiento-de-mensajes">La función de procesamiento de mensajes</a></li>
+<li class="toc-entry toc-h2"><a href="#planificación-del-componente">Planificación del componente</a></li>
+<li class="toc-entry toc-h2"><a href="#definición-previa-de-tipos">Definición previa de tipos</a></li>
+<li class="toc-entry toc-h2"><a href="#definición-de-clases">Definición de clases</a></li>
+<li class="toc-entry toc-h2"><a href="#implementación-del-componente">Implementación del componente</a></li>
+<li class="toc-entry toc-h2"><a href="#implementación-de-los-editores">Implementación de los editores</a></li>
+<li class="toc-entry toc-h2"><a href="#probando-el-componente-tselectfolderdialog">Probando el componente TSelectFolderDialog</a></li>
+</ul><p>Delphi incorpora múltiples componentes que permiten usar los cuadros de diálogos comunes del sistema, pero ninguno que permita elegir una carpeta. En este tutorial te enseño cómo crearlo.
+
+</p><p>Una de las posibilidades más interesantes de Delphi, como todos sabemos, es que podemos crear nuestros propios componentes e integrarlos en el entorno. Esta tarea, además, no requiere demasiado trabajo, puesto que contamos con un asistente que crea un esqueleto genérico, a completar por nosotros, y otro que se encarga de incluir el componente en un paquete, compilarlo e instalarlo.
+
+</p><p>Desarrollar componentes VCL, por tanto, no es un objetivo fuera del alcance de cualquier programador que use Delphi. Realmente, basta con echarle un poco de imaginación o, en algunos casos, tener una necesidad concreta. En este tutorial podrás encontrar el desarrollo completo de un componente que encapsula una funcionalidad de Windows. Lo más interesante del componente es, lógicamente, su código fuente. Asumiendo que conocemos las bases necesarias para crear componentes, vamos a centrarnos en el diseño concreto del componente que nos ocupe, sin indicar cómo se inicia la creación del componente, cómo se aloja en un paquete o cómo se instala.
+
+</p><h2>
+<a id="cuadros-de-diálogo-de-uso-común" class="anchor" href="#cuadros-de-di%C3%A1logo-de-uso-com%C3%BAn" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cuadros de diálogo de uso común</h2>
+<p>La mayor parte de las aplicaciones, independientemente de su finalidad concreta, cuentan con necesidades más o menos comunes: abrir archivos o guardarlos, seleccionar tipos de letra, imprimir información, etc. Tan comunes son estas necesidades, que el propio sistema operativo aporta una solución común: unos cuadros de diálogo que, como no podía ser de otra manera, se apellidan de uso común. Los componentes que encontramos en la página Dialogs de la paleta de Delphi (véase Figura 1), lo que hacen es simplificar para nosotros, los programadores que utilizamos Delphi, la utilización de esos servicios del sistema.
+
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/selectfolder/PaginaDialogs.png" title="Figura 1. Detalle de la página Dialogs de la Paleta de componentes de Delphi"></image></p>
+
+<p>Utilizar uno de los componentes de la citada página, es algo que se reduce a establecer algunas propiedades, generalmente durante la fase de diseño, y llamar posteriormente, en ejecución, al método <code>Execute()</code>, que hace aparecer el cuadro de diálogo. Cuando éste es cerrado, el programa puede recuperar la selección del usuario leyendo algunas propiedades.
+
+</p><p>Una acción que en ocasiones también puede ser precisa, y que no está disponible a través de ninguno de los componentes de Delphi, es la selección de una carpeta. Suponga que su programa tiene que preguntar al usuario dónde quiere alojar sus bases de datos, dándole a elegir entre las carpetas disponibles en el sistema. ¿Qué componente sería el adecuado para esta tarea? Componentes como <code>TOpenDialog</code> y <code>TSaveDialog</code> están orientados a la selección de archivos, no de carpetas.
+
+</p><p>Windows cuenta con una función, llamada <code>SHBrowseForFolder()</code>, que hace precisamente lo que podemos necesitar en esas ocasiones. Dicha función abre un cuadro de diálogo como el mostrado en la Figura 2, permitiendo al usuario seleccionar cualquiera de las carpetas existentes en el sistema. Para poder utilizar esta función, deberá incluirse el módulo <code>ShlObj</code> en nuestro proyecto.
+
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/selectfolder/CuadroDialogo.png" title="Figura 2. Cuadro de diálogo de selección de carpetas"></image></p>
+
+
+<p>Tener que utilizar la función <code>SHBrowseForFolder()</code> cada vez que se precisa facilitar la selección de una carpeta, no es, precisamente, nada cómodo. Como veremos en un momento, es preciso preparar una estructura de parámetros, escribir una función callback para procesar mensajes, convertir identificadores de Windows en caminos que podamos usar en el programa, etc. Se trata, por tanto, de una candidata perfecta para ser encapsulada en forma de componente.
+
+</p><h2>
+<a id="uso-de-shbrowseforfolder" class="anchor" href="#uso-de-shbrowseforfolder" aria-hidden="true"><span class="octicon octicon-link"></span></a>Uso de <code>SHBrowseForFolder()</code>
+</h2>
+<p>Para poder crear un componente que facilite el uso de esta función deberemos, lógicamente, conocer los parámetros que necesita, los valores que devuelve y, en general, su funcionamiento global. Vamos a dedicar éste y los puntos siguientes a estudiar detalladamente cómo se usa <code>SHBrowseForFolder()</code>, en una descripción básicamente teórica. Después, con las ideas claras acerca de lo que pretendemos, nos pondremos manos a la obra con el desarrollo del componente.
+
+</p><p>Antes de poder llamar a esta función, deberemos declarar una variable de tipo <code>TBrowseInfo</code>, un registro, asignando los valores apropiados a cada uno de sus miembros. Algunos de estos valores, como el título que aparecerá en la ventana, son obvios. Otros, por el contrario, no lo son tanto y requieren una mayor explicación. En la tabla siguiente se enumeran los miembros del mencionado registro, indicando el tipo y contenido de cada uno de ellos.
+
+</p><table>
+<caption>Miembros del registro <code>TBrowseInfo</code>
+</caption>
+<tr>
+<td><strong>Nombre del miembro</strong></td>
+<td><strong>Comentario</strong></td>
+</tr>
+<tr>
+<td><code>hwndOwner</code></td>
+<td>Identificador de la ventana que actuará como padre del cuadro de diálogo</td>
+</tr>
+<tr>
+<td><code>pidlRoot</code></td>
+<td>Lista de identificadores de la carpeta de la que partirá la selección</td>
+</tr>
+<tr>
+<td><code>pszDisplayName</code></td>
+<td>Cadena para recuperar el nombre del elemento seleccionado</td>
+</tr>
+<tr>
+<td><code>lpszTitle</code></td>
+<td>Cadena con el título que aparecerá en la ventana</td>
+</tr>
+<tr>
+<td><code>ulFlags</code></td>
+<td>Indicadores con opciones de funcionamiento</td>
+</tr>
+<tr>
+<td><code>lpfn</code></td>
+<td>Puntero a la función callback de proceso de mensajes</td>
+</tr>
+<tr>
+<td><code>lParam</code></td>
+<td>Parámetro de usuario, que será enviado a la función anterior</td>
+</tr>
+<tr>
+<td><code>iImage</code></td>
+<td>Índice de la imagen que representa al elemento seleccionado</td>
+</tr>
+</table>
+
+<p>Los miembros <code>hwndOwner</code>, <code>pszDisplayName</code>, <code>lpszTitle</code> y <code>lParam</code> no requieren demasiada explicación. El primero es el identificador de la ventana que actuará como padre del cuadro de diálogo, el segundo apuntará a una cadena en la que se almacenará el nombre del elemento que se haya elegido, el tercero será el mencionado título de la ventana y el último, un <code>Integer</code>, es un parámetro de usuario, útil tan sólo si se utiliza una función callback.
+
+</p><p>El miembro <code>lpfn</code> puede ser nulo, caso en el cual el funcionamiento del cuadro de diálogo será autónomo. Si se entrega la dirección de una función, por el contrario, el cuadro de diálogo notificará diversos eventos, como la inicialización o el cambio de selección. En un punto posterior entraremos en mayor detalle sobre la función callback, los mensajes que podemos recibir y los que es posible enviar al cuadro de diálogo.
+
+</p><p>Por defecto, el cuadro de diálogo mostrado por <code>SHBrowseForFolder()</code> permite elegir no solo carpetas, sino también ordenadores, impresoras y cualquier otro elemento que exista en el espacio de nombres de la interfaz de Windows. Mediante el parámetro <code>ulFlags</code> es posible especificar una o más opciones, representadas por una serie de constantes. De esta forma podríamos, por ejemplo, limitar la selección sólo a carpetas del sistema de archivos, incluir también la visualización de archivos o incluir una línea de estado para mostrar un texto. Consulte la ayuda en línea de Delphi sobre el API de Windows para obtener una enumeración de todas las constantes posibles.
+
+</p><p>Cada uno de los elementos que aparecen en el cuadro de diálogo tiene un pequeño icono asociado, que indica si dicho elemento es una carpeta, una unidad de disco, un ordenador, etc. Todas esas imágenes están almacenadas en un componente <code>ImageList</code> gestionado por el propio sistema. El miembro iImage contendrá el índice de la imagen, relativa a ese componente, que representa al objeto elegido.
+
+</p><h2>
+<a id="lista-de-identificadores" class="anchor" href="#lista-de-identificadores" aria-hidden="true"><span class="octicon octicon-link"></span></a>Lista de identificadores</h2>
+<p>En un cuadro de diálogo de apertura de archivo sólo pueden elegirse archivos, elementos que tienen una correspondencia con el sistema de almacenamiento físico del ordenador. En el cuadro de diálogo mostrado por <code>SHBrowseForFolder()</code>, sin embargo, aparecen elementos que no tienen esa correspondencia, elementos tales como impresoras u ordenadores. Al no ser elementos pertenecientes al sistema de archivos, no cuentan con un camino.
+
+</p><p>Dado que unos elementos cuentan con camino y otros no, Windows identifica a los objetos usando otro recurso alternativo, en lugar de un camino. Dicho recurso es una lista de identificadores concatenados, conocida habitualmente como PIDL (<i>Pointer to IDentifier List</i>, Puntero a lista de identificadores). Todos los elementos del espacio de nombres cuentan con un PIDL único, que les identifica de manera inequívoca.
+
+</p><p>Cuál es la estructura interna de un PIDL es algo que no nos interesa especialmente. Lo que sí nos interesa, es saber que la función <code>SHBrowseForFolder()</code> no nos devolverá un camino indicando cuál es el elemento elegido, dado que algunos elementos no cuentan con camino. Por eso, esta función lo que devuelve es un PIDL, un puntero a una lista de identificadores de longitud variable.
+
+</p><p>¿Y qué hacemos nosotros con un PIDL? No sabemos cuál es su estructura ni qué significa, ni siquiera si es mineral, vegetal o animal. En principio, puesto que lo que buscamos es facilitar la selección de carpetas, nos interesará saber cómo obtener el camino del objeto al que representa ese PIDL. Con este fin podemos usar la función <code>SHGetPathFromIDList()</code>, facilitando como primer parámetro el PIDL y como segundo una cadena con al menos <code>MAX_PATH</code> bytes de espacio disponible. Si el valor de retorno de esta función es True, ello significará que el objeto tiene un camino y éste ha sido devuelto en el segundo parámetro.
+
+</p><p>La conversión en sentido inverso, obteniendo el PIDL que corresponde a un determinado camino, es algo más complejo y requiere varios pasos. Lo primero es obtener un puntero a la interfaz <code>IShellFolder</code> del escritorio, simplemente llamado a la función SHGetDesktopFolder(). Acto seguido, usando dicho puntero, se llamaría al método <code>ParseDisplayName()</code>. El tercer parámetro sería el camino de entrada, y el penúltimo un puntero al PIDL obtenido. De esta forma podríamos, por ejemplo, facilitar una carpeta de inicio en el miembro <code>pidlRoot</code> del registro <code>TBrowseInfo</code>. Si el PIDL que queremos recuperar es el de una de las carpetas especiales de Windows, como la de archivos de programa o documentos, tenemos otra función disponible: <code>SHGetSpecialFolderLocation()</code>.
+
+</p><p>Los PIDL son estructuras de datos creadas por Windows a demanda nuestra, como respuesta a las llamadas de <code>SHBrowseForFolder()</code> o <code>ParseDisplayName()</code>. Estas estructuras se almacenan en un espacio de memoria común usado por el motor COM, siendo responsabilidad nuestra su liberación, cuando ya no nos sean útiles. Con este fin usaremos la función <code>CoTaskMemFree()</code>, facilitando como único parámetro el PIDL.
+
+</p><h2>
+<a id="funcionamiento-básico" class="anchor" href="#funcionamiento-b%C3%A1sico" aria-hidden="true"><span class="octicon octicon-link"></span></a>Funcionamiento básico</h2>
+<p>Con lo que conocemos hasta ahora, tenemos información suficiente para hacer aparecer el cuadro de diálogo de la Figura 1, saber si se ha elegido una carpeta y, en caso afirmativo, recuperar el camino correspondiente. Antes de continuar estudiando otros detalles, veamos con un ejemplo muy simple como aplicar en la práctica las explicaciones anteriores.
+
+</p><p>Inicia un nuevo proyecto de tipo estándar, inserta en el formulario un botón y haz doble clic sobre él. Añade a la cláusula <code>Uses</code> los módulos <code>ShlObj</code> y <code>Activex</code>, necesarios para usar funciones como <code>SHBrowseForFolder()</code> o <code>SHGetDesktopFolder()</code>. Por último, inserta el código listado a continuación.
+
+<figure class="highlight"><pre><code class="language-delphi" data-lang="delphi">procedure TForm1.Button1Click(Sender: TObject);
+var
+  FBrowseInfo: TBrowseInfo; // Registro para SHBrowseForFolder()
+//  SelectFolderDialog1.Execute;
+  pidlCarpeta: PItemIDList; // PIDL de la carpeta elegida
+  pDisplayName: array[0..MAX_PATH] of Char; // Nombre
+  pPath: array[0..MAX_PATH] of Char; // Camino
+  IDesktop: IShellFolder; // Interfaz del escritorio
+  pidlDesktop: PItemIDList; // PIDL de la carpeta inicial
+  dwAtributtes, pchEaten: Cardinal; // Parámetros adicionales
+begin
+  // Obtenemos la interfaz del escritorio
+  SHGetDesktopFolder(IDesktop);
+  // Recuperamos el PIDL correspondiente al camino 'C:\'
+  IDesktop.ParseDisplayName(0, Nil, 'C:\', pchEaten,
+    pidlDesktop, dwAtributtes);
+ 
+  // Inicializamos la estructura estableciendo
+  FillChar(FBrowseInfo, sizeof(FBrowseInfo), 0);
+  FBrowseInfo.hwndOwner := Handle; // la ventana padre
+  // el espacio para recuperar el nombre del objeto
+  FBrowseInfo.pszDisplayName := pDisplayName;
+  // sólo permitimos seleccionar carpetas
+  FBrowseInfo.ulFlags := BIF_RETURNONLYFSDIRS;
+  // partiendo desde la unidad C:\
+  FBrowseInfo.pidlRoot := pidlDesktop;
+ 
+  // Mostramos el cuadro de diálogo recuperando el PIDL
+  pidlCarpeta := SHBrowseForFolder(FBrowseInfo);
+  // Si se ha elegido una carpeta
+  if pidlCarpeta &lt;&gt; nil then begin
+    // recuperamos el camino correspondiente al PIDL
+    SHGetPathFromIDList(pidlCarpeta, pPath);
+    // y lo mostramos
+    ShowMessage(pPath);
+    CoTaskMemFree(pidlCarpeta); // liberamos el PIDL
+  end;
+ 
+  // Liberamos el PIDL correspondiente a C:\
+  CoTaskMemFree(pidlDesktop);
+end;</code></pre></figure>
+
+
+</p><p>El código está ampliamente comentado. Básicamente, lo que hacemos es obtener el PIDL que corresponde al camino <code>'C:\'</code>, a fin de mostrar el cuadro de diálogo sólo con las carpetas existentes en dicho camino. Tras preparar toda la estructura de datos, mostramos el cuadro de diálogo y, en caso de que el PIDL devuelto no sea nulo, obtenemos el camino correspondiente a la carpeta y lo comunicamos mediante un mensaje.
+
+</p><p>Al ejecutar el programa y pulsar sobre el botón, podrás apreciar que el cuadro de diálogo no muestra todo el espacio de nombres de Windows, sino sólo aquellos elementos que existen en el camino indicado antes. Además, al haberse incluido como opción la constante <code>BIF_RETURNONLYFSDIRS</code>, si selecciona un elemento que no sea una carpeta el botón Aceptar se desactivará automáticamente.
+
+</p><h2>
+<a id="la-función-de-procesamiento-de-mensajes" class="anchor" href="#la-funci%C3%B3n-de-procesamiento-de-mensajes" aria-hidden="true"><span class="octicon octicon-link"></span></a>La función de procesamiento de mensajes</h2>
+<p>Como has podido ver en el punto anterior, no es necesario codificar una función callback de proceso de mensajes para poder aprovechar la función <code>SHBrowseForFolder()</code>. Dicha función, sin embargo, será precisa si deseamos aprovechar todas las posibilidades disponibles.
+
+</p><p>El cuadro de diálogo mostrado por esta función cuenta, como toda ventana, con un manejador. Éste, no obstante, sólo existe desde el momento en que aparece en pantalla, al llamar a <code>SHBrowseForFolder()</code>, hasta que se cierra. Es un dato, por tanto, que no podremos obtener ni usar sin una función de proceso de mensajes. Este manejador lo podemos usar, por ejemplo, para cambiar la posición del cuadro de diálogo en pantalla, activar o desactivar el botón Aceptar que aparece en ella, etc.
+
+</p><p>Los mensajes que el cuadro de diálogo puede enviar a la función callback son tres: <code>BFFM_INITIALIZED</code>, <code>BFFM_SELCHANGED</code> y <code>BFFM_VALIDATEFAILED</code>. El primero se producirá siempre, pero una sola vez, justo en el momento en que el cuadro de diálogo ha sido inicializado, antes de que se haga visible en pantalla. El segundo tiene lugar cada vez que se cambia de un elemento a otro en la ventana, aún sin pulsar botón alguno. El último se da pocas veces, ya que sólo es posible si se hace aparecer un campo de edición en el interior de la ventana y, además, el usuario introduce un camino inválido en él.
+
+</p><p>El mensaje <code>BFFM_SELCHANGED</code> es especialmente interesante. Cada vez que recibe este mensaje, la función dispondrá también del PIDL del nuevo elemento seleccionado en ese momento. Esto permite que el programa compruebe si dicho elemento es válido o no para sus fines y, en consecuencia, active o desactive el botón Aceptar.
+
+</p><p>Desde la primera llamada a la función de proceso mensajes, nuestro componente podrá disponer del manejador del cuadro de diálogo. Podemos usarlo para enviarle mensajes a esa ventana, por ejemplo para indicar el texto de la línea de estado, seleccionar un determinado elemento, activar o desactivar el botón Aceptar. Los tres mensajes posibles son <code>BFFM_ENABLEOK</code>, <code>BFFM_SETSELECTION</code> y <code>BFFM_SETSTATUSTEXT</code>. El parámetro asociado será, por orden, un Boolean indicando si el botón se activa o desactiva, el PIDL o camino de la nueva selección y la cadena del nuevo texto.
+
+</p><h2>
+<a id="planificación-del-componente" class="anchor" href="#planificaci%C3%B3n-del-componente" aria-hidden="true"><span class="octicon octicon-link"></span></a>Planificación del componente</h2>
+<p>Conociendo la teoría de funcionamiento de <code>SHBrowseForFolder()</code> y sirviéndonos de la ayuda de API que incorpora Delphi, vamos a planificar las características del componente que queremos desarrollar, tras lo cual iniciaremos su codificación. Aunque la finalidad principal, y más habitual del componente, será facilitar la selección de una carpeta del sistema de archivos, tampoco impediremos que sea utilizado para elegir un ordenador o una impresora.
+
+</p><p>Al igual que los componentes <code>TOpenDialog</code> o <code>TSaveDialog</code>, el nuestro, al que vamos a llamar <code>TSelectFolderDialog</code>, contará con propiedades como <code>Title</code> y <code>Options</code>, así como con el método <code>Execute()</code>, que se comportará como el homónimo de los componentes citados. Además de esas dos propiedades, necesitaremos otras para establecer la carpeta que actuará como raíz, modificar o establecer el camino actual, mostrar un texto en la línea de estado, etc. En la Tabla siguiente puede verse la lista de propiedades que implementaremos en el componente, junto con su tipo y un breve comentario.
+
+</p><table>
+<caption>Lista de propiedades del componente <code>TSelectFolderDialog</code>
+</caption>
+<tr>
+<td><strong>Nombre de la propiedad</strong></td>
+<td><strong>Tipo</strong></td>
+<td><strong>Comentario</strong></td>
+</tr>
+<tr>
+<td><code>Title</code></td>
+<td><code>String</code></td>
+<td>Título que aparecerá en la ventana</td>
+</tr>
+<tr>
+<td><code>Options</code></td>
+<td><code>TSelectFolderOptions</code></td>
+<td>Conjunto de opciones</td>
+</tr>
+<tr>
+<td><code>StatusText</code></td>
+<td><code>String</code></td>
+<td>Texto para mostrar en la línea de estado</td>
+</tr>
+<tr>
+<td><code>RootFolder</code></td>
+<td><code>TRootFolder</code></td>
+<td>Carpeta que actuará como raíz</td>
+</tr>
+<tr>
+<td><code>Path</code></td>
+<td><code>String</code></td>
+<td>Camino actualmente seleccionado</td>
+</tr>
+<tr>
+<td><code>DisplayName</code></td>
+<td><code>String</code></td>
+<td>Nombre del elemento seleccionado</td>
+</tr>
+<tr>
+<td><code>Handle</code></td>
+<td><code>HWND</code></td>
+<td>Manejador del cuadro de diálogo</td>
+</tr>
+<tr>
+<td><code>OKEnabled</code></td>
+<td><code>Bolean</code></td>
+<td>Controla el estado del botón Aceptar</td>
+</tr>
+<tr>
+<td><code>Icon</code></td>
+<td><code>TIcon</code></td>
+<td>Icono asociado al elemento elegido</td>
+</tr>
+<tr>
+<td><code>About</code></td>
+<td><code>String</code></td>
+<td>Típico mensaje ‘Acerca de …’</td>
+</tr>
+
+
+<p>Las propiedades <code>Title</code>, <code>Options</code>, <code>StatusText</code>, <code>RootFolder</code>, <code>Path</code> y <code>About</code> estarán disponibles en modo de diseño, accesibles en el Inspector de objetos. El resto, por el contrario, serán propiedades a las que sólo podremos acceder en ejecución. <code>DisplayName</code>, <code>Handle</code> e <code>Icon</code> son propiedades sólo de lectura, mientras que <code>OKEnabled</code> es sólo de escritura.
+
+</p>
+<p>Aparte de las propiedades, nuestro componente generará tres eventos: <code>OnInitialized</code>, <code>OnSelChanged</code> y <code>OnValidateFailed</code>. Éstos, como puede observar, se corresponden con los tres mensajes que podíamos recibir en la función de proceso de mensajes. Aportar estos eventos permitirá al usuario del componente realizar operaciones que, de otra forma, no podría efectuar. Cada vez que se cambie la selección en el cuadro de diálogo, por ejemplo, el usuario puede aprovechar el evento <code>OnSelChanged</code> para saber qué elemento se ha elegido y, en consecuencia, activar o desactivar el botón Aceptar.
+
+</p>
+<p>Por último, para completar el desarrollo del componente, escribiremos un editor de componentes muy simple, que se limitará a añadir una opción al menú emergente de <code>TSelectFolderDialog</code>. Mediante dicha opción será posible probar el cuadro de diálogo sin necesidad de escribir código ni ejecutar el programa, viendo de manera inmediata cuál sería el funcionamiento con los valores asignados en ese momento a las propiedades.
+
+</p>
+<h2>
+<a id="definición-previa-de-tipos" class="anchor" href="#definici%C3%B3n-previa-de-tipos" aria-hidden="true"><span class="octicon octicon-link"></span></a>Definición previa de tipos</h2>
+<p>La propiedad Options de nuestro componente será un conjunto de opciones, mediante las cuales el usuario podrá indicar si desea limitar la selección sólo a carpetas del sistema de archivos, mostrar una línea de estado, incluir también archivos, etc. Definiremos, por tanto, una enumeración con constantes que representen todas esas opciones, así como un conjunto que pueda contener dichas opciones.
+
+</p>
+<p>Mediante la propiedad <code>RootFolder</code> permitiremos especificar una carpeta raíz, de tal forma que el cuadro de diálogo no muestre todo el espacio de nombres de Windows, sino sólo aquellos elementos que dependan de esa carpeta raíz. Aunque la carpeta raíz podría ser cualquiera, según se vio en el ejemplo previo, lo cierto es que habitualmente se elige una carpeta de sistema, como el escritorio, la carpeta de programas, etc. Por eso <code>RootFolder</code> no será una cadena, sino un valor de una enumeración que hemos definido como <code>TRootFolder</code>. En esta enumeración hay una constante por cada carpeta del sistema.
+
+</p>
+<p>De los tres eventos que ofrecerá este componente, dos de ellos serán de tipo <code>TNotifyEvent</code>, aportando como único parámetro el conocido <code>Sender</code>. El evento <code>OnSelChanged</code>, sin embargo, además de ese parámetro entregará otro, de tipo <code>String</code>, con el camino correspondiente al elemento elegido. Tras las definiciones de las enumeraciones anteriores, como puede verse en el siguiente listado, definimos un nuevo tipo de evento, al que llamamos <code>TSelChangeEvent</code>.
+
+<figure class="highlight"><pre><code class="language-delphi" data-lang="delphi">type
+  // Enumeración de las opciones aplicables al cuadro de diálogo
+  TSelectFolderOption = (foBrowseForComputer, foBrowseForPrinter,
+    foBrowseIncludeFiles, foDontGoBelowDomain, foEditBox,
+    foReturnFSAncestors, foReturnOnlyFSDirs, foStatusText,
+    foValidate);
+ 
+  // Conjunto para la propiedad Options del componente
+  TSelectFolderOptions = Set Of TSelectFolderOption;
+ 
+  // Enumeración de las carpetas que pueden actuar como raíz
+  TRootFolder = (
+    rfNONE, rfDESKTOP, rfINTERNET, rfPROGRAMS, rfCONTROLS,
+    rfPRINTERS, rfPERSONAL, rfFAVORITES, rfSTARTUP, rfRECENT,
+    rfSENDTO, rfBITBUCKET, rfSTARTMENU, rfDESKTOPDIRECTORY,
+    rfDRIVES, rfNETWORK, rfNETHOOD, rfFONTS, rfTEMPLATES,
+    rfCOMMON_STARTMENU, rfCOMMON_PROGRAMS, rfCOMMON_STARTUP,
+    rfCOMMON_DESKTOPDIRECTORY, rfAPPDATA, rfPRINTHOOD, rfALTSTARTUP,
+    rfCOMMON_ALTSTARTUP, rfCOMMON_FAVORITES, rfINTERNET_CACHE,
+    rfCOOKIES, rfHISTORY);
+ 
+  // Tipo para el evento de cambio de selección
+  TSelChangeEvent = procedure(Sender: TObject; Path: String) of object;</code></pre></figure>
+
+</p>
+<h2>
+<a id="definición-de-clases" class="anchor" href="#definici%C3%B3n-de-clases" aria-hidden="true"><span class="octicon octicon-link"></span></a>Definición de clases</h2>
+<p>Nuestro componente estará derivado directamente de <code>TComponent</code>, ya que no cuenta con una parte visual ni precisa ninguna funcionalidad ya existente en la VCL. Como es típico en cualquier componente, dispondremos en la parte privada todos los miembros cuya finalidad sea almacenar valores de propiedades, así como los métodos de acceso a esas propiedades en caso de que existan.
+
+</p>
+<p>Observe que en la parte protegida existen tres métodos virtuales. Éstos serán llamados desde la función de proceso de mensajes del cuadro de diálogo, siendo su finalidad principal generar los eventos en caso de que el usuario del componente los haya solicitado.
+
+</p>
+<p>Como miembros públicos tenemos el constructor del componente, el método <code>Execute()</code> y las propiedades que estarán disponibles sólo en ejecución. La última sección de la clase nos sirve para codificar las propiedades que sí serán accesibles en modo de diseño, así como los eventos. Observe que la mayoría de las propiedades leen y escriben sus valores directamente de los miembros de almacenamiento, en lugar de usar métodos de acceso. Tan sólo existen tres excepciones, correspondientes a la asignación de valores a las propiedades <code>OKEnabled</code>, <code>StatusText</code> y <code>Path</code>. Esto es así porque dichas asignaciones han de traducirse en cambios en el cuadro de diálogo, para lo cual, lógicamente, hay que ejecutar algo de código.
+
+</p>
+<p>Aparte de la clase en el que se define el componente, en el Listado siguiente puede ver que existen otras dos clases adicionales. La primera de ellas, derivada de <code>TPropertyEditor</code>, será el editor de propiedades para la propiedad <code>About</code>. Este editor hará que esa propiedad aparezca en el Inspector de componentes pero sea de sólo lectura, así como que tenga asociada una ventana. La segunda es el editor para el propio componente, que hará aparecer una opción en el menú emergente para poder comprobar su funcionamiento incluso en modo de diseño.
+
+<figure class="highlight"><pre><code class="language-delphi" data-lang="delphi">// Clase de definición del componente
+  TSelectFolderDialog = class(TComponent)
+  private
+    // Miembros de almacenamiento de propiedades
+    FDisplayName: String; // Nombre del elemento seleccionado
+    FPath: String; // Camino del elemento seleccionado
+    FTitle: String; // Título en el cuadro de diálogo
+    FOptions: TSelectFolderOptions; // Opciones
+    FHandle: HWND; // Identificador del cuadro de diálogo
+    FStatusText: String; // Texto de la línea de estado
+    FRootFolder: TRootFolder; // Carpeta raíz
+    FIcon: TIcon; // Icono que representa al elemento seleccionado
+    FAbout: String; // Para la propiedad About
+ 
+    // Miembros para los eventos
+    FOnValidateFailed: TNotifyEvent;
+    FOnSelChanged: TSelChangeEvent;
+    FOnInitialized: TNotifyEvent;
+ 
+    // Métodos de acceso a las propiedades
+    procedure SetOKEnabled(const Value: Boolean);
+    procedure SetStatusText(const Value: String);
+    procedure SetPath(const Value: String);
+  protected
+    // Métodos para procesar los mensajes del cuadro de diálogo
+    procedure DoInitialized; virtual;
+    procedure DoSelChanged(Path: String); virtual;
+    procedure DoValidateFailed; virtual;
+  public
+    // Redefinimos el constructor
+    constructor Create(AOwner: TComponent); override;
+    // Método que mostrará el cuadro de diálogo
+    function Execute: Boolean;
+ 
+    // Propiedades accesibles sólo en ejecución
+    property DisplayName: String read FDisplayName;
+    property Handle: HWND read FHandle;
+    property OKEnabled: Boolean write SetOKEnabled;
+    property Icon: TIcon read FIcon;
+  published
+    // Propiedades accesibles en modo de diseño
+    property Title: String read FTitle write FTitle; // Título ventana
+    // Opciones modificadoras
+    property Options: TSelectFolderOptions read FOptions write FOptions
+      default [foReturnOnlyFSDirs, foStatusText];
+    // Texto en la línea de estado
+    property StatusText: String read FStatusText write SetStatusText;
+    // Carpeta raíz
+    property RootFolder: TRootFolder read FRootFolder write FRootFolder
+      default rfNONE;
+    property Path: String read FPath write SetPath; // Camino actual
+    property About: String read FAbout write FAbout; // About
+ 
+    // Eventos del componente
+    property OnInitialized: TNotifyEvent
+     read FOnInitialized write FOnInitialized;
+    property OnSelChanged: TSelChangeEvent
+      read FOnSelChanged write FOnSelChanged;
+    property OnValidateFailed: TNotifyEvent
+      read FOnValidateFailed write FOnValidateFailed;
+  end;
+ 
+  // Clase que actuará como editor de la propiedad About
+  TAboutPropertyEditor = class(TPropertyEditor)
+  public // Estableceremos los atributos necesarios
+    function GetAttributes: TpropertyAttributes; override;
+    function GetValue: String; override; // para devolver una cadena
+    procedure Edit; override; // y mostrar una ventana asociada
+  end;
+ 
+  // Clase que actuará como editor del componente
+  TSelectFolderDialogEditor = class(TDefaultEditor)
+  public // añadiremos una opción al menú emergente para
+    procedure ExecuteVerb(Index: Integer); override; // probar el cuadro
+    function GetVerb(Index: Integer): string; override;
+    function GetVerbCount: Integer; override;
+  end;
+  </code></pre></figure>
+  
+</p>
+<h2>
+<a id="implementación-del-componente" class="anchor" href="#implementaci%C3%B3n-del-componente" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implementación del componente</h2>
+<p>En la codificación de los distintos métodos del componente existen algunos procesos obvios: en el constructor se inicializan los miembros con sus valores por defecto, los métodos <code>DoXXX()</code> comprueban si el usuario ha asignado un método a los eventos, generándolos en caso necesario, etc. Todo este código de implementación se encuentra extensamente comentado, por lo que no tendrá problema alguno en comprenderlo.
+
+</p>
+<p>Las dos partes más importantes de la implementación son el método <code>Execute()</code> y la función de proceso de mensajes o callback. Vamos a centrarnos en estos elementos, cuyo código se muestra en el Listado siguiente.
+
+<figure class="highlight"><pre><code class="language-delphi" data-lang="delphi">// Al llamar al método Execute() del componente
+function TSelectFolderDialog.Execute: Boolean;
+const
+  // Valores que representan a las opciones de
+  // la propiedad Options
+  foValores: array[TSelectFolderOption] of UINT =
+      (BIF_BROWSEFORCOMPUTER, BIF_BROWSEFORPRINTER,
+       BIF_BROWSEINCLUDEFILES, BIF_DONTGOBELOWDOMAIN,
+       BIF_EDITBOX, BIF_RETURNFSANCESTORS,
+       BIF_RETURNONLYFSDIRS, BIF_STATUSTEXT, BIF_VALIDATE);
+ 
+  // Valores que representan a las opciones de la
+  // propiedad RootFolder
+  rfValores: array[TRootFolder] of Integer = (
+    -1, CSIDL_DESKTOP, CSIDL_INTERNET, CSIDL_PROGRAMS, CSIDL_CONTROLS,
+    CSIDL_PRINTERS, CSIDL_PERSONAL, CSIDL_FAVORITES, CSIDL_STARTUP,
+    CSIDL_RECENT, CSIDL_SENDTO, CSIDL_BITBUCKET, CSIDL_STARTMENU,
+    CSIDL_DESKTOPDIRECTORY, CSIDL_DRIVES, CSIDL_NETWORK, CSIDL_NETHOOD,
+    CSIDL_FONTS, CSIDL_TEMPLATES, CSIDL_COMMON_STARTMENU,
+    CSIDL_COMMON_PROGRAMS, CSIDL_COMMON_STARTUP,
+    CSIDL_COMMON_DESKTOPDIRECTORY, CSIDL_APPDATA, CSIDL_PRINTHOOD,
+    CSIDL_ALTSTARTUP,CSIDL_COMMON_ALTSTARTUP,CSIDL_COMMON_FAVORITES,
+    CSIDL_INTERNET_CACHE, CSIDL_COOKIES, CSIDL_HISTORY);
+ 
+var
+  pidlRaiz: PItemIDList; // PIDL de la carpeta raíz
+  pidlCarpeta: PItemIDList; // PIDL de la carpeta elegida
+  pDisplayName: array[0..MAX_PATH] of Char; // Nombre
+  pPath: array[0..MAX_PATH] of Char; // Camino
+  foOpcion: TSelectFolderOption;
+  FBrowseInfo: TBrowseInfo; // Estructura para SHBrowseForFolder()
+begin
+  // Inicializamos la estructura TBrowseInfo
+  FillChar(FBrowseInfo, sizeof(FBrowseInfo), 0);
+  // estableciendo la ventana padre
+  FBrowseInfo.hwndOwner := Application.Handle;
+  // el espacio para recuperar el nombre del objeto
+  FBrowseInfo.pszDisplayName := pDisplayName;
+  // Establecemos la función de retorno
+  FBrowseInfo.lpfn := DialogCallback;
+  // Puntero a nosotros mismos como parámetro adicional
+  FBrowseInfo.lParam := Integer(Self);
+  // Título a mostrar en la ventana
+  FBrowseInfo.lpszTitle := PChar(FTitle);
+ 
+  FBrowseInfo.ulFlags := 0; // Indicadores de funcionamiento
+  // Recorremos el conjunto para ver qué opciones se han activado
+  for foOpcion := foBrowseForComputer to foValidate do
+      if foOpcion in FOptions then // por cada una de ellas
+          FBrowseInfo.ulFlags := FBrowseInfo.ulFlags or
+              foValores[foOpcion]; // añadimos el valor apropiado
+ 
+  // Si se ha elegido una carpeta raíz
+  if FRootFolder &lt;&gt; rfNONE then begin
+    // obtenemos el PIDL correspondiente
+    SHGetSpecialFolderLocation(0, rfValores[FRootFolder], pidlRaiz);
+    FBrowseInfo.pidlRoot := pidlRaiz;   // y lo indicamos
+  end;
+ 
+  // Mostramos el cuadro de diálogo recuperando el PIDL
+  pidlCarpeta := SHBrowseForFolder(FBrowseInfo);
+  // Si el PIDL no es nulo es que se ha elegido una carpeta
+  Result := pidlCarpeta &lt;&gt; nil;
+  // Si se ha elegido una carpeta
+  if Result then begin
+    SHGetPathFromIDList(pidlCarpeta, pPath); // obtenemos el camino
+    FPath := pPath; // y lo asignamos a la propiedad Path
+  end;
+ 
+  // Recuperamos el nombre del objeto elegido
+  FDisplayName := pDisplayName;
+ 
+  // Liberamos la memoria asignada para el PIDL de la carpeta elegida
+  if pidlCarpeta &lt;&gt; Nil Then
+    CoTaskMemFree(pidlCarpeta);
+  // y de la carpeta raíz si existe
+  if pidlRaiz &lt;&gt; Nil then
+    CoTaskMemFree(pidlRaiz);
+ 
+  FHandle := 0; // Invalidamos la propiedad Handle
+end;
+ 
+// Función que se encargará de procesar los mensajes
+// generados por el cuadro de diálogo
+function DialogCallback;
+var
+  pComp: TSelectFolderDialog;
+  pPath: array[0..MAX_PATH] of Char;
+  shInfo: TShFileInfo;
+begin
+  Result := 0; // El valor de retorno siempre será cero
+ 
+  // Convertimos el parámetro de usuario en un puntero al objeto
+  pComp := TSelectFolderDialog(lpData);
+ 
+  pComp.FHandle := Wnd; // Guardamos el identificador de la ventana
+ 
+  case uMsg of // Dependiendo del mensaje recibido
+    BFFM_INITIALIZED: pComp.DoInitialized; // efectuar inicialización
+    BFFM_SELCHANGED: begin // cambio de elemento seleccionado
+      // Recuperamos el icono asociado al elemento
+      SHGetFileInfo(PChar(lParam), 0, shInfo, SizeOf(shInfo),
+        SHGFI_ICON or SHGFI_LARGEICON or SHGFI_PIDL);
+      pComp.FIcon.ReleaseHandle; // liberamos el icono anterior
+      pComp.FIcon.Handle := CopyIcon(shInfo.hIcon); // obtenemos el nuevo
+      DestroyIcon(shInfo.hIcon); // y destruímos la copia de SHGetFileInfo
+      // Recuperamos el camino correspondiente al elemento
+      SHGetPathFromIDList(PItemIDList(lParam), pPath);
+      pComp.DoSelChanged(pPath); // y procesamos
+    end;
+    BFFM_VALIDATEFAILED: pComp.DoValidateFailed;
+  end;
+end;</code></pre></figure>
+
+</p>
+<p>La llamada al método <code>Execute()</code> se produce una vez que el usuario ha asignado a las propiedades los valores que le interesan, valores que ahora deberemos recuperar de sus miembros de almacenamiento y copiar en la estructura de datos <code>TBrowseInfo</code>. Para poder asignar al miembro <code>ulFlags</code> de dicha estructura los valores apropiados, hemos tenido que construir una lista con todas las constantes posibles. Éstas se añaden al mencionado miembro, mediante el operador or, en el interior de un bucle que comprueba las opciones elegidas por el usuario.
+
+</p>
+<p>Para la propiedad RootFolder hemos tenido que hacer algo parecido. Una matriz contiene las constantes que representan a todos los elementos posibles de esa propiedad. En caso de que el valor seleccionado no sea <code>rfNONE</code>, usamos la función <code>SHGetSpecialFolderLocation()</code> para obtener el PIDL de la carpeta y usarla como raíz del cuadro de diálogo.
+
+</p>
+<p>Fíjese en el valor asignado al miembro <code>lParam</code> del registro <code>TBrowseInfo</code>. Guardamos en él un puntero a nosotros mismos, al componente, de tal forma que la función de proceso de mensajes, que no forma parte de la clase, pueda acceder a sus miembros sin problemas.
+
+</p>
+<p>Establecidos todos los parámetros, invocamos a <code>SHBrowseForFolder()</code> para hacer aparecer el cuadro de diálogo. Hasta que esa función nos devuelva el control, la función callback recibirá varios mensajes que se traducirán en eventos de <code>TSelectFolderDialog</code>, en respuesta a los cuales podrán asignarse valores a las propiedades <code>OKEnabled</code>, <code>Path</code> o <code>StatusText</code>.
+
+</p>
+<p>En caso de que el valor devuelto por <code>SHBrowseForFolder()</code> no sea nulo, recuperamos el camino correspondiente al elemento elegido. Para terminar, usamos la función <code>CoTaskMemFree()</code> para liberar el PIDL de la carpeta elegida, así como el de la carpeta que se utilizó como raíz.
+
+</p>
+<p>La función de proceso de mensajes, por su parte, recuperará el puntero facilitado en el miembro <code>lParam</code> al llamar a <code>SHBrowseForFolder()</code>. Disponiendo de ese puntero, traducirá el mensaje en la llamada a uno de los métodos <code>DoXXX()</code> del componente. En el caso del mensaje <code>BFFM_SELCHANGED</code>, no obstante, antes se usa la función <code>SHGetFileInfo()</code> para recuperar el icono correspondiente al elemento elegido, icono que se asigna a la propiedad Icon del componente.
+
+</p>
+<h2>
+<a id="implementación-de-los-editores" class="anchor" href="#implementaci%C3%B3n-de-los-editores" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implementación de los editores</h2>
+<p>Además del propio componente, en nuestro módulo de código principal deberemos también implementar los métodos correspondientes a los dos editores: el de la propiedad About y el del componente. El código, en ambos casos, es muy simple, como puede verse en el Listado siguiente.
+
+
+<figure class="highlight"><pre><code class="language-delphi" data-lang="delphi">{ TAboutPropertyEditor }
+ 
+function TAboutPropertyEditor.GetAttributes;
+begin // La propiedad tendrá una ventana asociada y será
+    Result := [paDialog, paReadOnly]; // sólo de lectura
+end;
+ 
+function TAboutPropertyEditor.GetValue;
+begin // Devolvemos el texto que aparecerá en el Inspector de objetos
+    Result := '(c) Mundo Delphi - 1999';
+end;
+ 
+procedure TAboutPropertyEditor.Edit;
+begin // mostramos la ventana 'About'
+    Application.MessageBox('TSelectFolderDialog' + #13 +
+        '(c) Mundo Delphi - 1999', 'About ...',
+        MB_OK Or MB_ICONINFORMATION);
+End;
+ 
+ 
+{ TSelectFolderDialogEditor }
+ 
+function TSelectFolderDialogEditor.GetVerbCount;
+begin
+       Result := 1; // Vamos a añadir una sola opción al menú emergente
+end;
+ 
+function TSelectFolderDialogEditor.GetVerb;
+begin
+  Result:='Probar cuadro de diálogo'; // Cono este texto
+end;
+ 
+procedure TSelectFolderDialogEditor.ExecuteVerb;
+begin // al elegir esa opción
+  (Component As TSelectFolderDialog).Execute; // mostramos el cuadro
+end;</code></pre></figure>
+
+</p>
+<p>El método <code>GetAttributes()</code> del editor de la propiedad About devuelve un conjunto de valores, indicando que esta propiedad sólo es de lectura y que, además, contará con un cuadro de diálogo. El método <code>GetValue()</code> devuelve el valor a mostrar en el Inspector de objetos, mientras que el método <code>Edit()</code> hará aparecer el mencionado cuadro de diálogo que, en este caso, será una simple ventana con un mensaje.
+
+</p>
+<p>La implementación del editor del componentes es, si cabe, más simple aún. Usamos los métodos <code>GetVerbCount()</code> y <code>GetVerb()</code> para indicar que vamos a añadir una opción al menú emergente y facilitar el texto de dicha opción, respectivamente. Cuando el usuario abra el mencionado menú y ejecute esa opción, el método <code>ExecuteVerb()</code> se encargará de moldear el componente, cuya referencia se encuentra en <code>Component</code>, como un <code>TSelectFolderDialog</code> y llamar a su método <code>Execute()</code>. Esto causará que realmente se ejecute dicho método, a pesar de que nos encontremos en modo de diseño.
+
+</p>
+<p>Por último, y un módulo independiente del de implementación, codificaremos la función <code>Register()</code>, registrando tanto el componente como los editores. Desde dicho módulo, llamado RegistroComponentes.pas, se importarán los módulos que contengan los componentes, por lo que bastará con instalar el módulo de registro para crear el paquete correspondiente e instalar los componentes en Delphi.
+
+</p>
+<h2>
+<a id="probando-el-componente-tselectfolderdialog" class="anchor" href="#probando-el-componente-tselectfolderdialog" aria-hidden="true"><span class="octicon octicon-link"></span></a>Probando el componente TSelectFolderDialog</h2>
+<p>La forma más simple de comprobar el funcionamiento de este componente, una vez instalado en la Paleta de componentes, consiste en establecer algunas propiedades, desplegar el menú emergente y seleccionar la primera opción disponible, como puede verse en la Figura 3.
+
+</p>
+<p style="text-align:center"><image src="http://fcharte.com/assets/img/selectfolder/PropiedadesCOmponentes.png" title="Figura 3. Propiedades y menú emergente del componente TSelectFolderDialog"></image></p>
+
+<p>Si quiere algo más elaborado, no tiene mas que aprovechar los eventos del componente y escribir algo de código. En el paquete de código de la revista encontrará, junto al componente, una demostración simple de su uso. Con un mínimo de código, se utiliza el componente para elegir una carpeta, un ordenador o una impresora desde el mismo programa. Además, se aprovecha el evento <code>OnSelChanged</code> para recuperar el icono del elemento elegido, disponiéndolo como icono del formulario.
+
+</p>
+<p style="text-align:center"><image src="http://fcharte.com/assets/img/selectfolder/Demostracion.png" title="Figura 3. El programa de demostración en funcionamiento"></image></p>
+
+
+<p>Con algo más de código, podría efectuar cualquier otra operación que se le ocurra, como examinar los elementos elegidos para activar o desactivar el botón, añadir una línea de estado, etc.
+ </p>
+</table>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
