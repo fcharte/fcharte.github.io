@@ -60,7 +60,7 @@ end;
 
 <p style="text-align:center"><image src="{{ '/assets/img/xmldelphi/ListaLibrosEnIE.png' | absolute_url }}" title="Figura 3. Éste es el aspecto del documento, mostrado en Internet Explorer" /></p>
 
-<p style="text-align:center"><image src="{{ '/assets/img/xmldelphi/ListaLibrosEnBlockNotas.png' | absolute_url }}" title="Figura 4. También podemos ver el documento con el sencillo Bloc de notas" /></p>
+<p style="text-align:center"><image src="{{ '/assets/img/xmldelphi/ListaLibrosEnBlocNotas.png' | absolute_url }}" title="Figura 4. También podemos ver el documento con el sencillo Bloc de notas" /></p>
 
 <h2>Clases para automatizar el proceso</h2>
 
@@ -188,7 +188,7 @@ end.
 
 <h2>Bases de datos, ADO y XML</h2>
 
-<p>Cuando los datos que van a formar parte del documento XML se encuentra en una base de datos, siempre asumiendo que estamos trabajando con Windows como sistema operativo, existe un método mucho más sencillo para generarlo: usando ADO (<i>ActiveX Data Objects</i>). Los conjuntos de datos ADO disponen de un método, llamado <code>Save()<code>, que permiten almacenar los datos de forma persistente en un archivo en disco, ya sea en un formato propietario o en XML. Usar ADO es posible prácticamente desde cualquier versión de Delphi, pero resulta especialmente sencillo a partir de Delphi 5, gracias a la existencia de una serie de componentes VCL específicos.
+<p>Cuando los datos que van a formar parte del documento XML se encuentra en una base de datos, siempre asumiendo que estamos trabajando con Windows como sistema operativo, existe un método mucho más sencillo para generarlo: usando ADO (<i>ActiveX Data Objects</i>). Los conjuntos de datos ADO disponen de un método, llamado <code>Save()</code>, que permiten almacenar los datos de forma persistente en un archivo en disco, ya sea en un formato propietario o en XML. Usar ADO es posible prácticamente desde cualquier versión de Delphi, pero resulta especialmente sencillo a partir de Delphi 5, gracias a la existencia de una serie de componentes VCL específicos.
 
 <p>Teniendo seleccionado un conjunto de datos, por ejemplo mediante un <code>TADOTable</code> o <code>TADOQuery</code>, basta con llamar al método <code>SaveToFile()</code> facilitando dos parámetros: el nombre del archivo destino y la constante <code>pfXML</code>. El archivo generado constará de dos partes bien diferenciadas: un esquema en el que se define la estructura de cada fila, enumerando los nombres y tipos de columnas, y las propias entidades que contienen los datos.
 
