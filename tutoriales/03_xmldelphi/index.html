@@ -101,7 +101,7 @@
 
 <p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/ListaLibrosEnIE.png" title="Figura 3. Éste es el aspecto del documento, mostrado en Internet Explorer"></image></p>
 
-<p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/ListaLibrosEnBlockNotas.png" title="Figura 4. También podemos ver el documento con el sencillo Bloc de notas"></image></p>
+<p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/ListaLibrosEnBlocNotas.png" title="Figura 4. También podemos ver el documento con el sencillo Bloc de notas"></image></p>
 
 <h2>
 <a id="clases-para-automatizar-el-proceso" class="anchor" href="#clases-para-automatizar-el-proceso" aria-hidden="true"><span class="octicon octicon-link"></span></a>Clases para automatizar el proceso</h2>
@@ -225,12 +225,11 @@
 <h2>
 <a id="bases-de-datos-ado-y-xml" class="anchor" href="#bases-de-datos-ado-y-xml" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bases de datos, ADO y XML</h2>
 
-<p>Cuando los datos que van a formar parte del documento XML se encuentra en una base de datos, siempre asumiendo que estamos trabajando con Windows como sistema operativo, existe un método mucho más sencillo para generarlo: usando ADO (<i>ActiveX Data Objects</i>). Los conjuntos de datos ADO disponen de un método, llamado <code>Save()<code>, que permiten almacenar los datos de forma persistente en un archivo en disco, ya sea en un formato propietario o en XML. Usar ADO es posible prácticamente desde cualquier versión de Delphi, pero resulta especialmente sencillo a partir de Delphi 5, gracias a la existencia de una serie de componentes VCL específicos.
+<p>Cuando los datos que van a formar parte del documento XML se encuentra en una base de datos, siempre asumiendo que estamos trabajando con Windows como sistema operativo, existe un método mucho más sencillo para generarlo: usando ADO (<i>ActiveX Data Objects</i>). Los conjuntos de datos ADO disponen de un método, llamado <code>Save()</code>, que permiten almacenar los datos de forma persistente en un archivo en disco, ya sea en un formato propietario o en XML. Usar ADO es posible prácticamente desde cualquier versión de Delphi, pero resulta especialmente sencillo a partir de Delphi 5, gracias a la existencia de una serie de componentes VCL específicos.
 
-<p>Teniendo seleccionado un conjunto de datos, por ejemplo mediante un <code>TADOTable</code> o <code>TADOQuery</code>, basta con llamar al método <code>SaveToFile()</code> facilitando dos parámetros: el nombre del archivo destino y la constante <code>pfXML</code>. El archivo generado constará de dos partes bien diferenciadas: un esquema en el que se define la estructura de cada fila, enumerando los nombres y tipos de columnas, y las propias entidades que contienen los datos.
+</p><p>Teniendo seleccionado un conjunto de datos, por ejemplo mediante un <code>TADOTable</code> o <code>TADOQuery</code>, basta con llamar al método <code>SaveToFile()</code> facilitando dos parámetros: el nombre del archivo destino y la constante <code>pfXML</code>. El archivo generado constará de dos partes bien diferenciadas: un esquema en el que se define la estructura de cada fila, enumerando los nombres y tipos de columnas, y las propias entidades que contienen los datos.
 
-</p>
-<p>Sirviéndonos de un <code>TADOTable</code>, un <code>TDataSource</code>, un <code>TDBGrid</code> y un <code>TButton</code>, como puede verse en la Figura 6, tan sólo tendríamos que escribir el código siguiente asociado al evento OnClick del botón:
+</p><p>Sirviéndonos de un <code>TADOTable</code>, un <code>TDataSource</code>, un <code>TDBGrid</code> y un <code>TButton</code>, como puede verse en la Figura 6, tan sólo tendríamos que escribir el código siguiente asociado al evento OnClick del botón:
 
 <figure class="highlight"><pre><code class="language-pascal" data-lang="pascal"><span class="c1">// Al pulsarse el botón
 </span><span class="k">procedure</span> <span class="n">TForm1</span><span class="p">.</span><span class="n">Button1Click</span><span class="p">(</span><span class="n">Sender</span><span class="p">:</span> <span class="kt">TObject</span><span class="p">);</span>
@@ -241,32 +240,26 @@
         <span class="nb">Nil</span><span class="p">,</span> <span class="nb">Nil</span><span class="p">,</span> <span class="n">SW_NORMAL</span><span class="p">);</span>
 <span class="k">end</span><span class="p">;</span></code></pre></figure>
 
-</p>
-<p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/TablaADO.png" title="Figura 6. Usamos un TADOTable conectado a una de las tablas de la base de datos de ejemplo que acompaña a Delphi 5"></image></p>
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/TablaADO.png" title="Figura 6. Usamos un TADOTable conectado a una de las tablas de la base de datos de ejemplo que acompaña a Delphi 5"></image></p>
 
 <p>Previamente, como podrás suponer, hemos conectado el <code>TADOTable</code> con una base de datos de ejemplo de Delphi 5, seleccionando una de las tablas disponibles. Al ejecutarse el código anterior, el resultado obtenido será similar al de la Figura 7. Este código XML podría transferirse desde un servidor a un cliente HTTP, facilitando la manipulación de los datos de una base desde cualquier cliente remoto.
 
-</p>
-<p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/TablaXML.png" title="Figura 7. Aspecto de un documento XML generado por ADO a partir de una tabla de datos."></image></p>
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/TablaXML.png" title="Figura 7. Aspecto de un documento XML generado por ADO a partir de una tabla de datos."></image></p>
 
 <h2>
 <a id="uso-del-analizador-xml-de-microsoft" class="anchor" href="#uso-del-analizador-xml-de-microsoft" aria-hidden="true"><span class="octicon octicon-link"></span></a>Uso del analizador XML de Microsoft</h2>
 
 <p>En caso de que los datos que van a servir para componer el documento XML no estén en una base de datos, ni tampoco modeladas en una colección, siempre nos queda la alternativa de generar el código manualmente, como se hacía en el primer ejemplo. El riesgo, no obstante, es que puede producirse un documento no válido o incluso que no esté bien formado, porque falten etiquetas de cierre o fallos similares. 
 
-</p>
-<p>Otra opción, mucho más adecuada, consiste en usar el analizador XML de Microsoft que se encuentra incluido en todas las últimas versiones Windows, así como en aquellos ordenadores donde esté instalado Internet Explorer 4 o posterior. Dicho analizador, siguiendo el modelo de objetos DOM, facilita la manipulación de documentos XML de una forma relativamente sencilla y muy flexible.
+</p><p>Otra opción, mucho más adecuada, consiste en usar el analizador XML de Microsoft que se encuentra incluido en todas las últimas versiones Windows, así como en aquellos ordenadores donde esté instalado Internet Explorer 4 o posterior. Dicho analizador, siguiendo el modelo de objetos DOM, facilita la manipulación de documentos XML de una forma relativamente sencilla y muy flexible.
 
-</p>
-<p>Aunque podríamos usar el citado analizador, conocido como <code>Microsoft.XMLDOM</code>, mediante la técnica de automatización, es mucho mejor importar la librería de tipos desde Delphi, como se muestra en la Figura 8. Esto nos permitirá usar directamente los distintos objetos e interfaces disponiendo de información de tipos y, en el caso de Delphi 5, incluso obtendremos un componente que, al ser insertado en un formulario, nos permitirá acceder al servidor como si de cualquier control ActiveX se tratase.
+</p><p>Aunque podríamos usar el citado analizador, conocido como <code>Microsoft.XMLDOM</code>, mediante la técnica de automatización, es mucho mejor importar la librería de tipos desde Delphi, como se muestra en la Figura 8. Esto nos permitirá usar directamente los distintos objetos e interfaces disponiendo de información de tipos y, en el caso de Delphi 5, incluso obtendremos un componente que, al ser insertado en un formulario, nos permitirá acceder al servidor como si de cualquier control ActiveX se tratase.
 
-</p>
-<p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/ImportacionServidor.png" title="Figura 8. Usamos la opción Project|Import Type Library para importar la librería de tipos del componente COM XML de Microsoft."></image></p>
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/ImportacionServidor.png" title="Figura 8. Usamos la opción Project|Import Type Library para importar la librería de tipos del componente COM XML de Microsoft."></image></p>
 
 <p>El componente <code>Microsoft.XMLDOM</code> cuenta con varios objetos que implementan diversas interfaces. Uno de estos objetos, llamado <code>XMLDOMDocument</code>, implementa la interfaz <code>IXMLDOMDocument</code>, con cuyas propiedades y  métodos puede manipularse un documento XML. Cada uno de los nodos del documento se representa mediante un objeto <code>XMLDOMNode</code> que, como podrás suponer, implementa la interfaz <code>IXMLDOMNode</code>. Para acceder al nodo raíz del documento, del cual parten todos los demás, hay que usar la propiedad documentElement de la interfaz <code>IXMLDOMDocument</code>. 
 
-</p>
-<p>Para crear un documento XML sirviéndonos del analizador de Microsoft, nos basta con conocer una propiedad y dos métodos de la interfaz <code>IXMLDOMDocument</code> y una propiedad y un método de <code>IXMLDOMDone</code>. Volviendo al primero de los ejemplos que se propusieron, en el cual se creaba el documento manualmente, bastaría con modificar el código asociado a la pulsación del botón, sustituyéndolo por el que puedes ver en el Listado 4. La interfaz no ha sufrido modificación alguna, tan sólo se ha añadido un componente <code>TDOMDocument</code>, obtenido tras la importación de la librería de tipos, llamado <code>DOMDocument1</code>.
+</p><p>Para crear un documento XML sirviéndonos del analizador de Microsoft, nos basta con conocer una propiedad y dos métodos de la interfaz <code>IXMLDOMDocument</code> y una propiedad y un método de <code>IXMLDOMDone</code>. Volviendo al primero de los ejemplos que se propusieron, en el cual se creaba el documento manualmente, bastaría con modificar el código asociado a la pulsación del botón, sustituyéndolo por el que puedes ver en el Listado 4. La interfaz no ha sufrido modificación alguna, tan sólo se ha añadido un componente <code>TDOMDocument</code>, obtenido tras la importación de la librería de tipos, llamado <code>DOMDocument1</code>.
 
 
 <figure class="highlight"><pre><code class="language-pascal" data-lang="pascal"><span class="c1">// Al pulsar el botón de generación de texto
@@ -301,18 +294,15 @@
 </span>    <span class="n">ShellExecute</span><span class="p">(</span><span class="n">Handle</span><span class="p">,</span> <span class="nb">Nil</span><span class="p">,</span> <span class="s">'Ejemplo5.XML'</span><span class="p">,</span> <span class="nb">Nil</span><span class="p">,</span> <span class="nb">Nil</span><span class="p">,</span> <span class="n">SW_NORMAL</span><span class="p">);</span>
  <span class="k">end</span><span class="p">;</span></code></pre></figure>
 
-</p>
-<p>Inicialmente el documento está vacío. Usando el método <code>LoadXML()</code> de la interfaz <code>IXMLDOMDocument</code> establecemos un contenido inicial, en principio una marca <libros></libros> vacia. A continuación, en el interior de un bucle, recuperamos una referencia a ese nodo raíz a través de la propiedad documentElement. Éste, al igual que cualquier otro nodo XML, dispone del método <code>appendChild()</code>, con el que podemos añadir subnodos. Cada nodo cuenta también con la propiedad <code>text</code>, que nos sirve para establecer el valor que contendrá. 
+</p><p>Inicialmente el documento está vacío. Usando el método <code>LoadXML()</code> de la interfaz <code>IXMLDOMDocument</code> establecemos un contenido inicial, en principio una marca <libros></libros> vacia. A continuación, en el interior de un bucle, recuperamos una referencia a ese nodo raíz a través de la propiedad documentElement. Éste, al igual que cualquier otro nodo XML, dispone del método <code>appendChild()</code>, con el que podemos añadir subnodos. Cada nodo cuenta también con la propiedad <code>text</code>, que nos sirve para establecer el valor que contendrá. 
 
-</p>
-<p>Finalmente, al terminar la ejecución del bucle, guardamos el documento en un archivo sirviéndonos del método <code>save()</code> de <code>IXMLDOMDocument</code>. El resultado que genera el programa, a pesar de los cambios en el código, es exactamente el mismo que se obtenía con el primer ejemplo. En este caso, sin embargo, estamos seguros de que el documento estará bien formado, sin tener que preocuparnos de etiquetas de cierre y temas similares.
+</p><p>Finalmente, al terminar la ejecución del bucle, guardamos el documento en un archivo sirviéndonos del método <code>save()</code> de <code>IXMLDOMDocument</code>. El resultado que genera el programa, a pesar de los cambios en el código, es exactamente el mismo que se obtenía con el primer ejemplo. En este caso, sin embargo, estamos seguros de que el documento estará bien formado, sin tener que preocuparnos de etiquetas de cierre y temas similares.
 
-</p>
-<h2>
+</p><h2>
 <a id="resumiendo" class="anchor" href="#resumiendo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resumiendo</h2>
 
 <p>A lo largo de este artículo has conocido diversos métodos con los cuales puedes generar documentos XML a partir de tus datos, independientemente de dónde se encuentren éstos. Los documentos obtenidos, que en los ejemplos previos siempre hemos guardado en un archivo y abierto con Internet Explorer, pueden, lógicamente, ser transferidos a través de Internet, facilitando la comunicación entre un cliente y un servidor. También pueden ser utilizados como archivos de almacenamiento de información estructurada, aunque entonces tendríamos que saber también cómo recuperar y manipular los datos que contiene. Precisamente a este tema dedicaremos un próximo artículo, a conocer técnicas que nos permitan leer documentos XML.
-</p></code></code></p>
+</p>
 </article>
 
       </div>
