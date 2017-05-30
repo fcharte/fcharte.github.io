@@ -1,0 +1,232 @@
+---
+layout: post
+title: Cómo crear componentes ActiveX para ASP con Delphi</i><br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>Internet Information Server es capaz de generar documentos dinámicos a partir de páginas ASP. Con Delphi 5 podemos crear componentes ActiveX para usar desde estas páginas. Te demostramos cómo hacerlo.
+
+<p>Hubo un tiempo, no hace muchos años, en que las páginas web no eran mas que documentos HTML estáticos, composiciones de texto con algo de color, alguna imagen y unos útiles enlaces. Actualmente, a pesar del poco tiempo transcurrido, la mayoría de esas páginas se han convertido en complejas composiciones, con animaciones, anuncios que cambian, contenido que se actualiza dinámicamente según las preferencias del usuario, etc. Para que se produzca este gran cambio ha sido necesario aportar nuevas soluciones en las dos partes: el cliente y el servidor.
+
+<p>Los documentos que procesa el cliente web no están ya sólo compuestos de HTML, además existen hojas de estilo, guiones en lenguajes de script, HTML dinámico, datos en XML, etc. Todo esto, no obstante, no es suficiente para crear un contenido realmente dinámico, por ejemplo a partir de las preferencias del usuario introducidas en un formulario. El servidor web, que en aquellos tiempos citados se limitaba poco más que a servir los documentos que se le pedían, ha pasado a convertirse en una especie de servidor de aplicaciones. A petición de los clientes, el servidor web puede ejecutar CGIs, funciones almacenadas en librerías de enlace dinámico y código de script en páginas procesadas en la parte servidor. El resultado de esa ejecución, es el nuevo contenido que se envía a los clientes.
+
+<p>Una de las novedades que, en su día, aportó IIS (<i>Internet Information Server</i>), fue la de procesar páginas en el lado servidor antes de enviarlas al cliente. En dichas páginas, conocidas como ASP (<i>ActiveX Server Pages</i>), se incluyen scripts y contenidos reemplazables. El servidor web procesa la página generando un nuevo documento, enviándolo al cliente como código HTML corriente. El contenido dinámico es, por tanto, independiente del cliente que utilice el usuario final.
+
+<p>Aunque en el interior de una página ASP es posible introducir guiones en distintos lenguajes, como VBScript o JavaScript, existen limitaciones de funcionalidad y rendimiento. Por eso, en ocasiones, lo que se hace es crear componentes ActiveX que se encargan de efectuar la mayor parte del trabajo, componentes que son creados y utilizados desde la página ASP. Delphi 5 incorpora las definiciones y asistentes necesarios para crear este tipo de componentes, que aparecen como una alternativa a las clásicas aplicaciones ISAPI y NSAPI que existían desde la versión 3.
+
+<h2>Objetos ofrecidos por el servidor</h2>
+<p>El servidor web, en este caso IIS, recibe una solicitud de un cliente a la que debe dar respuesta. Para permitir que un elemento externo, en este caso un componente ActiveX, tenga acceso a esa información: todos los datos de la solicitud y los de respuesta, IIS ofrece una serie de objetos. Como siempre en Windows, estamos hablando de objetos COM que, en nuestro caso, podemos usar prácticamente como si de cualquier otro objeto Delphi se tratase.
+
+<p>La Figura 1 representa gráficamente y de manera simplificada el proceso en que interviene un componente ActiveX de tipo ASP. El cliente envía una petición al servidor, solicitándole un determinado documento ASP. IIS procesa dicho documento, ejecutando el código que hay en su interior para obtener como resultado un documento HTML. Durante la ejecución, el motor ASP usa un control ActiveX para generar todo o parte de ese contenido dinámico. Sirviéndose de los objetos integrados en el motor ASP, el control puede obtener datos sobre la solicitud, la sesión de trabajo y otros elementos, generando finalmente la respuesta.
+
+<p style="text-align:center"><image src="{{ '/assets/img/vbxasp/EsquemaFuncionamiento.png' | absolute_url }}" title="Figura 1. Representación esquemática de los diversos elementos que intervienen en el uso de un componente ASP" /></p>
+
+
+<p>Los dos objetos usados más habitualmente son <code>Request</code> y <code>Response</code>, cada uno de los cuales cuenta con varias colecciones y propiedades. Mediante la colección <code>Form</code> del objeto <code>Request</code>, por ejemplo, es posible acceder a los valores introducidos por el usuario en un formulario HTML. La colección Cookies, con la que cuentan ambos objetos, puede utilizarse tanto para leer como para escribir cookies en el sistema del usuario.
+
+<p>Otros objetos interesantes son <code>Application</code>, compartido por todas las sesiones y componentes utilizados por IIS, y <code>Session</code>, útil para gestionar información relativa a la sesión de un solo cliente. La versión 5.0 de IIS, integrada en el próximo Windows 2000, dispone también de un objeto, llamado <code>ObjectContext</code>, que puede utilizarse para controlar transacciones en el ámbito ASP.
+
+<p>Todos estos objetos estarán, en el caso concreto de Delphi, accesibles mediante las propiedades de la clase <code>TASPObject</code>, que servirá como base para crear nuestros propios componentes ActiveX para ASP. En realidad, las propiedades <code>Application</code>, <code>Session</code>, <code>Response</code> y <code>Request</code> siempre devolverán un puntero a una interfaz, como <code>ISessionObject</code> o <code>IResponse</code>. Estas interfaces, codificadas en el módulo Asptlb.pas, cuentan con las propiedades y métodos precisos para añadir cabeceras HTML a la respuesta para el cliente, modificar una cookie o conocer el tipo de cliente.
+
+<h2>El nuevo asistente para objetos ASP</h2>
+<p>En la página <b>ActiveX</b> del Depósito de objetos de Delphi 5 hay disponible un nuevo asistente, identificado por la etiqueta <b>Active Server Object</b> y con el icono que puede verse en la Figura 2.  Como todos los asistentes que generan componentes COM, éste debe ser usado previa creación de una librería o ejecutable de tipo ActiveX. 
+
+<p style="text-align:center"><image src="{{ '/assets/img/vbxasp/IconoNuevoAsistente.png' | absolute_url }}" title="Figura 2. En la página ActiveX del Depósito de objetos se encuentra el asistente para la creación de objetos ASP" /></p>
+
+
+<p>El asistente consta de una simple ventana, la mostrada en la Figura 3, en la que se dan varias opciones para personalizar el objeto ASP a crear. Tras introducir el nombre, podremos elegir el modelo de gestión de hilos y el modo de creación de objetos. En el apartado <b>Active Server Type</b> existen dos opciones, cuya finalidad es indicar el tipo de servidor con el que funcionará el componente. Por defecto está elegida la primera de ellas, que es la apropiada para IIS 3 y 4. En caso de que estemos usando IIS 5, por ejemplo en Windows 2000, habrá que seleccionar la segunda opción.
+
+<p>Las versiones 3 y 4 de IIS usan dos eventos, llamados <code>OnStartPage</code> y <code>OnEndPage</code>, para comunicar a los objetos ASP el contexto de ejecución. IIS 5, por el contrario, utiliza un contexto de objeto basado en MTS (<i>Microsoft Transaction Server</i>), cuyos servicios se han integrado en COM+ en el caso de Windows 2000. Dependiendo del tipo de servidor, nuestro nuevo componente derivará de <code>TASPObject</code>, para las versiones 3 y 4, o TASPMTSObject, para IIS 5.
+
+<p>Crear un componente ASP en Delphi, a pesar de la existencia de este asistente, no es una tarea realmente sencilla debido a la falta de documentación sobre las clases citadas y sus propiedades. Si recurre a la ayuda de Delphi o la documentación escrita, verá que no es posible encontrar nada más que un mínimo tutorial que enumera los pasos para crear una página ASP simple para crear un objeto ASP. No se describe, por el contrario, cómo hay que usar propiedades como <code>Form</code> o <code>Cookies</code>, ni cómo puede enviarse contenido desde el control ASP al cliente.
+
+<p>En realidad, lo que ha hecho Borland es simplemente traducir el archivo de cabecera <b>Asptlb.h</b> generando un módulo Object Pascal con varias interfaces y clases. El asistente, por su parte, se limita a definir una clase simple derivada de otra y que implementa una determinada interfaz, pero sin ninguna funcionalidad adicional. Cualquier ayuda, por tanto, habrá que buscarla en la documentación propia de IIS, un producto que pertenece a Microsoft.
+
+<h2>Manos a la obra</h2>
+<p>La mejor manera de entender cómo se utiliza un componente ASP es, sin duda, siguiendo un caso práctico. Por eso, en lugar de continuar con la teoría sobre las interfaces, sus propiedades, colecciones, etc., vamos a ponernos manos a la obra creando un ejemplo muy sencillo de partida, que podremos ir completando después.
+
+<p>Los componentes ASP que vamos a crear a continuación estarán alojados en una librería ActiveX, por lo que tendrás que comenzar seleccionando la opción <b>File|New ...</b> para abrir el Depósito de objetos, haciendo doble clic sobre el elemento <b>ActiveX Library</b> de la página <b>ActiveX</b>. Este paso lo daremos una sola vez, de tal forma que una sola DLL almacenará los diversos componentes.
+
+<p style="text-align:center"><image src="{{ '/assets/img/vbxasp/AsistenteASP.png' | absolute_url }}" title="Figura 3. El asistente nos permite elegir el tipo de servidor a usar, dándonos también opción a crear una página ASP para crear el objeto" /></p>
+
+
+<p>Acto seguido habrá que añadir el primer componente ASP, usando para ello el asistente anteriormente citado. Tan sólo modificaremos el nombre, que será <code>HolaMundoASP</code>. Al cerrar el asistente se abrirá el editor de librerías de tipos ActiveX, que usaremos, como se aprecia en la Figura 4, para añadir un nuevo método a la interfaz <code>IHolaMundoASP</code>. Este método, llamado <code>HolaMundo</code>, se limitará a emitir el clásico saludo como respuesta a la solicitud de los clientes.
+
+<p style="text-align:center"><image src="{{ '/assets/img/vbxasp/LibreriaTipos.png' | absolute_url }}" title="Figura 4. En el editor de librerías de tipos especificaremos los nombres y parámetros de todos los métodos con que contará el componente" /></p>
+
+<p>El módulo de código generado por el asistente será similar al del Listado 1. Lo único que haremos será completar la implementación del método <code>HolaMundo</code>. Observa cómo se usa la propiedad <code>Response</code>, concretamente su método <code>Write</code>, para enviar la cadena al cliente. Finalizada la implementación, habrá que compilar el proyecto para generar la correspondiente DLL, que copiaremos en la carpeta <b>scripts</b> o equivalente de nuestra configuración de servidor IIS. Como todo componente COM, éste deberá ser apropiadamente registrado para poder utilizarse. Con este fin puedes usar la utilidad <b>regsvr32</b>.
+
+{% highlight pascal %}
+unit HolaMundoASPUnit;
+
+interface
+
+uses
+  ComObj, ActiveX, AspTlb, HolaMundo_TLB, StdVcl;
+
+type
+  THolaMundoASP = class(TASPObject, IHolaMundoASP)
+  protected
+    procedure OnEndPage; safecall;
+    procedure OnStartPage(const AScriptingContext: IUnknown); safecall;
+    procedure HolaMundo; safecall;
+  end;
+
+implementation
+
+uses ComServ;
+
+procedure THolaMundoASP.OnEndPage;
+begin
+  inherited OnEndPage;
+end;
+
+procedure THolaMundoASP.OnStartPage(const AScriptingContext: IUnknown);
+begin
+  inherited OnStartPage(AScriptingContext);
+end;
+
+procedure THolaMundoASP.HolaMundo; // Al invocar a este método
+begin
+    Response.Write('¡Hola mundo!'); // emitimos el saludo
+end;
+
+initialization
+  TAutoObjectFactory.Create(ComServer, THolaMundoASP, Class_HolaMundoASP,
+    ciMultiInstance, tmApartment);
+end.
+
+{% endhighlight %}
+
+<p>Aparte del módulo de código, el asistente ASP también ha creado una página ASP que nos servirá como plantilla para poder probar el funcionamiento del componente. Observa que la mayor parte de esa página está compuesta de código HTML, a excepción del script delimitado por las parejas de caracteres <% y %>. Estos delimitadores permiten al servidor IIS identificar las partes que tiene que procesar, sustituyendo su contenido por el resultado que genere dicho proceso.
+
+<p>En nuestro caso particular, como puedes ver en el Listado 2, el código se limita a crear una copia del componente <code>HolaMundoASP</code> que se encuentra en la DLL <code>HolaMundo</code>, llamando a continuación a uno de sus métodos. La página ASP habrá que copiarla a la carpeta raíz de IIS, habitualmente <b>wwwroot</b>, u otra que hayas establecido para realizar estas pruebas. Hecho esto, no hay mas que abrir nuestro cliente web habitual y solicitar el documento ASP al servidor, como puedes ver en la Figura 5. Ten en cuenta que no puedes abrir directamente el documento ASP con el cliente web, sino que ha de ser el servidor el que procese la petición para poder generar el resultado. Es necesario, por tanto, tener instalado y activo el servidor IIS.
+
+{% highlight html %}
+<HTML>
+<BODY>
+<TITLE> Testing Delphi ASP </TITLE>
+<CENTER>
+<H3> You should see the results of your Delphi Active Server method below </H3>
+</CENTER>
+<HR>
+<% Set DelphiASPObj = Server.CreateObject("HolaMundo.HolaMundoASP") 
+   DelphiASPObj.HolaMundo
+%>
+<HR>
+</BODY>
+</HTML>
+
+{% endhighlight %}
+
+<p style="text-align:center"><image src="{{ '/assets/img/vbxasp/ResultadoHolaMundo.png' | absolute_url }}" title="Figura 5. Resultado obtenido al solicitar la página ASP que utiliza el componente HolaMundo" /></p>
+
+<h2>La interfaz <code>IResponse</code></h2>
+<p>Cuando usamos la propiedad <code>Response</code> del objeto ASP, en el ejemplo anterior para enviar una cadena simple al cliente, lo que estamos usando es una interfaz COM, concretamente la interfaz <code>IResponse</code>. Ésta cuenta con un importante número de métodos que, en su mayor parte, tienen por finalidad manipular la respuesta que se enviará al cliente. El método <code>Write</code>, por ejemplo, añade una cadena al final de ese contenido. 
+
+<p>En el ejemplo anterior, el resultado que obtiene el cliente web es una combinación del código HTML existente en el documento ASP más la cadena insertada por el componente ASP. Éste, no obstante, podría previamente haber eliminado todo el contenido mediante el método <code>Clear</code>. El envío del contenido se efectúa cuando se ha terminado de procesar el documento ASP. Una llamada al método <code>End</code>, sin embargo, forzaría el envío inmediato de la respuesta, finalizando dicho proceso.
+
+<p>Otros métodos, accesibles como propiedades en el caso de Delphi, permiten conocer el estado actual, saber si el cliente está o no conectado, establecer el tipo de contenido a enviar y acceder a las cookies, entre otras operaciones.
+
+<p>Aunque en el ejemplo anterior se ha usado el método <code>Write</code> para enviar una cadena simple, realmente podemos usarlo para enviar cualquier código. Podríamos, por ejemplo, generar una tabla HTML a partir de una base de datos, escribiéndola en el objeto <code>Response</code> para enviarla al cliente. La tabla podría generarse manualmente, como se hace en el componente <code>ListaTablaASP</code> que hemos añadido al proyecto anterior.  
+
+<p>No hay un trabajo de diseño, puesto que el componente <code>TTable</code> se crea dinámicamente como puede verse en el Listado 3, asignando las propiedades necesarias para acceder a una de las tablas de ejemplo que acompañan a Delphi. La Figura 6 es un ejemplo del resultado obtenido.
+
+{% highlight pascal %}
+procedure TListaTablaASP.ListaTabla;
+var
+    Table1: TTable;
+begin
+    try
+      Table1 := TTable.Create(Nil); // Creamos el componente
+      // y accedemos a la base de datos de ejemplo
+      Table1.DatabaseName := 'DBDEMOS';
+      Table1.TableName := 'country.db';
+      Table1.Open; // abrimos la tabla
+
+      Response.Write('<TABLE>'); // iniciamos la tabla HTML
+      while not Table1.EOF do begin // hasta llegar al final
+          Response.Write('<TR>' + // iniciamos una fila
+          // con tres columnas
+          '<TD>' + Table1.FieldByName('Name').AsString + '</TD>' +
+          '<TD>' + Table1.FieldByName('Continent').AsString + '</TD>' +
+          '<TD>' + Table1.FieldByName('Capital').AsString + '</TD>' +
+          '</TR>'); // fin de la fila
+
+          Table1.Next; // pasamos a la siguiente
+      end;
+      Response.Write('</TABLE>'); // fin de la tabla
+      Table1.Close; // cerramos la tabla
+      Table1.Free; // y la destruimos
+    except // si se produce una excepción lo más posible es que no se
+        Response.Write('Fallo al abrir la tabla'); // pueda abrir
+    end;
+end;
+
+{% endhighlight %}
+
+<p style="text-align:center"><image src="{{ '/assets/img/vbxasp/ListaTabla.png' | absolute_url }}" title="Figura 6. Tabla HTML generada a partir de una tabla Paradox" /></p>
+
+<h2>La interfaz <code>IRequest</code></h2>
+<p>Mediante la propiedad <code>Request</code> del objeto ASP es posible acceder a la información de solicitud efectuada por el cliente, leyendo campos de formularios HTML, cookies, variables y otros valores interesantes, como la dirección remota del cliente, el método de petición, etc.
+
+<p>La mayor parte de las propiedades accesibles mediante <code>Request</code>, como <code>Form</code>, <code>Cookies</code>, <code>ServerVairables</code>, <code>QueryString</code> o <code>ClientCertificate</code>, devuelven siempre como referencia un puntero a una interfaz <code>IRequestDictionary</code>. Esto significa que todas esas propiedades permiten acceder a una colección de datos, usando el típico operador <code>[ ]</code> de Object Pascal y como índice una cadena con el nombre de la cookie, campo o elemento que corresponda. Puesto que la propiedad <code>Item</code> de la interfaz <code>IRequestDictionary</code> es la propiedad por defecto, es posible escribir directamente expresiones como la siguiente:
+
+{% highlight pascal %}
+Request.Form[‘Nombre’]
+{% endhighlight %}
+
+<p>En este caso está accediéndose al campo <code>Nombre</code> del formulario HTML desde el que se supone el cliente ha enviado la solicitud. De forma análoga, podríamos recuperar una cookie o identificar al cliente.
+
+<p>Podemos ver esto en la práctica con un sencillo ejemplo. Partimos de un documento HTML como el del Listado 4, con una formulario HTML en el que se supone el usuario debe introducir un identificador y una contraseña. Fíjate en la acción que ejecutará el formulario, que será <b>Registro.asp</b>, y en el nombre de los dos campos del formulario, ya que serán esos nombres los que debamos usar posteriormente para acceder a los datos.
+
+{% highlight html %}
+<HTML>
+<BODY>
+<FORM NAME="Registro" METHOD=POST ACTION="Registro.asp">
+<CENTER>
+<TABLE>
+  <TR>
+    <TD><B>Identificador de usuario</B></TD>
+    <TD><INPUT TYPE=TEXT NAME="Identificador"></TD>
+  </TR>
+  <TR>
+    <TD><B>Contraseña</B></TD>
+    <TD><INPUT TYPE=PASSWORD NAME="Contrasena"</TD>
+   </TR>
+   <TR>
+    <TD align=middle colSpan=2>
+<INPUT TYPE=SUBMIT NAME="Entrar" VALUE="Entrar"></TD>
+   </TR>
+</TABLE>
+</CENTER>
+</FORM>
+</BODY>
+</HTML>
+{% endhighlight %}
+
+
+<p>Lo siguiente será añadir un nuevo componente ASP al proyecto, componente que irá acompañado del documento <b>Registro.asp</b>, desde el que se llamará al método <code>Registro</code> de este nuevo componente. En dicho método, como se observa en el Listado 5, utilizamos la colección <code>Form</code> de la propiedad <code>Request</code> para acceder a los datos introducidos por el usuario en el formulario. Esta información la usamos para componer una respuesta, aunque en la práctica la usaríamos para validar la entrada contra una base de datos de usuarios, permitiendo o denegando el acceso.
+
+{% highlight pascal %}
+procedure TRegistro.Registro;
+begin // Recuperamos los valores del formulario y los devolvemos al cliente
+    Response.Write('Dices ser <B>' + String(Request.Form['Identificador']) +
+        '</B> e intentas entrar con la clave <B>' +
+        String(Request.Form['Contrasena']) + '</B>');
+end;
+
+{% endhighlight %}
+
+<p>Observa cómo se realiza una conversión de tipo para poder mostrar los datos recuperados del formulario. Hay que tener en cuenta que estamos trabajando con objetos COM automatizables, con colecciones en las que los elementos siempre son considerados <code>OleVariant</code>, de ahí que sea preciso convertir al tipo que corresponda en cada paso. En las Figuras 7 y 8 puedes ver el formulario y la respuesta obtenida.
+
+<p style="text-align:center"><image src="{{ '/assets/img/vbxasp/Formulario.png' | absolute_url }}" title="Figura 7. Usamos el formulario HTML para facilitar los hipotéticos datos de registro en la sede web" /></p>
+
+<p style="text-align:center"><image src="{{ '/assets/img/vbxasp/Validacion.png' | absolute_url }}" title="Figura 8. El componente ASP recupera los datos del formulario y nos da una respuesta" /></p>
+
+<h2>Un punto de partida</h2>
+<p>La información facilitada en este tutorial, junto con los ejemplos que le acompañan, son tan sólo un punto de partida en el desarrollo de componentes para páginas ASP. Ya sabes, sin embargo, cómo crear un componente de este tipo, cómo enviar respuestas al cliente y cómo recuperar datos de un formulario. De forma análoga, podrías leer valores almacenados en el sistema del cliente (las famosas cookies) y realizar cualquier otro proceso. Dada la escasa información facilitada por Borland, si deseas profundizar en el tema de ASP y el uso de componentes ActiveX ASP, tendrás que recurrir a la documentación de Microsoft. En la sede MSDN, http://msdn.microsoft.com, podrás encontrar mucha información.
+
+<p>Algunas de las operaciones efectuadas en los componentes de ejemplo, como la creación de una respuesta a partir de los datos del formulario, pueden realizarse de forma más sencilla directamente en el script ASP. Lo que se persigue con los ejemplos, no obstante, es mostrarte cómo realizar esas mismas operaciones desde Delphi, aunque los componentes ASP tienen sentido cuando el trabajo a realizar es más complejo o necesita ser más eficaz. Las distintas acciones, además, pueden codificarse como métodos de un mismo componente, en lugar de crear varios componentes como hemos hecho nosotros.
+
