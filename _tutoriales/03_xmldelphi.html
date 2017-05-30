@@ -1,0 +1,270 @@
+---
+layout: post
+title: Cómo generar documentos XML desde Delphi<br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>El lenguaje XML (<i>Extensible Markup Language</i>) es actualmente la mejor opción para comunicar unas aplicaciones con otras, ya sea intercambiando información, mediante documentos XML, o incluso efectuando llamadas, con protocolos XML-RPC (<i>Remote Procedure Call</i> basado en XML) como SOAP (<i>Simple Object Access Protocol</i>).  El caso más habitual es el primero: unas aplicaciones generan documentos XML partiendo de sus datos, documentos que después pueden ser leídos y procesados por otras aplicaciones. Lo más interesante, como podrás suponer, es que no importa si dichas aplicaciones están o no escritas con el mismo lenguaje, en el mismo sistema operativo o, incluso, la misma plataforma hardware. 
+
+<p>Aparte del intercambio de información directa entre aplicaciones, XML también representa una muy buena alternativa a la hora de trabajar con datos en páginas web. De hecho, XML surgió en principio como una tecnología para la web. En una página HTML es posible codificar islas de datos, manipulables en el lado cliente mediante los típicos guiones en JavaScript o VBScript. Es la técnica usada en Delphi 5 por la nueva versión de MIDAS, que facilita la edición de datos por parte de clientes web.
+
+<p>La generación de documentos XML desde nuestras aplicaciones es, por tanto, una necesidad que puede surgirnos en cualquier momento, si es que no la tenemos ya. El componente <code>TMidasPageProducer</code> de la versión <i>Enterprise</i> de Delphi 5 tan sólo es útil para crear aplicaciones basadas en MIDAS, por lo que tendremos que buscar otros medios para generar XML a partir de nuestros datos. En este artículo te mostramos varias alternativas para hacerlo, que pueden serte útiles per se o servirte como punto de partida para crear tu propio sistema.
+
+<h2>Generación bruta del código XML</h2>
+
+<p>Los documentos XML, así como los documentos de definición de tipos (conocidos como DTD), las hojas de estilo XSL (<i>Extensible Style Sheet</i>) o los esquemas XML, son archivos de texto simples, que pueden crearse con cualquier editor, como el sencillo <b>Bloc de notas</b>. Esto significa que desde nuestros programas, usando los servicios de E/S de archivos de Delphi o clases como <code>TStringList</code>, no tendríamos problema alguno para crear documentos XML.
+
+<p>Dado que la generación del código XML se haría casi <i>manualmente</i>, los datos de origen podrían provenir de cualquier fuente, desde una base de datos hasta información obtenida de Internet pasando, lógicamente, por datos introducidos por el usuario final. Si aparte del documento XML también hay que generar un esquema o una DTD, el tema se complica algo, puesto que hay que conocer la estructura y tipos de los datos con cierto detalle.
+
+<p>Vamos a ver con un ejemplo cómo podríamos crear un documento XML desde un programa propio, sin necesidad de recurrir a ningún componente ni recurso externo. Tanto en éste como en los siguientes ejemplos, se asume que tenemos instalado Microsoft Internet Explorer en nuestro sistema, ya que lo usaremos para visualizar directamente los documentos XML. Posteriormente, también lo necesitaremos para generar documentos siguiendo el modelo DOM (<i>Document Object Model</i>).
+
+<p>En este primer ejemplo, los datos del documento a generar serán introducidos manualmente por el usuario. Para ello diseñaremos un formulario similar al de la Figura 1, con un <code>TListView</code> en la parte superior y un <code>TPanel</code> en la inferior con algunas cajas de texto. Cada vez que se pulse el botón <b>Añadir</b>, los datos introducidos en las cajas de texto pasarán a la parte superior. La parte más interesante, no cabe duda, se desencadena con la pulsación del segundo botón, que ejecuta el código del Listado 1. No hay ningún misterio, simplemente se crea una lista de cadenas de texto y se almacena en ella el código XML que, posteriormente, es guardado en un archivo que abrimos mediante la función <code>ShellExecute()</code>.
+
+{% highlight pascal %}
+procedure TForm1.Button1Click(Sender: TObject);
+var
+    CodigoXML: TStringList;
+begin
+    CodigoXML := TStringList.Create; // Creamos un TStringList
+    with CodigoXML do begin // para insertar en él el código XML
+      Add('<?xml version = "1.0" ?>'); // cabecera
+      Add('<Libros>'); // inicio de la lista de libros
+      while lvLibros.Items.Count <> 0 do begin // mientras haya libros
+        Add(' <Libro>'); // iniciamos un elemento Libro
+        // insertando el título, tema, autor y editorial
+        Add('  <Titulo>' + lvLibros.Items[0].Caption + '</Titulo>');
+        Add('  <Tema>' + lvLibros.Items[0].SubItems[0] + '</Tema>');
+        Add('  <Autor>' + lvLibros.Items[0].SubItems[1] + '</Autor>');
+        Add('  <Editorial>'+lvLibros.Items[0].SubItems[2]+'</Editorial>');
+        Add(' </Libro>'); // fin del elemento libro
+        lvLibros.Items.Delete(0); // eliminamos el libro añadido
+      end;
+      Add('</Libros>'); // cerramos la lista de libros
+    end;
+    CodigoXML.SaveToFile('Ejemplo1.XML'); // guardamos el código
+    CodigoXML.Free; // destruimos el TStringList
+    // y abrimos el documento XML en Internet Explorer
+    ShellExecute(Handle, Nil, 'Ejemplo1.XML', Nil, Nil, SW_NORMAL);
+end;
+
+{% endhighlight %}
+
+
+<p style="text-align:center"><image src="{{ '/assets/img/xmldelphi/DisenoFormulario.png' | absolute_url }}" title="Figura 1. Aspecto del formulario para facilitar la introducción de datos" /></p>
+
+
+<p>La Figura 2 muestra el programa tras introducir algunos elementos, mientras que en la Figura 3 aparece el documento generado, mostrado en Internet Explorer. El documento podría abrirse con cualquier editor de texto, como en la Figura 4, pero con Internet Explorer sabemos que el documento es correcto, puesto que antes de visualizarlo lo analiza. Además, la estructura en árbol hace más fácil la lectura, siendo posible incluso cerrar y abrir elementos.
+
+<p style="text-align:center"><image src="{{ '/assets/img/xmldelphi/DatosIntroducidos.png' | absolute_url }}" title="Figura 2. El formulario del programa tras introducir algunos datos" /></p>
+
+<p style="text-align:center"><image src="{{ '/assets/img/xmldelphi/ListaLibrosEnIE.png' | absolute_url }}" title="Figura 3. Éste es el aspecto del documento, mostrado en Internet Explorer" /></p>
+
+<p style="text-align:center"><image src="{{ '/assets/img/xmldelphi/ListaLibrosEnBlockNotas.png' | absolute_url }}" title="Figura 4. También podemos ver el documento con el sencillo Bloc de notas" /></p>
+
+<h2>Clases para automatizar el proceso</h2>
+
+<p>Aunque crear documentos XML según el proceso anterior es relativamente simple, no es menos cierto que se trata de un método poco flexible y algo tedioso, aparte de contribuir a la introducción de posibles errores en los documentos. ¿Qué ocurre si añadimos una nueva columna a la lista de datos del ejemplo anterior, por ejemplo para introducir el número de páginas? Sí, tendríamos que modificar el proceso de generación del documento, y cada vez que hacemos esto podemos causar fallos en algo que, hasta ese momento, funcionaba.
+
+<p>Una alternativa, especialmente válida cuando los datos origen del documento están en memoria en algún momento, consiste en modelar los datos en forma de clases. En el supuesto anterior, por ejemplo, podríamos definir un tipo llamado <code>TLibro</code>, para contener todos los datos de cada libro, y una colección <code>TLibros</code>, para agrupar varios libros y operar sobre ellos. Estas clases contarían, además, con los métodos necesarios para generar el código XML. 
+
+<p>La separación de esas clases en un módulo independiente, como se aprecia en el Listado 2, aporta una mayor flexibilidad. Es posible modificar la interfaz sin ningún problema, puesto que los datos se mantienen en una colección independiente. La generación del documento, además, no queda en manos de la parte de interfaz, sino de un método de la propia colección. Al pulsar el botón <b>Generar XML</b>, por tanto, lo único que habrá que hacer será llamar al método <code>SaveToFile()</code> de la clase <code>TLibros</code>. Cualquier cambio en la estructura de la colección y, consecuentemente, el documento a generar, no afectará directamente al resto del programa.
+
+{% highlight pascal %}
+unit ClsLibros;
+
+interface
+
+Uses Classes;
+
+type
+  // Cada elemento de la colección
+  TLibro = class(TCollectionItem)
+  public
+    FTitulo: string; // constará de un título
+    FTema: string; // tema
+    FAutor: string; // autor
+    FEditorial: string; // y editorial
+    // un método facilitará el añadido de un nuevo libro
+    procedure Anade(Titulo, Tema, Autor, Editorial: string);
+    // y otro generará el código XML correspondiente
+    function CodigoXML: string;
+  end;
+
+  // Esta clase será la colección de libros
+  TLibros = class(TCollection)
+  public // que añadirá un método SaveToFile() para crear
+    procedure SaveToFile(FileName: string); // el documento
+  end;
+
+implementation
+
+// Añadir un nuevo libro
+procedure TLibro.Anade;
+begin
+    FTitulo := Titulo; // simplemente conservamos
+    FTema := Tema; // los datos facilitados en
+    FAutor := Autor; // los miembros correspondientes
+    FEditorial := Editorial;
+end;
+
+// Generar el código XML correspondiente a un libro
+function TLibro.CodigoXML: string;
+begin
+    result := // lo devolvemos como una sola cadena
+        '<Libro>' +
+        '<Titulo>' + FTitulo + '</Titulo>' +
+        '<Tema>' + FTema + '</Tema>' +
+        '<Autor>' + FAutor + '</Autor>' +
+        '<Editorial>' + FEditorial + '</Editorial>' +
+        '</Libro>';
+end;
+
+// Método para crear el documento XML a partir de la colección
+procedure TLibros.SaveToFile;
+var
+    DocXML: TStringList;
+    Indice: integer;
+begin
+    DocXML := TStringList.Create; // nos servimos de un TStringList
+    // para ir añadiendo todo el código XML
+    DocXML.Add('<?xml version="1.0"?>');
+    DocXML.Add('<Libros>'); // lista de libros
+    // recorremos la colección
+    for Indice := 0 to Count - 1 do
+        // añadiendo el código de cada libro
+        DocXML.Add((Items[Indice] As TLibro).CodigoXML);
+    DocXML.Add('</Libros>'); // cerramos la lista
+    DocXML.SaveToFile(FileName); // y guardamos el documento
+    DocXML.Free;
+end;
+
+end.
+
+{% endhighlight %}
+
+
+<p><code>TLibro</code> y <code>TLibros</code> son clases específicas, que tan sólo pueden generar código XML para una colección de libros. Utilizando técnicas como la herencia, las propiedades publicadas y la información RTTI, podrían construirse clases mucho más genéricas, útiles para crear documentos XML partiendo de cualquier colección de datos. Esto es lo que ha hecho el grupo de trabajo <i>SourceWorks</i> del proyecto JEDI, crear unas clases genéricas para la producción de código HTML facilitándolas, además, como código libre con sus fuentes. Puedes obtener la última versión de estas clases, llamadas <i>XML Works</i>, en <a href="http://www.pbe.com/SourceWorks/XMLWorks/">http://www.pbe.com/SourceWorks/XMLWorks/</a>. 
+
+<p>Utilizando las clases <i>XML Works</i> nuestro módulo <b>ClsLibros</b> sería mucho más sencillo, como puede verse en el Listado 3. Ahora tomamos como base a las clases <code>TXMLCollectionItem</code> y <code>TXMLCollection</code>, en lugar de <code>TCollectionItem</code> y <code>TCollection</code>, respectivamente. Esas clases cuentan con una serie de propiedades y métodos que, heredados por <code>TLibroCollectionItem</code> y <code>TLibrosCollection</code>, se encargan de generar el código XML. Basta con leer la propiedad XML de la colección, en este caso <code>TLibrosCollection</code>, para obtener todo el documento XML, incluida una DTD que describe la estructura de los datos.
+
+{% highlight pascal %}
+unit ClsLibros;
+
+interface
+
+Uses XMLWorks;
+
+type
+  // Cada elemento de la colección
+  TLibroCollectionItem = class(TXMLCollectionItem)
+  private
+    FTitulo: string; // constará de un título
+    FTema: string; // tema
+    FAutor: string; // autor
+    FEditorial: string; // y editorial
+  published
+    property Titulo: string read FTitulo write FTitulo;
+    property Tema: string read FTema write FTema;
+    property Autor: string read FAutor write FAutor;
+    property Editorial: string read FEditorial write FEditorial;
+  end;
+
+  // Esta clase será la colección de libros
+  TLibrosCollection = class(TXMLCollection)
+  end;
+
+implementation
+
+end.
+
+{% endhighlight %}
+
+
+<p>El resultado obtenido, tras cambiar el código del módulo y efectuar unas pequeñas modificaciones en los métodos asociados a los botones, el resultado obtenido finalmente es exactamente el mismo. Si abres el documento XML en un editor, sin embargo, podrás ver que ahora (Figura 5) no sólo almacena los datos, sino también la DTD.
+
+
+<p style="text-align:center"><image src="{{ '/assets/img/xmldelphi/ListaLibrosConDTD.png' | absolute_url }}" title="Figura 5. Los documentos generados por XML Works cuentan con su DTD" /></p>
+
+<h2>Bases de datos, ADO y XML</h2>
+
+<p>Cuando los datos que van a formar parte del documento XML se encuentra en una base de datos, siempre asumiendo que estamos trabajando con Windows como sistema operativo, existe un método mucho más sencillo para generarlo: usando ADO (<i>ActiveX Data Objects</i>). Los conjuntos de datos ADO disponen de un método, llamado <code>Save()<code>, que permiten almacenar los datos de forma persistente en un archivo en disco, ya sea en un formato propietario o en XML. Usar ADO es posible prácticamente desde cualquier versión de Delphi, pero resulta especialmente sencillo a partir de Delphi 5, gracias a la existencia de una serie de componentes VCL específicos.
+
+<p>Teniendo seleccionado un conjunto de datos, por ejemplo mediante un <code>TADOTable</code> o <code>TADOQuery</code>, basta con llamar al método <code>SaveToFile()</code> facilitando dos parámetros: el nombre del archivo destino y la constante <code>pfXML</code>. El archivo generado constará de dos partes bien diferenciadas: un esquema en el que se define la estructura de cada fila, enumerando los nombres y tipos de columnas, y las propias entidades que contienen los datos.
+
+<p>Sirviéndonos de un <code>TADOTable</code>, un <code>TDataSource</code>, un <code>TDBGrid</code> y un <code>TButton</code>, como puede verse en la Figura 6, tan sólo tendríamos que escribir el código siguiente asociado al evento OnClick del botón:
+
+{% highlight pascal %}
+// Al pulsarse el botón
+procedure TForm1.Button1Click(Sender: TObject);
+begin // generamos el documento XML
+    ADOTable1.SaveToFile('Ejemplo4.xml', pfXML);
+    // y lo abrimos en Internet Explorer
+    ShellExecute(Handle, Nil, 'Ejemplo4.xml',
+        Nil, Nil, SW_NORMAL);
+end;
+{% endhighlight %}
+
+<p style="text-align:center"><image src="{{ '/assets/img/xmldelphi/TablaADO.png' | absolute_url }}" title="Figura 6. Usamos un TADOTable conectado a una de las tablas de la base de datos de ejemplo que acompaña a Delphi 5" /></p>
+
+<p>Previamente, como podrás suponer, hemos conectado el <code>TADOTable</code> con una base de datos de ejemplo de Delphi 5, seleccionando una de las tablas disponibles. Al ejecutarse el código anterior, el resultado obtenido será similar al de la Figura 7. Este código XML podría transferirse desde un servidor a un cliente HTTP, facilitando la manipulación de los datos de una base desde cualquier cliente remoto.
+
+<p style="text-align:center"><image src="{{ '/assets/img/xmldelphi/TablaXML.png' | absolute_url }}" title="Figura 7. Aspecto de un documento XML generado por ADO a partir de una tabla de datos." /></p>
+
+<h2>Uso del analizador XML de Microsoft</h2>
+
+<p>En caso de que los datos que van a servir para componer el documento XML no estén en una base de datos, ni tampoco modeladas en una colección, siempre nos queda la alternativa de generar el código manualmente, como se hacía en el primer ejemplo. El riesgo, no obstante, es que puede producirse un documento no válido o incluso que no esté bien formado, porque falten etiquetas de cierre o fallos similares. 
+
+<p>Otra opción, mucho más adecuada, consiste en usar el analizador XML de Microsoft que se encuentra incluido en todas las últimas versiones Windows, así como en aquellos ordenadores donde esté instalado Internet Explorer 4 o posterior. Dicho analizador, siguiendo el modelo de objetos DOM, facilita la manipulación de documentos XML de una forma relativamente sencilla y muy flexible.
+
+<p>Aunque podríamos usar el citado analizador, conocido como <code>Microsoft.XMLDOM</code>, mediante la técnica de automatización, es mucho mejor importar la librería de tipos desde Delphi, como se muestra en la Figura 8. Esto nos permitirá usar directamente los distintos objetos e interfaces disponiendo de información de tipos y, en el caso de Delphi 5, incluso obtendremos un componente que, al ser insertado en un formulario, nos permitirá acceder al servidor como si de cualquier control ActiveX se tratase.
+
+<p style="text-align:center"><image src="{{ '/assets/img/xmldelphi/ImportacionServidor.png' | absolute_url }}" title="Figura 8. Usamos la opción Project|Import Type Library para importar la librería de tipos del componente COM XML de Microsoft." /></p>
+
+<p>El componente <code>Microsoft.XMLDOM</code> cuenta con varios objetos que implementan diversas interfaces. Uno de estos objetos, llamado <code>XMLDOMDocument</code>, implementa la interfaz <code>IXMLDOMDocument</code>, con cuyas propiedades y  métodos puede manipularse un documento XML. Cada uno de los nodos del documento se representa mediante un objeto <code>XMLDOMNode</code> que, como podrás suponer, implementa la interfaz <code>IXMLDOMNode</code>. Para acceder al nodo raíz del documento, del cual parten todos los demás, hay que usar la propiedad documentElement de la interfaz <code>IXMLDOMDocument</code>. 
+
+<p>Para crear un documento XML sirviéndonos del analizador de Microsoft, nos basta con conocer una propiedad y dos métodos de la interfaz <code>IXMLDOMDocument</code> y una propiedad y un método de <code>IXMLDOMDone</code>. Volviendo al primero de los ejemplos que se propusieron, en el cual se creaba el documento manualmente, bastaría con modificar el código asociado a la pulsación del botón, sustituyéndolo por el que puedes ver en el Listado 4. La interfaz no ha sufrido modificación alguna, tan sólo se ha añadido un componente <code>TDOMDocument</code>, obtenido tras la importación de la librería de tipos, llamado <code>DOMDocument1</code>.
+
+
+{% highlight pascal %}
+// Al pulsar el botón de generación de texto
+procedure TForm1.Button1Click(Sender: TObject);
+var
+    Nodo, Elemento: IXMLDOMNode;
+begin
+    DOMDocument1.Connect; // Conectamos con el analizador
+    // Iniciamos el documento con la raíz <Libros>
+    DOMDocument1.loadXML('<Libros/>');
+    // recorremos los elementos que hay en el ListView
+    while lvLibros.Items.Count <> 0 do // mientras haya libros
+     with DOMDocument1 do begin
+        // creamos un nodo <Libro>
+        Nodo := documentElement.appendChild(createElement('Libro'));
+        // insertando en él los nodos de datos
+        Elemento := Nodo.appendChild(createElement('Titulo')); // título
+        Elemento.text := lvLibros.Items[0].Caption; // y dato asociado
+        Elemento := Nodo.appendChild(createElement('Tema'));
+        Elemento.text := lvLibros.Items[0].SubItems[0];
+        Elemento := Nodo.appendChild(createElement('Autor'));
+        Elemento.text := lvLibros.Items[0].SubItems[1];
+        Elemento := Nodo.appendChild(createElement('Editorial'));
+        Elemento.text := lvLibros.Items[0].SubItems[2];
+
+        lvLibros.Items.Delete(0); // eliminamos el libro añadido
+     end;
+
+    DOMDocument1.save('Ejemplo5.xml'); // guardamos el documento generado
+    DOMDocument1.Disconnect; // y desconectamos el servidor
+    // abrimos el documento XML en Internet Explorer
+    ShellExecute(Handle, Nil, 'Ejemplo5.XML', Nil, Nil, SW_NORMAL);
+ end;
+
+{% endhighlight %}
+
+<p>Inicialmente el documento está vacío. Usando el método <code>LoadXML()</code> de la interfaz <code>IXMLDOMDocument</code> establecemos un contenido inicial, en principio una marca <Libros/> vacia. A continuación, en el interior de un bucle, recuperamos una referencia a ese nodo raíz a través de la propiedad documentElement. Éste, al igual que cualquier otro nodo XML, dispone del método <code>appendChild()</code>, con el que podemos añadir subnodos. Cada nodo cuenta también con la propiedad <code>text</code>, que nos sirve para establecer el valor que contendrá. 
+
+<p>Finalmente, al terminar la ejecución del bucle, guardamos el documento en un archivo sirviéndonos del método <code>save()</code> de <code>IXMLDOMDocument</code>. El resultado que genera el programa, a pesar de los cambios en el código, es exactamente el mismo que se obtenía con el primer ejemplo. En este caso, sin embargo, estamos seguros de que el documento estará bien formado, sin tener que preocuparnos de etiquetas de cierre y temas similares.
+
+<h2>Resumiendo</h2>
+
+<p>A lo largo de este artículo has conocido diversos métodos con los cuales puedes generar documentos XML a partir de tus datos, independientemente de dónde se encuentren éstos. Los documentos obtenidos, que en los ejemplos previos siempre hemos guardado en un archivo y abierto con Internet Explorer, pueden, lógicamente, ser transferidos a través de Internet, facilitando la comunicación entre un cliente y un servidor. También pueden ser utilizados como archivos de almacenamiento de información estructurada, aunque entonces tendríamos que saber también cómo recuperar y manipular los datos que contiene. Precisamente a este tema dedicaremos un próximo artículo, a conocer técnicas que nos permitan leer documentos XML.
