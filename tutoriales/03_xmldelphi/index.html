@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo generar documentos XML desde Delphi&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link href="data:text/css,pre%20%2Eoperator%2C%0Apre%20%2Eparen%20%7B%0A%20color%3A%20rgb%28104%2C%20118%2C%20135%29%0A%7D%0A%0Apre%20%2Eliteral%20%7B%0A%20color%3A%20%23990073%0A%7D%0A%0Apre%20%2Enumber%20%7B%0A%20color%3A%20%23099%3B%0A%7D%0A%0Apre%20%2Ecomment%20%7B%0A%20color%3A%20%23998%3B%0A%20font%2Dstyle%3A%20italic%0A%7D%0A%0Apre%20%2Ekeyword%20%7B%0A%20color%3A%20%23900%3B%0A%20font%2Dweight%3A%20bold%0A%7D%0A%0Apre%20%2Eidentifier%20%7B%0A%20color%3A%20rgb%280%2C%200%2C%200%29%3B%0A%7D%0A%0Apre%20%2Estring%20%7B%0A%20color%3A%20%23d14%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://assets-cdn.github.com/assets/frameworks-148da7a2b8b9ad739a5a0b8b68683fed4ac7e50ce8185f17d86aa05e75ed376e.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo generar documentos XML desde Delphi<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#generación-bruta-del-código-xml">Generación bruta del código XML</a></li>
+<li class="toc-entry toc-h2"><a href="#clases-para-automatizar-el-proceso">Clases para automatizar el proceso</a></li>
+<li class="toc-entry toc-h2"><a href="#bases-de-datos-ado-y-xml">Bases de datos, ADO y XML</a></li>
+<li class="toc-entry toc-h2"><a href="#uso-del-analizador-xml-de-microsoft">Uso del analizador XML de Microsoft</a></li>
+<li class="toc-entry toc-h2"><a href="#resumiendo">Resumiendo</a></li>
+</ul><p>El lenguaje XML (<i>Extensible Markup Language</i>) es actualmente la mejor opción para comunicar unas aplicaciones con otras, ya sea intercambiando información, mediante documentos XML, o incluso efectuando llamadas, con protocolos XML-RPC (<i>Remote Procedure Call</i> basado en XML) como SOAP (<i>Simple Object Access Protocol</i>).  El caso más habitual es el primero: unas aplicaciones generan documentos XML partiendo de sus datos, documentos que después pueden ser leídos y procesados por otras aplicaciones. Lo más interesante, como podrás suponer, es que no importa si dichas aplicaciones están o no escritas con el mismo lenguaje, en el mismo sistema operativo o, incluso, la misma plataforma hardware. 
+
+</p><p>Aparte del intercambio de información directa entre aplicaciones, XML también representa una muy buena alternativa a la hora de trabajar con datos en páginas web. De hecho, XML surgió en principio como una tecnología para la web. En una página HTML es posible codificar islas de datos, manipulables en el lado cliente mediante los típicos guiones en JavaScript o VBScript. Es la técnica usada en Delphi 5 por la nueva versión de MIDAS, que facilita la edición de datos por parte de clientes web.
+
+</p><p>La generación de documentos XML desde nuestras aplicaciones es, por tanto, una necesidad que puede surgirnos en cualquier momento, si es que no la tenemos ya. El componente <code>TMidasPageProducer</code> de la versión <i>Enterprise</i> de Delphi 5 tan sólo es útil para crear aplicaciones basadas en MIDAS, por lo que tendremos que buscar otros medios para generar XML a partir de nuestros datos. En este artículo te mostramos varias alternativas para hacerlo, que pueden serte útiles per se o servirte como punto de partida para crear tu propio sistema.
+
+</p><h2>
+<a id="generación-bruta-del-código-xml" class="anchor" href="#generaci%C3%B3n-bruta-del-c%C3%B3digo-xml" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generación bruta del código XML</h2>
+
+<p>Los documentos XML, así como los documentos de definición de tipos (conocidos como DTD), las hojas de estilo XSL (<i>Extensible Style Sheet</i>) o los esquemas XML, son archivos de texto simples, que pueden crearse con cualquier editor, como el sencillo <b>Bloc de notas</b>. Esto significa que desde nuestros programas, usando los servicios de E/S de archivos de Delphi o clases como <code>TStringList</code>, no tendríamos problema alguno para crear documentos XML.
+
+</p><p>Dado que la generación del código XML se haría casi <i>manualmente</i>, los datos de origen podrían provenir de cualquier fuente, desde una base de datos hasta información obtenida de Internet pasando, lógicamente, por datos introducidos por el usuario final. Si aparte del documento XML también hay que generar un esquema o una DTD, el tema se complica algo, puesto que hay que conocer la estructura y tipos de los datos con cierto detalle.
+
+</p><p>Vamos a ver con un ejemplo cómo podríamos crear un documento XML desde un programa propio, sin necesidad de recurrir a ningún componente ni recurso externo. Tanto en éste como en los siguientes ejemplos, se asume que tenemos instalado Microsoft Internet Explorer en nuestro sistema, ya que lo usaremos para visualizar directamente los documentos XML. Posteriormente, también lo necesitaremos para generar documentos siguiendo el modelo DOM (<i>Document Object Model</i>).
+
+</p><p>En este primer ejemplo, los datos del documento a generar serán introducidos manualmente por el usuario. Para ello diseñaremos un formulario similar al de la Figura 1, con un <code>TListView</code> en la parte superior y un <code>TPanel</code> en la inferior con algunas cajas de texto. Cada vez que se pulse el botón <b>Añadir</b>, los datos introducidos en las cajas de texto pasarán a la parte superior. La parte más interesante, no cabe duda, se desencadena con la pulsación del segundo botón, que ejecuta el código del Listado 1. No hay ningún misterio, simplemente se crea una lista de cadenas de texto y se almacena en ella el código XML que, posteriormente, es guardado en un archivo que abrimos mediante la función <code>ShellExecute()</code>.
+
+<figure class="highlight"><pre><code class="language-pascal" data-lang="pascal"><span class="k">procedure</span> <span class="n">TForm1</span><span class="p">.</span><span class="n">Button1Click</span><span class="p">(</span><span class="n">Sender</span><span class="p">:</span> <span class="kt">TObject</span><span class="p">);</span>
+<span class="k">var</span>
+    <span class="n">CodigoXML</span><span class="p">:</span> <span class="n">TStringList</span><span class="p">;</span>
+<span class="k">begin</span>
+    <span class="n">CodigoXML</span> <span class="p">:=</span> <span class="n">TStringList</span><span class="p">.</span><span class="n">Create</span><span class="p">;</span> <span class="c1">// Creamos un TStringList
+</span>    <span class="k">with</span> <span class="n">CodigoXML</span> <span class="k">do</span> <span class="k">begin</span> <span class="c1">// para insertar en él el código XML
+</span>      <span class="n">Add</span><span class="p">(</span><span class="s">'&lt;?xml version = "1.0" ?&gt;'</span><span class="p">);</span> <span class="c1">// cabecera
+</span>      <span class="n">Add</span><span class="p">(</span><span class="s">'&lt;Libros&gt;'</span><span class="p">);</span> <span class="c1">// inicio de la lista de libros
+</span>      <span class="k">while</span> <span class="n">lvLibros</span><span class="p">.</span><span class="n">Items</span><span class="p">.</span><span class="n">Count</span> <span class="p">&lt;&gt;</span> <span class="m">0</span> <span class="k">do</span> <span class="k">begin</span> <span class="c1">// mientras haya libros
+</span>        <span class="n">Add</span><span class="p">(</span><span class="s">' &lt;Libro&gt;'</span><span class="p">);</span> <span class="c1">// iniciamos un elemento Libro
+</span>        <span class="c1">// insertando el título, tema, autor y editorial
+</span>        <span class="n">Add</span><span class="p">(</span><span class="s">'  &lt;Titulo&gt;'</span> <span class="p">+</span> <span class="n">lvLibros</span><span class="p">.</span><span class="n">Items</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">Caption</span> <span class="p">+</span> <span class="s">'&lt;/Titulo&gt;'</span><span class="p">);</span>
+        <span class="n">Add</span><span class="p">(</span><span class="s">'  &lt;Tema&gt;'</span> <span class="p">+</span> <span class="n">lvLibros</span><span class="p">.</span><span class="n">Items</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">SubItems</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">+</span> <span class="s">'&lt;/Tema&gt;'</span><span class="p">);</span>
+        <span class="n">Add</span><span class="p">(</span><span class="s">'  &lt;Autor&gt;'</span> <span class="p">+</span> <span class="n">lvLibros</span><span class="p">.</span><span class="n">Items</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">SubItems</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">+</span> <span class="s">'&lt;/Autor&gt;'</span><span class="p">);</span>
+        <span class="n">Add</span><span class="p">(</span><span class="s">'  &lt;Editorial&gt;'</span><span class="p">+</span><span class="n">lvLibros</span><span class="p">.</span><span class="n">Items</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">SubItems</span><span class="p">[</span><span class="m">2</span><span class="p">]+</span><span class="s">'&lt;/Editorial&gt;'</span><span class="p">);</span>
+        <span class="n">Add</span><span class="p">(</span><span class="s">' &lt;/Libro&gt;'</span><span class="p">);</span> <span class="c1">// fin del elemento libro
+</span>        <span class="n">lvLibros</span><span class="p">.</span><span class="n">Items</span><span class="p">.</span><span class="n">Delete</span><span class="p">(</span><span class="m">0</span><span class="p">);</span> <span class="c1">// eliminamos el libro añadido
+</span>      <span class="k">end</span><span class="p">;</span>
+      <span class="n">Add</span><span class="p">(</span><span class="s">'&lt;/Libros&gt;'</span><span class="p">);</span> <span class="c1">// cerramos la lista de libros
+</span>    <span class="k">end</span><span class="p">;</span>
+    <span class="n">CodigoXML</span><span class="p">.</span><span class="n">SaveToFile</span><span class="p">(</span><span class="s">'Ejemplo1.XML'</span><span class="p">);</span> <span class="c1">// guardamos el código
+</span>    <span class="n">CodigoXML</span><span class="p">.</span><span class="n">Free</span><span class="p">;</span> <span class="c1">// destruimos el TStringList
+</span>    <span class="c1">// y abrimos el documento XML en Internet Explorer
+</span>    <span class="n">ShellExecute</span><span class="p">(</span><span class="n">Handle</span><span class="p">,</span> <span class="nb">Nil</span><span class="p">,</span> <span class="s">'Ejemplo1.XML'</span><span class="p">,</span> <span class="nb">Nil</span><span class="p">,</span> <span class="nb">Nil</span><span class="p">,</span> <span class="n">SW_NORMAL</span><span class="p">);</span>
+<span class="k">end</span><span class="p">;</span></code></pre></figure>
+
+
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/DisenoFormulario.png" title="Figura 1. Aspecto del formulario para facilitar la introducción de datos"></image></p>
+
+
+<p>La Figura 2 muestra el programa tras introducir algunos elementos, mientras que en la Figura 3 aparece el documento generado, mostrado en Internet Explorer. El documento podría abrirse con cualquier editor de texto, como en la Figura 4, pero con Internet Explorer sabemos que el documento es correcto, puesto que antes de visualizarlo lo analiza. Además, la estructura en árbol hace más fácil la lectura, siendo posible incluso cerrar y abrir elementos.
+
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/DatosIntroducidos.png" title="Figura 2. El formulario del programa tras introducir algunos datos"></image></p>
+
+<p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/ListaLibrosEnIE.png" title="Figura 3. Éste es el aspecto del documento, mostrado en Internet Explorer"></image></p>
+
+<p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/ListaLibrosEnBlockNotas.png" title="Figura 4. También podemos ver el documento con el sencillo Bloc de notas"></image></p>
+
+<h2>
+<a id="clases-para-automatizar-el-proceso" class="anchor" href="#clases-para-automatizar-el-proceso" aria-hidden="true"><span class="octicon octicon-link"></span></a>Clases para automatizar el proceso</h2>
+
+<p>Aunque crear documentos XML según el proceso anterior es relativamente simple, no es menos cierto que se trata de un método poco flexible y algo tedioso, aparte de contribuir a la introducción de posibles errores en los documentos. ¿Qué ocurre si añadimos una nueva columna a la lista de datos del ejemplo anterior, por ejemplo para introducir el número de páginas? Sí, tendríamos que modificar el proceso de generación del documento, y cada vez que hacemos esto podemos causar fallos en algo que, hasta ese momento, funcionaba.
+
+</p><p>Una alternativa, especialmente válida cuando los datos origen del documento están en memoria en algún momento, consiste en modelar los datos en forma de clases. En el supuesto anterior, por ejemplo, podríamos definir un tipo llamado <code>TLibro</code>, para contener todos los datos de cada libro, y una colección <code>TLibros</code>, para agrupar varios libros y operar sobre ellos. Estas clases contarían, además, con los métodos necesarios para generar el código XML. 
+
+</p><p>La separación de esas clases en un módulo independiente, como se aprecia en el Listado 2, aporta una mayor flexibilidad. Es posible modificar la interfaz sin ningún problema, puesto que los datos se mantienen en una colección independiente. La generación del documento, además, no queda en manos de la parte de interfaz, sino de un método de la propia colección. Al pulsar el botón <b>Generar XML</b>, por tanto, lo único que habrá que hacer será llamar al método <code>SaveToFile()</code> de la clase <code>TLibros</code>. Cualquier cambio en la estructura de la colección y, consecuentemente, el documento a generar, no afectará directamente al resto del programa.
+
+<figure class="highlight"><pre><code class="language-pascal" data-lang="pascal"><span class="k">unit</span> <span class="n">ClsLibros</span><span class="p">;</span>
+
+<span class="k">interface</span>
+
+<span class="k">Uses</span> <span class="n">Classes</span><span class="p">;</span>
+
+<span class="k">type</span>
+  <span class="c1">// Cada elemento de la colección
+</span>  <span class="n">TLibro</span> <span class="p">=</span> <span class="k">class</span><span class="p">(</span><span class="n">TCollectionItem</span><span class="p">)</span>
+  <span class="k">public</span>
+    <span class="n">FTitulo</span><span class="p">:</span> <span class="k">string</span><span class="p">;</span> <span class="c1">// constará de un título
+</span>    <span class="n">FTema</span><span class="p">:</span> <span class="k">string</span><span class="p">;</span> <span class="c1">// tema
+</span>    <span class="n">FAutor</span><span class="p">:</span> <span class="k">string</span><span class="p">;</span> <span class="c1">// autor
+</span>    <span class="n">FEditorial</span><span class="p">:</span> <span class="k">string</span><span class="p">;</span> <span class="c1">// y editorial
+</span>    <span class="c1">// un método facilitará el añadido de un nuevo libro
+</span>    <span class="k">procedure</span> <span class="n">Anade</span><span class="p">(</span><span class="n">Titulo</span><span class="p">,</span> <span class="n">Tema</span><span class="p">,</span> <span class="n">Autor</span><span class="p">,</span> <span class="n">Editorial</span><span class="p">:</span> <span class="k">string</span><span class="p">);</span>
+    <span class="c1">// y otro generará el código XML correspondiente
+</span>    <span class="k">function</span> <span class="n">CodigoXML</span><span class="p">:</span> <span class="k">string</span><span class="p">;</span>
+  <span class="k">end</span><span class="p">;</span>
+
+  <span class="c1">// Esta clase será la colección de libros
+</span>  <span class="n">TLibros</span> <span class="p">=</span> <span class="k">class</span><span class="p">(</span><span class="n">TCollection</span><span class="p">)</span>
+  <span class="k">public</span> <span class="c1">// que añadirá un método SaveToFile() para crear
+</span>    <span class="k">procedure</span> <span class="n">SaveToFile</span><span class="p">(</span><span class="n">FileName</span><span class="p">:</span> <span class="k">string</span><span class="p">);</span> <span class="c1">// el documento
+</span>  <span class="k">end</span><span class="p">;</span>
+
+<span class="k">implementation</span>
+
+<span class="c1">// Añadir un nuevo libro
+</span><span class="k">procedure</span> <span class="n">TLibro</span><span class="p">.</span><span class="n">Anade</span><span class="p">;</span>
+<span class="k">begin</span>
+    <span class="n">FTitulo</span> <span class="p">:=</span> <span class="n">Titulo</span><span class="p">;</span> <span class="c1">// simplemente conservamos
+</span>    <span class="n">FTema</span> <span class="p">:=</span> <span class="n">Tema</span><span class="p">;</span> <span class="c1">// los datos facilitados en
+</span>    <span class="n">FAutor</span> <span class="p">:=</span> <span class="n">Autor</span><span class="p">;</span> <span class="c1">// los miembros correspondientes
+</span>    <span class="n">FEditorial</span> <span class="p">:=</span> <span class="n">Editorial</span><span class="p">;</span>
+<span class="k">end</span><span class="p">;</span>
+
+<span class="c1">// Generar el código XML correspondiente a un libro
+</span><span class="k">function</span> <span class="n">TLibro</span><span class="p">.</span><span class="n">CodigoXML</span><span class="p">:</span> <span class="k">string</span><span class="p">;</span>
+<span class="k">begin</span>
+    <span class="n">result</span> <span class="p">:=</span> <span class="c1">// lo devolvemos como una sola cadena
+</span>        <span class="s">'&lt;Libro&gt;'</span> <span class="p">+</span>
+        <span class="s">'&lt;Titulo&gt;'</span> <span class="p">+</span> <span class="n">FTitulo</span> <span class="p">+</span> <span class="s">'&lt;/Titulo&gt;'</span> <span class="p">+</span>
+        <span class="s">'&lt;Tema&gt;'</span> <span class="p">+</span> <span class="n">FTema</span> <span class="p">+</span> <span class="s">'&lt;/Tema&gt;'</span> <span class="p">+</span>
+        <span class="s">'&lt;Autor&gt;'</span> <span class="p">+</span> <span class="n">FAutor</span> <span class="p">+</span> <span class="s">'&lt;/Autor&gt;'</span> <span class="p">+</span>
+        <span class="s">'&lt;Editorial&gt;'</span> <span class="p">+</span> <span class="n">FEditorial</span> <span class="p">+</span> <span class="s">'&lt;/Editorial&gt;'</span> <span class="p">+</span>
+        <span class="s">'&lt;/Libro&gt;'</span><span class="p">;</span>
+<span class="k">end</span><span class="p">;</span>
+
+<span class="c1">// Método para crear el documento XML a partir de la colección
+</span><span class="k">procedure</span> <span class="n">TLibros</span><span class="p">.</span><span class="n">SaveToFile</span><span class="p">;</span>
+<span class="k">var</span>
+    <span class="n">DocXML</span><span class="p">:</span> <span class="n">TStringList</span><span class="p">;</span>
+    <span class="n">Indice</span><span class="p">:</span> <span class="kt">integer</span><span class="p">;</span>
+<span class="k">begin</span>
+    <span class="n">DocXML</span> <span class="p">:=</span> <span class="n">TStringList</span><span class="p">.</span><span class="n">Create</span><span class="p">;</span> <span class="c1">// nos servimos de un TStringList
+</span>    <span class="c1">// para ir añadiendo todo el código XML
+</span>    <span class="n">DocXML</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">'&lt;?xml version="1.0"?&gt;'</span><span class="p">);</span>
+    <span class="n">DocXML</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">'&lt;Libros&gt;'</span><span class="p">);</span> <span class="c1">// lista de libros
+</span>    <span class="c1">// recorremos la colección
+</span>    <span class="k">for</span> <span class="n">Indice</span> <span class="p">:=</span> <span class="m">0</span> <span class="k">to</span> <span class="n">Count</span> <span class="p">-</span> <span class="m">1</span> <span class="k">do</span>
+        <span class="c1">// añadiendo el código de cada libro
+</span>        <span class="n">DocXML</span><span class="p">.</span><span class="n">Add</span><span class="p">((</span><span class="n">Items</span><span class="p">[</span><span class="n">Indice</span><span class="p">]</span> <span class="k">As</span> <span class="n">TLibro</span><span class="p">).</span><span class="n">CodigoXML</span><span class="p">);</span>
+    <span class="n">DocXML</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">'&lt;/Libros&gt;'</span><span class="p">);</span> <span class="c1">// cerramos la lista
+</span>    <span class="n">DocXML</span><span class="p">.</span><span class="n">SaveToFile</span><span class="p">(</span><span class="n">FileName</span><span class="p">);</span> <span class="c1">// y guardamos el documento
+</span>    <span class="n">DocXML</span><span class="p">.</span><span class="n">Free</span><span class="p">;</span>
+<span class="k">end</span><span class="p">;</span>
+
+<span class="k">end</span><span class="p">.</span></code></pre></figure>
+
+
+</p><p><code>TLibro</code> y <code>TLibros</code> son clases específicas, que tan sólo pueden generar código XML para una colección de libros. Utilizando técnicas como la herencia, las propiedades publicadas y la información RTTI, podrían construirse clases mucho más genéricas, útiles para crear documentos XML partiendo de cualquier colección de datos. Esto es lo que ha hecho el grupo de trabajo <i>SourceWorks</i> del proyecto JEDI, crear unas clases genéricas para la producción de código HTML facilitándolas, además, como código libre con sus fuentes. Puedes obtener la última versión de estas clases, llamadas <i>XML Works</i>, en <a href="http://www.pbe.com/SourceWorks/XMLWorks/">http://www.pbe.com/SourceWorks/XMLWorks/</a>. 
+
+</p><p>Utilizando las clases <i>XML Works</i> nuestro módulo <b>ClsLibros</b> sería mucho más sencillo, como puede verse en el Listado 3. Ahora tomamos como base a las clases <code>TXMLCollectionItem</code> y <code>TXMLCollection</code>, en lugar de <code>TCollectionItem</code> y <code>TCollection</code>, respectivamente. Esas clases cuentan con una serie de propiedades y métodos que, heredados por <code>TLibroCollectionItem</code> y <code>TLibrosCollection</code>, se encargan de generar el código XML. Basta con leer la propiedad XML de la colección, en este caso <code>TLibrosCollection</code>, para obtener todo el documento XML, incluida una DTD que describe la estructura de los datos.
+
+<figure class="highlight"><pre><code class="language-pascal" data-lang="pascal"><span class="k">unit</span> <span class="n">ClsLibros</span><span class="p">;</span>
+
+<span class="k">interface</span>
+
+<span class="k">Uses</span> <span class="n">XMLWorks</span><span class="p">;</span>
+
+<span class="k">type</span>
+  <span class="c1">// Cada elemento de la colección
+</span>  <span class="n">TLibroCollectionItem</span> <span class="p">=</span> <span class="k">class</span><span class="p">(</span><span class="n">TXMLCollectionItem</span><span class="p">)</span>
+  <span class="k">private</span>
+    <span class="n">FTitulo</span><span class="p">:</span> <span class="k">string</span><span class="p">;</span> <span class="c1">// constará de un título
+</span>    <span class="n">FTema</span><span class="p">:</span> <span class="k">string</span><span class="p">;</span> <span class="c1">// tema
+</span>    <span class="n">FAutor</span><span class="p">:</span> <span class="k">string</span><span class="p">;</span> <span class="c1">// autor
+</span>    <span class="n">FEditorial</span><span class="p">:</span> <span class="k">string</span><span class="p">;</span> <span class="c1">// y editorial
+</span>  <span class="k">published</span>
+    <span class="k">property</span> <span class="n">Titulo</span><span class="p">:</span> <span class="k">string</span> <span class="k">read</span> <span class="n">FTitulo</span> <span class="k">write</span> <span class="n">FTitulo</span><span class="p">;</span>
+    <span class="k">property</span> <span class="n">Tema</span><span class="p">:</span> <span class="k">string</span> <span class="k">read</span> <span class="n">FTema</span> <span class="k">write</span> <span class="n">FTema</span><span class="p">;</span>
+    <span class="k">property</span> <span class="n">Autor</span><span class="p">:</span> <span class="k">string</span> <span class="k">read</span> <span class="n">FAutor</span> <span class="k">write</span> <span class="n">FAutor</span><span class="p">;</span>
+    <span class="k">property</span> <span class="n">Editorial</span><span class="p">:</span> <span class="k">string</span> <span class="k">read</span> <span class="n">FEditorial</span> <span class="k">write</span> <span class="n">FEditorial</span><span class="p">;</span>
+  <span class="k">end</span><span class="p">;</span>
+
+  <span class="c1">// Esta clase será la colección de libros
+</span>  <span class="n">TLibrosCollection</span> <span class="p">=</span> <span class="k">class</span><span class="p">(</span><span class="n">TXMLCollection</span><span class="p">)</span>
+  <span class="k">end</span><span class="p">;</span>
+
+<span class="k">implementation</span>
+
+<span class="k">end</span><span class="p">.</span></code></pre></figure>
+
+
+</p><p>El resultado obtenido, tras cambiar el código del módulo y efectuar unas pequeñas modificaciones en los métodos asociados a los botones, el resultado obtenido finalmente es exactamente el mismo. Si abres el documento XML en un editor, sin embargo, podrás ver que ahora (Figura 5) no sólo almacena los datos, sino también la DTD.
+
+
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/ListaLibrosConDTD.png" title="Figura 5. Los documentos generados por XML Works cuentan con su DTD"></image></p>
+
+<h2>
+<a id="bases-de-datos-ado-y-xml" class="anchor" href="#bases-de-datos-ado-y-xml" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bases de datos, ADO y XML</h2>
+
+<p>Cuando los datos que van a formar parte del documento XML se encuentra en una base de datos, siempre asumiendo que estamos trabajando con Windows como sistema operativo, existe un método mucho más sencillo para generarlo: usando ADO (<i>ActiveX Data Objects</i>). Los conjuntos de datos ADO disponen de un método, llamado <code>Save()<code>, que permiten almacenar los datos de forma persistente en un archivo en disco, ya sea en un formato propietario o en XML. Usar ADO es posible prácticamente desde cualquier versión de Delphi, pero resulta especialmente sencillo a partir de Delphi 5, gracias a la existencia de una serie de componentes VCL específicos.
+
+<p>Teniendo seleccionado un conjunto de datos, por ejemplo mediante un <code>TADOTable</code> o <code>TADOQuery</code>, basta con llamar al método <code>SaveToFile()</code> facilitando dos parámetros: el nombre del archivo destino y la constante <code>pfXML</code>. El archivo generado constará de dos partes bien diferenciadas: un esquema en el que se define la estructura de cada fila, enumerando los nombres y tipos de columnas, y las propias entidades que contienen los datos.
+
+</p>
+<p>Sirviéndonos de un <code>TADOTable</code>, un <code>TDataSource</code>, un <code>TDBGrid</code> y un <code>TButton</code>, como puede verse en la Figura 6, tan sólo tendríamos que escribir el código siguiente asociado al evento OnClick del botón:
+
+<figure class="highlight"><pre><code class="language-pascal" data-lang="pascal"><span class="c1">// Al pulsarse el botón
+</span><span class="k">procedure</span> <span class="n">TForm1</span><span class="p">.</span><span class="n">Button1Click</span><span class="p">(</span><span class="n">Sender</span><span class="p">:</span> <span class="kt">TObject</span><span class="p">);</span>
+<span class="k">begin</span> <span class="c1">// generamos el documento XML
+</span>    <span class="n">ADOTable1</span><span class="p">.</span><span class="n">SaveToFile</span><span class="p">(</span><span class="s">'Ejemplo4.xml'</span><span class="p">,</span> <span class="n">pfXML</span><span class="p">);</span>
+    <span class="c1">// y lo abrimos en Internet Explorer
+</span>    <span class="n">ShellExecute</span><span class="p">(</span><span class="n">Handle</span><span class="p">,</span> <span class="nb">Nil</span><span class="p">,</span> <span class="s">'Ejemplo4.xml'</span><span class="p">,</span>
+        <span class="nb">Nil</span><span class="p">,</span> <span class="nb">Nil</span><span class="p">,</span> <span class="n">SW_NORMAL</span><span class="p">);</span>
+<span class="k">end</span><span class="p">;</span></code></pre></figure>
+
+</p>
+<p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/TablaADO.png" title="Figura 6. Usamos un TADOTable conectado a una de las tablas de la base de datos de ejemplo que acompaña a Delphi 5"></image></p>
+
+<p>Previamente, como podrás suponer, hemos conectado el <code>TADOTable</code> con una base de datos de ejemplo de Delphi 5, seleccionando una de las tablas disponibles. Al ejecutarse el código anterior, el resultado obtenido será similar al de la Figura 7. Este código XML podría transferirse desde un servidor a un cliente HTTP, facilitando la manipulación de los datos de una base desde cualquier cliente remoto.
+
+</p>
+<p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/TablaXML.png" title="Figura 7. Aspecto de un documento XML generado por ADO a partir de una tabla de datos."></image></p>
+
+<h2>
+<a id="uso-del-analizador-xml-de-microsoft" class="anchor" href="#uso-del-analizador-xml-de-microsoft" aria-hidden="true"><span class="octicon octicon-link"></span></a>Uso del analizador XML de Microsoft</h2>
+
+<p>En caso de que los datos que van a servir para componer el documento XML no estén en una base de datos, ni tampoco modeladas en una colección, siempre nos queda la alternativa de generar el código manualmente, como se hacía en el primer ejemplo. El riesgo, no obstante, es que puede producirse un documento no válido o incluso que no esté bien formado, porque falten etiquetas de cierre o fallos similares. 
+
+</p>
+<p>Otra opción, mucho más adecuada, consiste en usar el analizador XML de Microsoft que se encuentra incluido en todas las últimas versiones Windows, así como en aquellos ordenadores donde esté instalado Internet Explorer 4 o posterior. Dicho analizador, siguiendo el modelo de objetos DOM, facilita la manipulación de documentos XML de una forma relativamente sencilla y muy flexible.
+
+</p>
+<p>Aunque podríamos usar el citado analizador, conocido como <code>Microsoft.XMLDOM</code>, mediante la técnica de automatización, es mucho mejor importar la librería de tipos desde Delphi, como se muestra en la Figura 8. Esto nos permitirá usar directamente los distintos objetos e interfaces disponiendo de información de tipos y, en el caso de Delphi 5, incluso obtendremos un componente que, al ser insertado en un formulario, nos permitirá acceder al servidor como si de cualquier control ActiveX se tratase.
+
+</p>
+<p style="text-align:center"><image src="http://fcharte.com/assets/img/xmldelphi/ImportacionServidor.png" title="Figura 8. Usamos la opción Project|Import Type Library para importar la librería de tipos del componente COM XML de Microsoft."></image></p>
+
+<p>El componente <code>Microsoft.XMLDOM</code> cuenta con varios objetos que implementan diversas interfaces. Uno de estos objetos, llamado <code>XMLDOMDocument</code>, implementa la interfaz <code>IXMLDOMDocument</code>, con cuyas propiedades y  métodos puede manipularse un documento XML. Cada uno de los nodos del documento se representa mediante un objeto <code>XMLDOMNode</code> que, como podrás suponer, implementa la interfaz <code>IXMLDOMNode</code>. Para acceder al nodo raíz del documento, del cual parten todos los demás, hay que usar la propiedad documentElement de la interfaz <code>IXMLDOMDocument</code>. 
+
+</p>
+<p>Para crear un documento XML sirviéndonos del analizador de Microsoft, nos basta con conocer una propiedad y dos métodos de la interfaz <code>IXMLDOMDocument</code> y una propiedad y un método de <code>IXMLDOMDone</code>. Volviendo al primero de los ejemplos que se propusieron, en el cual se creaba el documento manualmente, bastaría con modificar el código asociado a la pulsación del botón, sustituyéndolo por el que puedes ver en el Listado 4. La interfaz no ha sufrido modificación alguna, tan sólo se ha añadido un componente <code>TDOMDocument</code>, obtenido tras la importación de la librería de tipos, llamado <code>DOMDocument1</code>.
+
+
+<figure class="highlight"><pre><code class="language-pascal" data-lang="pascal"><span class="c1">// Al pulsar el botón de generación de texto
+</span><span class="k">procedure</span> <span class="n">TForm1</span><span class="p">.</span><span class="n">Button1Click</span><span class="p">(</span><span class="n">Sender</span><span class="p">:</span> <span class="kt">TObject</span><span class="p">);</span>
+<span class="k">var</span>
+    <span class="n">Nodo</span><span class="p">,</span> <span class="n">Elemento</span><span class="p">:</span> <span class="n">IXMLDOMNode</span><span class="p">;</span>
+<span class="k">begin</span>
+    <span class="n">DOMDocument1</span><span class="p">.</span><span class="n">Connect</span><span class="p">;</span> <span class="c1">// Conectamos con el analizador
+</span>    <span class="c1">// Iniciamos el documento con la raíz &lt;Libros&gt;
+</span>    <span class="n">DOMDocument1</span><span class="p">.</span><span class="n">loadXML</span><span class="p">(</span><span class="s">'&lt;Libros/&gt;'</span><span class="p">);</span>
+    <span class="c1">// recorremos los elementos que hay en el ListView
+</span>    <span class="k">while</span> <span class="n">lvLibros</span><span class="p">.</span><span class="n">Items</span><span class="p">.</span><span class="n">Count</span> <span class="p">&lt;&gt;</span> <span class="m">0</span> <span class="k">do</span> <span class="c1">// mientras haya libros
+</span>     <span class="k">with</span> <span class="n">DOMDocument1</span> <span class="k">do</span> <span class="k">begin</span>
+        <span class="c1">// creamos un nodo &lt;Libro&gt;
+</span>        <span class="n">Nodo</span> <span class="p">:=</span> <span class="n">documentElement</span><span class="p">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">createElement</span><span class="p">(</span><span class="s">'Libro'</span><span class="p">));</span>
+        <span class="c1">// insertando en él los nodos de datos
+</span>        <span class="n">Elemento</span> <span class="p">:=</span> <span class="n">Nodo</span><span class="p">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">createElement</span><span class="p">(</span><span class="s">'Titulo'</span><span class="p">));</span> <span class="c1">// título
+</span>        <span class="n">Elemento</span><span class="p">.</span><span class="n">text</span> <span class="p">:=</span> <span class="n">lvLibros</span><span class="p">.</span><span class="n">Items</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">Caption</span><span class="p">;</span> <span class="c1">// y dato asociado
+</span>        <span class="n">Elemento</span> <span class="p">:=</span> <span class="n">Nodo</span><span class="p">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">createElement</span><span class="p">(</span><span class="s">'Tema'</span><span class="p">));</span>
+        <span class="n">Elemento</span><span class="p">.</span><span class="n">text</span> <span class="p">:=</span> <span class="n">lvLibros</span><span class="p">.</span><span class="n">Items</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">SubItems</span><span class="p">[</span><span class="m">0</span><span class="p">];</span>
+        <span class="n">Elemento</span> <span class="p">:=</span> <span class="n">Nodo</span><span class="p">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">createElement</span><span class="p">(</span><span class="s">'Autor'</span><span class="p">));</span>
+        <span class="n">Elemento</span><span class="p">.</span><span class="n">text</span> <span class="p">:=</span> <span class="n">lvLibros</span><span class="p">.</span><span class="n">Items</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">SubItems</span><span class="p">[</span><span class="m">1</span><span class="p">];</span>
+        <span class="n">Elemento</span> <span class="p">:=</span> <span class="n">Nodo</span><span class="p">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">createElement</span><span class="p">(</span><span class="s">'Editorial'</span><span class="p">));</span>
+        <span class="n">Elemento</span><span class="p">.</span><span class="n">text</span> <span class="p">:=</span> <span class="n">lvLibros</span><span class="p">.</span><span class="n">Items</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">SubItems</span><span class="p">[</span><span class="m">2</span><span class="p">];</span>
+
+        <span class="n">lvLibros</span><span class="p">.</span><span class="n">Items</span><span class="p">.</span><span class="n">Delete</span><span class="p">(</span><span class="m">0</span><span class="p">);</span> <span class="c1">// eliminamos el libro añadido
+</span>     <span class="k">end</span><span class="p">;</span>
+
+    <span class="n">DOMDocument1</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="s">'Ejemplo5.xml'</span><span class="p">);</span> <span class="c1">// guardamos el documento generado
+</span>    <span class="n">DOMDocument1</span><span class="p">.</span><span class="n">Disconnect</span><span class="p">;</span> <span class="c1">// y desconectamos el servidor
+</span>    <span class="c1">// abrimos el documento XML en Internet Explorer
+</span>    <span class="n">ShellExecute</span><span class="p">(</span><span class="n">Handle</span><span class="p">,</span> <span class="nb">Nil</span><span class="p">,</span> <span class="s">'Ejemplo5.XML'</span><span class="p">,</span> <span class="nb">Nil</span><span class="p">,</span> <span class="nb">Nil</span><span class="p">,</span> <span class="n">SW_NORMAL</span><span class="p">);</span>
+ <span class="k">end</span><span class="p">;</span></code></pre></figure>
+
+</p>
+<p>Inicialmente el documento está vacío. Usando el método <code>LoadXML()</code> de la interfaz <code>IXMLDOMDocument</code> establecemos un contenido inicial, en principio una marca <libros></libros> vacia. A continuación, en el interior de un bucle, recuperamos una referencia a ese nodo raíz a través de la propiedad documentElement. Éste, al igual que cualquier otro nodo XML, dispone del método <code>appendChild()</code>, con el que podemos añadir subnodos. Cada nodo cuenta también con la propiedad <code>text</code>, que nos sirve para establecer el valor que contendrá. 
+
+</p>
+<p>Finalmente, al terminar la ejecución del bucle, guardamos el documento en un archivo sirviéndonos del método <code>save()</code> de <code>IXMLDOMDocument</code>. El resultado que genera el programa, a pesar de los cambios en el código, es exactamente el mismo que se obtenía con el primer ejemplo. En este caso, sin embargo, estamos seguros de que el documento estará bien formado, sin tener que preocuparnos de etiquetas de cierre y temas similares.
+
+</p>
+<h2>
+<a id="resumiendo" class="anchor" href="#resumiendo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resumiendo</h2>
+
+<p>A lo largo de este artículo has conocido diversos métodos con los cuales puedes generar documentos XML a partir de tus datos, independientemente de dónde se encuentren éstos. Los documentos obtenidos, que en los ejemplos previos siempre hemos guardado en un archivo y abierto con Internet Explorer, pueden, lógicamente, ser transferidos a través de Internet, facilitando la comunicación entre un cliente y un servidor. También pueden ser utilizados como archivos de almacenamiento de información estructurada, aunque entonces tendríamos que saber también cómo recuperar y manipular los datos que contiene. Precisamente a este tema dedicaremos un próximo artículo, a conocer técnicas que nos permitan leer documentos XML.
+</p></code></code></p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
