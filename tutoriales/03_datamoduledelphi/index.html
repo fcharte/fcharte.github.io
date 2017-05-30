@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cómo usar el nuevo Diseñador de móduilos de datos de Delphi 5&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link href="data:text/css,pre%20%2Eoperator%2C%0Apre%20%2Eparen%20%7B%0A%20color%3A%20rgb%28104%2C%20118%2C%20135%29%0A%7D%0A%0Apre%20%2Eliteral%20%7B%0A%20color%3A%20%23990073%0A%7D%0A%0Apre%20%2Enumber%20%7B%0A%20color%3A%20%23099%3B%0A%7D%0A%0Apre%20%2Ecomment%20%7B%0A%20color%3A%20%23998%3B%0A%20font%2Dstyle%3A%20italic%0A%7D%0A%0Apre%20%2Ekeyword%20%7B%0A%20color%3A%20%23900%3B%0A%20font%2Dweight%3A%20bold%0A%7D%0A%0Apre%20%2Eidentifier%20%7B%0A%20color%3A%20rgb%280%2C%200%2C%200%29%3B%0A%7D%0A%0Apre%20%2Estring%20%7B%0A%20color%3A%20%23d14%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://assets-cdn.github.com/assets/frameworks-148da7a2b8b9ad739a5a0b8b68683fed4ac7e50ce8185f17d86aa05e75ed376e.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="http://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Cómo usar el nuevo Diseñador de móduilos de datos de Delphi 5<br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#elementos-del-nuevo-módulo-de-datos">Elementos del nuevo módulo de datos</a></li>
+<li class="toc-entry toc-h2"><a href="#el-antiguo-método-de-trabajo">El antiguo método de trabajo</a></li>
+<li class="toc-entry toc-h2"><a href="#el-nuevo-método-de-trabajo">El nuevo método de trabajo</a></li>
+<li class="toc-entry toc-h2"><a href="#diagramas-de-datos">Diagramas de datos</a></li>
+<li class="toc-entry toc-h2"><a href="#merece-la-pena">Merece la pena</a></li>
+</ul><p>Una de las tareas más tediosas que los programadores tenemos que efectuar al trabajar con componentes de accesos de datos, es el establecimiento de las necesarias conexiones entre dichos componentes. La base de datos se enlaza con la sesión, lo mismo que las tablas y consultas. Cuando existen relaciones maestro/detalle hay que realizar más enlaces, y lo mismo ocurre cuando una columna de un conjunto de datos debe tomar valores almacenados en otra tabla. Si alguna vez has desarrollado una aplicación de las llamadas <i>de gestión</i>, seguro que todo esto no te es ajeno.
+
+</p><p>Casi desde sus inicios, Delphi ha facilitado la separación de los elementos de interfaz, alojados en formularios, de aquellos pensados para efectuar el acceso a los datos. Con este fin existen los módulos de datos que, posiblemente, hayas usado en infinidad de ocasiones. Un módulo de datos, tal y como lo conocíamos hasta Delphi 4, era un simple contenedor, un depósito en el que ir alojando nuestros componentes de acceso a datos. 
+
+</p><p>Establecer las relaciones entre los diversos componentes, no obstante, no es el único problema con el que nos enfrentamos habitualmente. Tanto o más importante, es contar con la documentación apropiada para conocer, durante la fase de desarrollo, todas esas relaciones. Salvo que utilicemos una herramienta de diseño o planificación previamente, lo más usual es que acabemos dibujando, ya sea en pantalla o en papel, una representación de los datos y sus enlaces.
+
+</p><p>Con Delphi 5, como tendrás ocasión de ver en este artículo, las tareas descritas se han automatizado en su mayor parte. Los módulos de datos, aparte de para almacenar componentes, ahora cuentan con otros elementos que le han convertido en un diseñador, facilitando el establecimiento de relaciones entre los componentes. También es más simple la documentación de los enlaces, ya que en el diseñador es posible trazar un diagrama de bloques representando tablas, consultas, columnas, propiedades y otros elementos.
+
+</p><h2>
+<a id="elementos-del-nuevo-módulo-de-datos" class="anchor" href="#elementos-del-nuevo-m%C3%B3dulo-de-datos" aria-hidden="true"><span class="octicon octicon-link"></span></a>Elementos del nuevo módulo de datos</h2>
+
+<p>Al añadir un módulo de datos a un proyecto en Delphi 5, lo primero que advertirás es que la ventana ahora tiene dos secciones, a izquierda y derecha, y que ésta última cuenta con dos páginas. La visible por defecto, según puede verse en la Figura 1, es la equivalente a la de los módulos de datos de versiones previas. En ella, por tanto, puedes insertar los componentes de acceso a datos que necesites, como has hecho hasta ahora.
+
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/datamoduledelphi/AspectoModuloDatos.png" title="Figura 1. Aspecto de los nuevos módulos de datos en Delphi 5"></image></p>
+
+<p>El panel que ocupa la parte izquierda es una lista jerárquica, en la que irán apareciendo todos los componentes alojados en el módulo de datos. Las dependencias entre esos componentes se mostrarán gráficamente, mediante niveles, como ocurre en un componente <code>TTreeView</code>. Cada vez que añadas un componente en el panel derecho, automáticamente en la lista jerárquica aparecerá su nombre entre paréntesis, precedido del nombre de la base de datos, tabla, sesión, etc. A medida que vayan estableciéndose propiedades, por ejemplo relacionando una tabla con una base de datos o una sesión, los elementos en la lista jerárquica irán cambiando de posición para mostrar la configuración actual.
+
+</p><p>Además de los elementos creados explícitamente, al insertarlos en el módulo de datos, en la lista jerárquica también aparecen aquellos usados por defecto por Delphi cuando no se indica lo contrario. Al insertar un <code>TTable</code>, por ejemplo, podrás ver cómo automáticamente se asocia a una base de datos y una sesión por defecto. Algo similar ocurrirá si añades al módulo un componente ADO, como un <code>TADOTable</code>, creándose una conexión implícita para él.
+
+</p><p>La segunda página del panel derecho, llamada <b>Data Diagram</b>, inicialmente está vacía. A pesar de que en la página de componentes hayas insertado algunos objetos de acceso a datos, éstos no se reflejan automáticamente en ésta segunda página. Fíjate en la existencia, en la parte central del módulo de datos, de una barra de botones. En principio la mayor parte de ellos están desactivados. Después veremos para qué sirven y cómo utilizar esta página para crear nuestro modelo de datos.
+
+</p><h2>
+<a id="el-antiguo-método-de-trabajo" class="anchor" href="#el-antiguo-m%C3%A9todo-de-trabajo" aria-hidden="true"><span class="octicon octicon-link"></span></a>El antiguo método de trabajo</h2>
+
+<p>Si para diseñar una aplicación con acceso a datos, usando Delphi 5, creas un módulo de datos e insertas directamente los componentes en la página <b>Components</b>, estarás trabajando como habías hecho hasta ahora, con versiones previas. No estás aprovechando las nuevas posibilidades del diseñador de módulos de datos, algunas de las cuales pueden ahorrarte muchos pasos que, aunque simples, consumen su tiempo.
+
+</p><p>Para ver claramente cuáles son las diferencias entre el antiguo y el nuevo método de trabajo, vamos a servirnos de un hipotético programa de ejemplo, en el que necesitamos acceder a una de las tablas de la base de datos de ejemplo que acompaña a Delphi. Añadiríamos un módulo de datos al proyecto y, a continuación, insertaríamos en él un componente <code>TDatabase</code>, un <code>TSession</code>, un <code>TTable</code> y un <code>TDataSource</code>. Aunque vamos a asumir que trabajamos con los componentes BDE, el caso sería prácticamente idéntico para los componentes ADO o IBX.
+
+</p><p>Tras insertar los cuatro componentes, sin modificar aún propiedad alguna, en el módulo de datos tendríamos algo parecido a lo que puede verse en la Figura 2. Observa, en la lista jerárquica, que prácticamente no existe relación alguna entre los cuatro componentes insertados. Colgando directamente del módulo de datos tenemos al <code>TSession</code> y el <code>TDataSource</code>, así como una sesión creada por defecto. Dependiendo de ésta tenemos el <code>TDatabase</code> insertado por nosotros y otro también creado por defecto, del cual, a su vez, pende el componente <code>TTable</code>.
+
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/datamoduledelphi/InsercionAntigua.png" title="Figura 2. Los componentes recién insertados en el módulo de datos no guardan prácticamente ninguna relación entre sí"></image></p>
+
+
+<p>Lo siguiente que haríamos sería establecer las propiedades necesarias del <code>TDatabase</code> para acceder a la citada base de datos. Puesto que deseamos usar nuestra propia sesión, enlazaríamos el <code>TDatabase</code> con el <code>TSession</code>, haciendo lo mismo con el <code>TTable</code>. Éste último, deberíamos asociarlo al <code>TDatabase</code>, eligiendo a continuación cualquiera de las tablas disponibles. Por último, enlazaríamos el <code>TDataSource</code> con el <code>TTable</code>, finalizando el proceso.
+
+</p><p>Dados todos los pasos descritos, el aspecto del módulo de datos será ahora el de la Figura 3. En el panel derecho no hay diferencia alguna. Todos los cambios se han reflejado, sin embargo, en la lista jerárquica. Podemos ver claramente que hay una sesión, con una base de datos y una tabla que, a su vez, tiene enlazado un <code>TDataSource</code>. Fíjate en que las marcas rojas que existían antes, en la Figura 2, ahora han desaparecido, indicando que todos los componentes están correctamente enlazados.
+
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/datamoduledelphi/PropiedadesEstablecidas.png" title="Figura 3. Nuevo aspecto de la lista jerárquica, tras enlazar apropiadamente todos los componentes previamente insertados"></image></p>
+
+<p>Para finalizar, haríamos doble clic sobre el <code>TTable</code> a fin de abrir el editor de columnas. Usando el menú emergente, o bien la combinación Control+F, añadiríamos todas las columnas de la tabla. De esta forma podremos hacer referencia directa a los objetos que representan a las columnas, sin necesidad de usar la propiedad <code>Fields</code> o el método <code>FieldByName()</code>.
+
+</p><h2>
+<a id="el-nuevo-método-de-trabajo" class="anchor" href="#el-nuevo-m%C3%A9todo-de-trabajo" aria-hidden="true"><span class="octicon octicon-link"></span></a>El nuevo método de trabajo</h2>
+
+<p>La lista jerárquica que ocupa la parte izquierda de los módulos de datos, no es simplemente una visualización de las relaciones entre los componentes. Es, en realidad, un panel de trabajo, en el que también podemos arrastrar y soltar componentes, desde el que podemos acceder a las propiedades y a las opciones de cada componente. En la página <b>Components</b> los componentes se sueltan sobre el fondo de un contenedor. En la lista jerárquica, por el contrario, los componentes pueden soltarse unos sobre otros, fijando directamente las relaciones entre ellos.
+
+</p><p>Para apreciar claramente las diferencias entre el anterior método de trabajo y el nuevo, lo mejor es añadir un nuevo módulo de datos al proyecto, dando a continuación los pasos necesarios para llegar al mismo resultado. 
+
+</p><p>En este caso comenzaríamos insertando el componente <code>TSession</code>, en la lista jerárquica o en la página <b>Components</b> de manera indistinta. Si lo sueltas en la lista, verás que el componente aparece también aproximadamente en el centro del panel derecho. Establecemos el nombre de la sesión, que de manera inmediata aparecerá en la lista jerárquica.
+
+</p><p>El siguiente paso sería la inserción del componente <code>TDatabase</code>, pero no sobre el panel derecho, sino en la lista jerárquica, concretamente sobre el elemento que representa a la sesión, tal y como se indica gráficamente en la Figura 4. De esta forma asociaremos directamente la base de datos con su sesión, sin necesidad de establecer propiedades manualmente.
+
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/datamoduledelphi/SoltarSobreSesion.png" title="Figura 4. Soltamos el componente TDatabase seleccionado sobre el TSession que hay en la lista jerárquica"></image></p>
+
+<p>Como puedes imaginar, el componente <code>TTable</code> lo soltaríamos sobre la base de datos. De esta forma lo enlazaríamos con su sesión y base de datos. El <code>TDataSource</code>, por último, lo soltaríamos sobre el <code>TTable</code>. En caso de que intentes soltar un componente sobre otro que no le corresponde, por ejemplo el <code>TDataSource</code> sobre el <code>TDatabase</code>, observarás que el cursor cambia de aspecto, indicando que esa operación no es posible.
+
+</p><p>Tan sólo nos falta un paso: añadir todas las columnas de la tabla para que los objetos <code>TField</code> sean creados estáticamente. No es necesario abrir el editor de columnas para realizar esta tarea, basta con pulsar el botón secundario del ratón sobre el elemento <b>Fields</b> en la lista jerárquica, eligiendo la opción <b>Add fields</b>, como se muestra en la Figura 5. Ese elemento representa, en realidad, a la propiedad <code>Fields</code> del <code>TTable</code> al que pertenece.
+
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/datamoduledelphi/AnadirColumnas.png" title="Figura 5. Usamos el menú emergente de la propiedad Fields del TTable para añadir todas las columnas de la tabla"></image></p>
+
+<p>Finalizado el proceso, tenemos exactamente el mismo resultado que obtuvimos en el punto anterior. La diferencia es que todos los enlaces se han establecido automáticamente, al soltar unos componentes sobre otros, en lugar de manualmente, estableciendo propiedades. ¿No te parece mucho más cómodo e intuitivo?
+
+</p><h2>
+<a id="diagramas-de-datos" class="anchor" href="#diagramas-de-datos" aria-hidden="true"><span class="octicon octicon-link"></span></a>Diagramas de datos</h2>
+
+<p>La segunda página existente en el panel derecho del módulo de datos, llamada <b>Data Diagram</b>, permanecerá siempre vacía mientras no la usemos para algo. En ella podemos trazar visualmente las relaciones existentes entre nuestros datos. No ya entre sesiones, bases de datos, tablas y similares, sino, además, las relaciones entre columnas de diferentes tablas. De esta forma es posible, por ejemplo, establecer una relación maestro/detalle entre dos tablas sin preocuparse de propiedades como <code>MasterSource</code>, <code>MasterFields</code>, etc.
+
+</p><p>Al diagrama de datos puedes arrastrar cualquiera de los elementos disponibles en la lista jerárquica, desde una tabla completa hasta columnas simples. También puedes insertar en él comentarios, así como líneas de enlace o alusión, según lo precises. Los botones existentes en la parte central se usan para asociar propiedades, crear relaciones maestro/detalle, relaciones de búsqueda, crear bloques de comentarios y trazar líneas de enlace.
+
+</p><p>Todos los elementos que aparecen en el diagrama de datos cuentan con un menú emergente, mediante el cual es posible acceder a sus propiedades, cambiar las características de visualización, eliminarlos del diagrama, etc. El propio diagrama de datos, cuenta con un  menú que, aunque mínimo, dispone de una opción muy interesante: <b>Print</b>. Con ella podemos obtener una copia impresa de todo el diagrama de datos, lo cual puede servirnos como referencia para la posterior codificación.
+
+</p><p>La mejor manera de aprender a utilizar el diagrama de datos es, precisamente, usándolo. Arrastra elementos de la lista jerárquica y suéltalos sobre el diagrama. Usa el menú emergente para ver las opciones disponibles, incluye comentarios, etc. Verás que es bastante intuitivo y muy útil. 
+De todas las operaciones posibles, tan sólo existen tres que pueden implicar una cierta dificultad: la asociación de propiedades y la creación de relaciones maestro/detalle y de búsqueda. Veamos algunas de ellas de forma práctica.
+
+</p><p>Partiendo de cualquiera de los módulos de datos que ya teníamos creados, vamos a añadir sobre la página <b>Components</b> un componente <code>TDataSource</code>, lo que causará que inicialmente no esté asociado con ningún otro. Ahora abrimos la página del diagrama de datos, arrastrando sobre él una de las tablas disponibles y el mencionado <code>TDataSource</code>. Como verás, no aparece ninguna relación indicada entre ellos. Para establecerla, pulsaríamos el primer botón disponible, contando de arriba a abajo, pulsando sobre el recuadro que representa al <code>TDataSource</code> y arrastrando hasta la tabla. Verás que aparece una flecha indicando que la propiedad <code>DataSet</code> del primer componente apunta al segundo. También en la lista jerárquica se reflejará la relación de manera inmediata.
+
+</p><p>Para crear una relación maestro/detalle entre dos tablas, es necesario contar con tablas que guarden alguna relación entre sí. En la base de datos de ejemplo de Delphi encontramos las tablas <code>Orders</code> y <code>Customer</code>, que se prestan a una relación de este tipo. Tras añadir esas dos tablas a la lista jerárquica, las arrastramos al diagrama de datos. A continuación pinchamos sobre la tabla maestra, que sería la de clientes (<i>customers</i>) y arrastramos hasta la de pedidos (<i>orders</i>). Aparecerá una ventana similar a la de la Figura 6, en la que seleccionaremos las columnas con valor común entre las dos tablas. Hecho esto, verás que aparece una línea de enlace entre ellas, con unos terminadores asimétricos. El de mayor tamaño representa a la tabla maestra, y el más pequeño a la tabla de detalle.
+
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/datamoduledelphi/RelacionMaestroDetalle.png" title="Figura 6. Para establecer la relación maestro/detalle, tiene que existir una columna de enlace entre las dos tablas"></image></p>
+
+<p>De forma similar, podría crearse una relación de búsqueda, añadir comentarios y cualquier otro enlace. Si añades al diagrama objetos que ya tienen una relación, podrás ver que ésta se representa de forma inmediata. Puedes, por ejemplo, arrastrar sobre el diagrama cualquiera de las columnas de una de las tablas. En la Figura 7 puedes ver un diagrama de datos con los pasos descritos en este punto. En cualquier momento puedes modificar el diagrama, desplazando los elementos y estirando los enlaces para disponerlos según tus preferencias.
+
+</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/datamoduledelphi/DiagramaDatos.png" title="Figura 7. Un diagrama de datos con dos tablas enlazadas por una relación maestro/detalle, además de un comentario y otros elementos"></image></p>
+
+<h2>
+<a id="merece-la-pena" class="anchor" href="#merece-la-pena" aria-hidden="true"><span class="octicon octicon-link"></span></a>Merece la pena</h2>
+
+<p>Como has podido experimentar por ti mismo, si has seguido en tu ordenador todos los pasos descritos en este artículo, el nuevo diseñador con que cuentan los módulos de datos de Delphi 5 es una herramienta que, sin duda alguna, merece la pena conocer. Si sabemos aprovecharla, no sólo ahorraremos trabajo y tiempo sino que, además, dispondremos de una forma sencilla de documentar nuestros modelos de datos, todo ello sin necesidad de ninguna aplicación externa.
+</p>
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2017 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
