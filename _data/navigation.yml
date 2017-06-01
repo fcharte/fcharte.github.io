@@ -3,6 +3,8 @@ site:
     url: "/about/"
   - title: Tutoriales
     url: "/tutoriales/"
+  - title: Manuales
+    url: "/manuales/"
   - title: Antiguo sitio web
     url: "http://www.fcharte.com"
 

@@ -32,6 +32,8 @@ permalink: pretty
 collections:
   tutoriales:
     output: true
+  manuales:
+    output: true
 
 # Build settings
 markdown: kramdown
