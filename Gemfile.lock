@@ -6,7 +6,7 @@ GEM
     colorator (1.1.0)
     ffi (1.10.0)
     forwardable-extended (2.6.0)
-    jekyll (3.3.1)
+    jekyll (3.8.5)
       addressable (~> 2.4)
       colorator (~> 1.0)
       jekyll-sass-converter (~> 1.0)
@@ -54,9 +54,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  jekyll (= 3.3.1)
+  jekyll (= 3.8.5)
   jekyll-feed (~> 0.6)
   jekyll-toc
 
 BUNDLED WITH
-   1.11.0
+   1.12.3
