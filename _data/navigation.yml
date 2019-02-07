@@ -5,8 +5,12 @@ site:
     url: "/tutoriales/"
   - title: Manuales
     url: "/manuales/"
-  - title: Antiguo sitio web
-    url: "http://www.fcharte.com"
+  - title: Docencia
+    url: "/docencia/"
+  - title: Investigación
+    url: "/investigacion/"
+  - title: Publicaciones
+    url: "/publicaciones/"
 
 social:
   - title: ResearchGate
@@ -15,3 +19,5 @@ social:
     url: "http://orcid.org/0000-0002-3083-8942"
   - title: GitHub
     url: "https://github.com/fcharte"
+  - title: Google Scholar
+    url: "https://scholar.google.es/citations?user=i8l_80EAAAAJ&hl=es"
