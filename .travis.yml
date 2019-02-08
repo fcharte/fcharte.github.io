@@ -7,7 +7,7 @@ rvm:
 before_install:
   - git config --global user.email "francisco@fcharte.com"
   - git config --global user.name "Francisco Charte"
-  - git clone -b master https://${GITHUB_TOKEN}@github.com/fcharte/fcharte.github.io.git _site
+  - git clone -b master https://fcharte:${GITHUB_TOKEN}@github.com/fcharte/fcharte.github.io.git _site
   - rm -rf _site/*
 
 script:
