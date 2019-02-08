@@ -32,7 +32,11 @@
   
   <a href="http://fcharte.com/manuales/">Manuales</a>
   
-  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  <a href="http://fcharte.com/docencia/">Docencia</a>
+  
+  <a href="http://fcharte.com/investigacion/">Investigación</a>
+  
+  <a href="http://fcharte.com/publicaciones/">Publicaciones</a>
   
 </nav>
 
@@ -47,13 +51,13 @@
 <ul class="section-nav">
 </ul><p>	El diseño de <i>shaders</i> usando programas como Shader Maker resulta bastante sencillo, pero el objetivo último es usar esos <i>shaders</i> en nuestras propias aplicaciones. Para ello habría que seguir el procedimiento descrito en el tutorial sobre lenguajes de <i>shaders</i>, concretamente el apartado <a href="http://fcharte.com/tutoriales/0004_lenguajesshaders/">sobre OGLSL</a>. Traducido a código, dicho procedimiento se implementaría así:</p>
 
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// Variables para almacenar los identificadores de shaders
-</span><span class="n">GLuint</span> <span class="n">vs</span><span class="p">,</span> <span class="n">gs</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="n">shaders</span><span class="p">;</span>
-<span class="c1">// y para contener el código
-</span><span class="kt">char</span> <span class="o">*</span><span class="n">codVS</span><span class="p">,</span> <span class="o">*</span><span class="n">codGS</span><span class="p">,</span> <span class="o">*</span><span class="n">codPS</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// Variables para almacenar los identificadores de shaders</span>
+<span class="n">GLuint</span> <span class="n">vs</span><span class="p">,</span> <span class="n">gs</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="n">shaders</span><span class="p">;</span>
+<span class="c1">// y para contener el código</span>
+<span class="kt">char</span> <span class="o">*</span><span class="n">codVS</span><span class="p">,</span> <span class="o">*</span><span class="n">codGS</span><span class="p">,</span> <span class="o">*</span><span class="n">codPS</span><span class="p">;</span>
 
-<span class="c1">// Asignar a codVS, codGS y codPS el código de los shaders
-</span><span class="n">codVS</span> <span class="o">=</span> <span class="s">"uniform vec3 dirLuz; \</span><span class="err">
+<span class="c1">// Asignar a codVS, codGS y codPS el código de los shaders</span>
+<span class="n">codVS</span> <span class="o">=</span> <span class="s">"uniform vec3 dirLuz; \</span><span class="err">
 </span><span class="s">   varying float intensidad;\</span><span class="err">
 </span><span class="s">   \</span><span class="err">
 </span><span class="s">   void main() { \</span><span class="err">
@@ -77,32 +81,32 @@
 </span><span class="s">   }"</span><span class="p">;</span>
 
 
-<span class="c1">// Se crea y compila el VS
-</span><span class="n">vs</span> <span class="o">=</span> <span class="n">glCreateShader</span><span class="p">(</span><span class="n">GL_VERTEX_SHADER</span><span class="p">);</span>
+<span class="c1">// Se crea y compila el VS</span>
+<span class="n">vs</span> <span class="o">=</span> <span class="n">glCreateShader</span><span class="p">(</span><span class="n">GL_VERTEX_SHADER</span><span class="p">);</span>
 <span class="n">glShaderSource</span><span class="p">(</span><span class="n">vs</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">codVS</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
 <span class="n">glCompileShader</span><span class="p">(</span><span class="n">vs</span><span class="p">);</span>
 
-<span class="c1">// Se crea y compila el GS
-</span><span class="n">gs</span> <span class="o">=</span> <span class="n">glCreateShader</span><span class="p">(</span><span class="n">GL_GEOMETRY_SHADER_EXT</span><span class="p">);</span>
+<span class="c1">// Se crea y compila el GS</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">glCreateShader</span><span class="p">(</span><span class="n">GL_GEOMETRY_SHADER_EXT</span><span class="p">);</span>
 <span class="n">glShaderSource</span><span class="p">(</span><span class="n">gs</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">codGS</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
 <span class="n">glCompileShader</span><span class="p">(</span><span class="n">gs</span><span class="p">);</span>
 
-<span class="c1">// Se crea y compila el PS
-</span><span class="n">ps</span> <span class="o">=</span> <span class="n">glCreateShader</span><span class="p">(</span><span class="n">GL_FRAGMENT_SHADER</span><span class="p">);</span>
+<span class="c1">// Se crea y compila el PS</span>
+<span class="n">ps</span> <span class="o">=</span> <span class="n">glCreateShader</span><span class="p">(</span><span class="n">GL_FRAGMENT_SHADER</span><span class="p">);</span>
 <span class="n">glShaderSource</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">codPS</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
 <span class="n">glCompileShader</span><span class="p">(</span><span class="n">ps</span><span class="p">);</span>
 
-<span class="c1">// Se crea un programa y se asocian los shaders
-</span><span class="n">shaders</span> <span class="o">=</span> <span class="n">glCreateProgram</span><span class="p">();</span>
+<span class="c1">// Se crea un programa y se asocian los shaders</span>
+<span class="n">shaders</span> <span class="o">=</span> <span class="n">glCreateProgram</span><span class="p">();</span>
 <span class="n">glAttachShader</span><span class="p">(</span><span class="n">shaders</span><span class="p">,</span> <span class="n">vs</span><span class="p">);</span>
 <span class="n">glAttachShader</span><span class="p">(</span><span class="n">shaders</span><span class="p">,</span> <span class="n">gs</span><span class="p">);</span>
 <span class="n">glAttachShader</span><span class="p">(</span><span class="n">shaders</span><span class="p">,</span> <span class="n">ps</span><span class="p">);</span>
 
-<span class="c1">// Y finalmente se linka y asocia al cauce
-</span><span class="n">glLinkProgram</span><span class="p">(</span><span class="n">shaders</span><span class="p">);</span>
+<span class="c1">// Y finalmente se linka y asocia al cauce</span>
+<span class="n">glLinkProgram</span><span class="p">(</span><span class="n">shaders</span><span class="p">);</span>
 <span class="n">glUseProgram</span><span class="p">(</span><span class="n">shaders</span><span class="p">);</span>
 
-<span class="o">//</span> <span class="n">A</span> <span class="n">partir</span> <span class="n">de</span> <span class="n">aqu</span><span class="err">í</span> <span class="n">dibujar</span> <span class="n">la</span> <span class="n">escena</span> <span class="n">con</span> <span class="n">OpenGL</span></code></pre></figure>
+<span class="c1">// A partir de aquí dibujar la escena con OpenGL</span></code></pre></figure>
 <p>	Las funciones <code>glCreateShader()</code>, <code>glShaderSource()</code>, <code>glCompileShader()</code>, etc., forman parte de <b>OpenGL 2.1 o posterior</b>. Lo más cómodo es descargar <b>GLEW</b> e incluir al inicio de nuestro módulo de código el archivo de cabecera <code>glew.h</code>. Éste contiene una serie de marcos que se encargarán de convertir las llamadas a las anteriores funciones en la invocación adecuada a la extensión que corresponda.</p>
 <p>Con esta breve entrada pongo punto y final a esta extensa serie introductoria sobre la programación de <i>shaders</i>, en la que he abordado desde los fundamentos básicos de cada tipo de <i>shader</i> hasta su desarrollo en la práctica con ejemplos sencillos, pasando por el análisis de los lenguajes disponibles y algunas herramientas. En el margen derecho tienes la sección <b>Curso sobre <i>shaders</i></b> que te permite acceder a todas las entradas de esta series.</p>
 </article>
@@ -113,7 +117,7 @@
     <footer>
   <div class="inner footer-inner">
     <div>
-      &copy; 1997-2017 Francisco Charte.
+      &copy; 1997-2019 Francisco Charte.
       
       <nav class="main-navigation">
   
@@ -122,6 +126,8 @@
   <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
   
   <a href="https://github.com/fcharte">GitHub</a>
+  
+  <a href="https://scholar.google.es/citations?user=i8l_80EAAAAJ&hl=es">Google Scholar</a>
   
 </nav>
 

@@ -32,7 +32,11 @@
   
   <a href="http://fcharte.com/manuales/">Manuales</a>
   
-  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  <a href="http://fcharte.com/docencia/">Docencia</a>
+  
+  <a href="http://fcharte.com/investigacion/">Investigación</a>
+  
+  <a href="http://fcharte.com/publicaciones/">Publicaciones</a>
   
 </nav>
 
@@ -74,24 +78,24 @@
 <p>	El GS cuyo código aparece a continuación tiene el objetivo de generar, por cada vértice de un triángulo de entrada, otros tantos triángulos, con las coordenadas ligeramente desplazadas. Además se asigna un color diferente a cada vértice del triángulo de salida. De esta forma se consigue que la geometría original se convierta en una matriz tridimensional de triángulos, un efecto muy sencillo de implementar y bastante llamativo.</p>
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span>
 <span class="p">{</span>
- <span class="c1">// Las primitivas de entrada serán triángulos, 3 vértices
-</span> <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+ <span class="c1">// Las primitivas de entrada serán triángulos, 3 vértices</span>
+ <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
    <span class="n">vec4</span> <span class="n">punto</span><span class="o">=</span><span class="n">gl_PositionIn</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
    <span class="n">vec4</span> <span class="n">color</span> <span class="o">=</span> <span class="n">vec4</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
 
-   <span class="c1">// Por cada vértice se emite un nuevo triángulo
-</span>   <span class="n">gl_FrontColor</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">color</span><span class="p">;</span>
+   <span class="c1">// Por cada vértice se emite un nuevo triángulo</span>
+   <span class="n">gl_FrontColor</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">color</span><span class="p">;</span>
    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span><span class="o">*</span><span class="n">punto</span><span class="p">;</span>
    <span class="n">EmitVertex</span><span class="p">();</span>
 
-   <span class="c1">// con sus vértices ligeramente desplazados
-</span>   <span class="n">gl_FrontColor</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">color</span><span class="p">;</span>
+   <span class="c1">// con sus vértices ligeramente desplazados</span>
+   <span class="n">gl_FrontColor</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">color</span><span class="p">;</span>
    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span><span class="o">*</span><span class="p">(</span>
          <span class="n">punto</span><span class="o">+</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">));</span>
    <span class="n">EmitVertex</span><span class="p">();</span>
 
-   <span class="c1">// y con un color en cada vértice
-</span>   <span class="n">gl_FrontColor</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">color</span><span class="p">;</span>
+   <span class="c1">// y con un color en cada vértice</span>
+   <span class="n">gl_FrontColor</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">color</span><span class="p">;</span>
    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span><span class="o">*</span><span class="p">(</span>
          <span class="n">punto</span><span class="o">+</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span><span class="o">-</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">));</span>
    <span class="n">EmitVertex</span><span class="p">();</span>
@@ -113,7 +117,7 @@
     <footer>
   <div class="inner footer-inner">
     <div>
-      &copy; 1997-2017 Francisco Charte.
+      &copy; 1997-2019 Francisco Charte.
       
       <nav class="main-navigation">
   
@@ -122,6 +126,8 @@
   <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
   
   <a href="https://github.com/fcharte">GitHub</a>
+  
+  <a href="https://scholar.google.es/citations?user=i8l_80EAAAAJ&hl=es">Google Scholar</a>
   
 </nav>
 

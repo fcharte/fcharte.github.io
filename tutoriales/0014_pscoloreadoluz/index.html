@@ -32,7 +32,11 @@
   
   <a href="http://fcharte.com/manuales/">Manuales</a>
   
-  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  <a href="http://fcharte.com/docencia/">Docencia</a>
+  
+  <a href="http://fcharte.com/investigacion/">Investigación</a>
+  
+  <a href="http://fcharte.com/publicaciones/">Publicaciones</a>
   
 </nav>
 
@@ -53,20 +57,20 @@
 
 
 <p>	El trabajo del VS será, precisamente, calcular ese nivel de intensidad, almacenándolo en un parámetro <i>varying</i> para que el PS pueda usarla posteriormente. El código del VS es el mostrado a continuación:</p>
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// La dirección de la luz se establecerá externamente
-</span><span class="n">uniform</span> <span class="n">vec3</span> <span class="n">dirLuz</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// La dirección de la luz se establecerá externamente</span>
+<span class="n">uniform</span> <span class="n">vec3</span> <span class="n">dirLuz</span><span class="p">;</span>
 
-<span class="c1">// Cálculo de la intensidad de luz recibida
-</span><span class="n">varying</span> <span class="kt">float</span> <span class="n">intensidad</span><span class="p">;</span>
+<span class="c1">// Cálculo de la intensidad de luz recibida</span>
+<span class="n">varying</span> <span class="kt">float</span> <span class="n">intensidad</span><span class="p">;</span>
 
 <span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
-    <span class="c1">// Producto punto entre la dirección de la luz
-</span>    <span class="c1">// y la normal del vértice que esta procesándose
-</span>    <span class="n">intensidad</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">dirLuz</span><span class="p">,</span> <span class="n">gl_Normal</span><span class="p">);</span>
+    <span class="c1">// Producto punto entre la dirección de la luz</span>
+    <span class="c1">// y la normal del vértice que esta procesándose</span>
+    <span class="n">intensidad</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">dirLuz</span><span class="p">,</span> <span class="n">gl_Normal</span><span class="p">);</span>
 
-   <span class="c1">// No se altera la posición
-</span>    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span> <span class="o">*</span> <span class="n">gl_Vertex</span><span class="p">;</span>
+   <span class="c1">// No se altera la posición</span>
+    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span> <span class="o">*</span> <span class="n">gl_Vertex</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
 <p>	Al declarar como <code>uniform</code> el parámetro <code>dirLuz</code>, éste vendrá determinado por la aplicación de forma que la dirección de donde procede la luz pueda alterarse fácilmente.</p>
@@ -78,22 +82,22 @@
 <p>	En la implementación del PS ignoraremos por completo la información de color almacenada en <code>gl_Color</code> (de hecho en el VS no se ha asignado valor alguno a <code>gl_FrontColor</code> ni <code>gl_BackColor</code>), asignando a <code>gl_FragColor</code> un color u otro dependiendo de la intensidad calculada previamente en el VS.</p>
 
 <p>	Las versiones actuales de VS y PS permiten emplear ciertas estructuras de control, entre ellas condicionales del tipo <code>if-then-else</code> y también bucles <code>for</code> y <code>while</code>. Al codificar el PS será necesario asignar a <code>gl_FragColor</code> un valor  u otro dependiendo de la evaluación del parámetro <code>intensidad</code>, tarea para la que he usado un clásico <code>if-else</code> como se aprecia en el código siguiente:</p>
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// Parámetro procedente del VS
-</span><span class="n">varying</span> <span class="kt">float</span> <span class="n">intensidad</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// Parámetro procedente del VS</span>
+<span class="n">varying</span> <span class="kt">float</span> <span class="n">intensidad</span><span class="p">;</span>
 
 <span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
-    <span class="c1">// Dependiendo de la intensidad
-</span>    <span class="k">if</span> <span class="p">(</span><span class="n">intensidad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">95</span><span class="p">)</span> <span class="c1">// se asigna un color blanco
-</span>        <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">intensidad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">75</span><span class="p">)</span> <span class="c1">// rojo
-</span>        <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">intensidad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span> <span class="c1">// verde
-</span>        <span class="n">gl_FragColor</span><span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">intensidad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">25</span><span class="p">)</span> <span class="c1">// azul
-</span>        <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
-    <span class="k">else</span> <span class="c1">// o amarillo
-</span>        <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="c1">// Dependiendo de la intensidad</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">intensidad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">95</span><span class="p">)</span> <span class="c1">// se asigna un color blanco</span>
+        <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">intensidad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">75</span><span class="p">)</span> <span class="c1">// rojo</span>
+        <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">intensidad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span> <span class="c1">// verde</span>
+        <span class="n">gl_FragColor</span><span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">intensidad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">25</span><span class="p">)</span> <span class="c1">// azul</span>
+        <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">else</span> <span class="c1">// o amarillo</span>
+        <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
 
 <p>	Una vez compilados y enlazados al programa los <i>shaders</i>, será necesario cargar algún modelo geométrico en la escena, por ejemplo la tetera, y a continuación definir la dirección de la luz. Shader Maker dispone de una página, con el título <b>Uniforms</b>, en la que aparecen los parámetros de comunicación entre los <i>shaders</i> y la aplicación, de forma que sea posible modificarlos durante la ejecución.</p>
@@ -111,7 +115,7 @@
     <footer>
   <div class="inner footer-inner">
     <div>
-      &copy; 1997-2017 Francisco Charte.
+      &copy; 1997-2019 Francisco Charte.
       
       <nav class="main-navigation">
   
@@ -120,6 +124,8 @@
   <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
   
   <a href="https://github.com/fcharte">GitHub</a>
+  
+  <a href="https://scholar.google.es/citations?user=i8l_80EAAAAJ&hl=es">Google Scholar</a>
   
 </nav>
 

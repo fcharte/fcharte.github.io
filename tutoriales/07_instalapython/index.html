@@ -32,7 +32,11 @@
   
   <a href="http://fcharte.com/manuales/">Manuales</a>
   
-  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  <a href="http://fcharte.com/docencia/">Docencia</a>
+  
+  <a href="http://fcharte.com/investigacion/">Investigación</a>
+  
+  <a href="http://fcharte.com/publicaciones/">Publicaciones</a>
   
 </nav>
 
@@ -121,15 +125,15 @@ El lenguaje Python está disponible para múltiples sistemas operativos, entre e
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">interpolate</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span>
 
-<span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.3</span><span class="p">)</span>  <span class="c"># Secuencia de 0 a 10 en pasos de 0.3</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>            <span class="c"># y[i] = sin(x[i])</span>
-<span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">'o'</span><span class="p">)</span>      <span class="c"># Dibujar cada dato como un punto sólido</span>
-
-<span class="n">f</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="c"># Obtengo función de interpolación x/y</span>
-<span class="n">d</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>    <span class="c"># Secuencia de 0 a 10 en pasos de 0.1</span>
-<span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s">'-'</span><span class="p">)</span>     <span class="c"># Dibujar d y el valor interpolado como línea</span>
-
-<span class="n">pyplot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>       <span class="c"># Mostrar la gráfica</span></code></pre></figure>
+<span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.3</span><span class="p">)</span>  <span class="c1"># Secuencia de 0 a 10 en pasos de 0.3
+</span><span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>            <span class="c1"># y[i] = sin(x[i])
+</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">'o'</span><span class="p">)</span>      <span class="c1"># Dibujar cada dato como un punto sólido
+</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="c1"># Obtengo función de interpolación x/y
+</span><span class="n">d</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>    <span class="c1"># Secuencia de 0 a 10 en pasos de 0.1
+</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s">'-'</span><span class="p">)</span>     <span class="c1"># Dibujar d y el valor interpolado como línea
+</span>
+<span class="n">pyplot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>       <span class="c1"># Mostrar la gráfica</span></code></pre></figure>
 
 <p>Finalmente, basta con pulsar <b>F5</b> para ejecutar el guión (habrá que guardarlo antes) y comprobar el resultado. Si aparece una ventana como la inferior, mostrando una gráfica de la función seno, es que todo ha ido bien.</p>
 <p style="text-align:center"><image src="http://www.fcharte.com/imagenes/graficaseno.png" title="Un sencillo script que usa funciones de NumPy, SciPy y matplotlib"></image></p>
@@ -142,7 +146,7 @@ El lenguaje Python está disponible para múltiples sistemas operativos, entre e
     <footer>
   <div class="inner footer-inner">
     <div>
-      &copy; 1997-2017 Francisco Charte.
+      &copy; 1997-2019 Francisco Charte.
       
       <nav class="main-navigation">
   
@@ -151,6 +155,8 @@ El lenguaje Python está disponible para múltiples sistemas operativos, entre e
   <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
   
   <a href="https://github.com/fcharte">GitHub</a>
+  
+  <a href="https://scholar.google.es/citations?user=i8l_80EAAAAJ&hl=es">Google Scholar</a>
   
 </nav>
 

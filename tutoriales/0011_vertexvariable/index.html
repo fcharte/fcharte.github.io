@@ -32,7 +32,11 @@
   
   <a href="http://fcharte.com/manuales/">Manuales</a>
   
-  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  <a href="http://fcharte.com/docencia/">Docencia</a>
+  
+  <a href="http://fcharte.com/investigacion/">Investigación</a>
+  
+  <a href="http://fcharte.com/publicaciones/">Publicaciones</a>
   
 </nav>
 
@@ -48,18 +52,18 @@
 </ul><p>Partiendo del código del VS del tutorial previo de esta serie, es fácil introducir algunos cambios a fin de que la transformación que se aplica a los vértices no sea constante sino variable con el tiempo. Para ello se puede utilizar el parámetro uniforme <code>time</code> (un parámetro al que tiene el acceso el <i>shader</i> y que no puede modificar, procede de la aplicación).</p>
 
 <p>	El código del <i>shader</i>, una vez modificado, sería el siguiente:</p>
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">uniform</span> <span class="kt">float</span> <span class="n">time</span><span class="p">;</span> <span class="c1">// Tiempo que lleva ejecutándose el shader
-</span>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">uniform</span> <span class="kt">float</span> <span class="n">time</span><span class="p">;</span> <span class="c1">// Tiempo que lleva ejecutándose el shader</span>
+
 <span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
-    <span class="n">vec4</span> <span class="n">v</span> <span class="o">=</span> <span class="n">gl_Vertex</span><span class="p">;</span> <span class="c1">// Tomamos el vertice de origen
-</span>
-    <span class="c1">// Se aplica una transformación variable y periódica
-</span>    <span class="n">v</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">abs</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">time</span><span class="p">))</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">vec4</span> <span class="n">v</span> <span class="o">=</span> <span class="n">gl_Vertex</span><span class="p">;</span> <span class="c1">// Tomamos el vertice de origen</span>
+
+    <span class="c1">// Se aplica una transformación variable y periódica</span>
+    <span class="n">v</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">abs</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">time</span><span class="p">))</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">;</span>
     <span class="n">v</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">abs</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">time</span><span class="p">))</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">;</span>
 
-    <span class="c1">// Se aplica establece el vértice transformado como posición
-</span>    <span class="n">gl_Position</span>    <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span> <span class="o">*</span> <span class="n">v</span><span class="p">;</span>
+    <span class="c1">// Se aplica establece el vértice transformado como posición</span>
+    <span class="n">gl_Position</span>    <span class="o">=</span> <span class="n">gl_ModelViewProjectionMatrix</span> <span class="o">*</span> <span class="n">v</span><span class="p">;</span>
     <span class="p">...</span></code></pre></figure>
 <p>	La declaración <code>uniform float time</code> al inicio permite al <i>shader</i> acceder al citado parámetro <code>time</code>, en el que la aplicación facilita los segundos que lleva en ejecución. Este dato es suficiente para aplicar una transformación variable y de tipo periódico, gracias a las funciones <code>sin()</code> y <code>cos()</code>. Ambas son de tipo periódico, pero los valores negativos no interesan para este caso, por lo que se obtiene el valor absoluto.</p>
 
@@ -76,7 +80,7 @@
     <footer>
   <div class="inner footer-inner">
     <div>
-      &copy; 1997-2017 Francisco Charte.
+      &copy; 1997-2019 Francisco Charte.
       
       <nav class="main-navigation">
   
@@ -85,6 +89,8 @@
   <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
   
   <a href="https://github.com/fcharte">GitHub</a>
+  
+  <a href="https://scholar.google.es/citations?user=i8l_80EAAAAJ&hl=es">Google Scholar</a>
   
 </nav>
 

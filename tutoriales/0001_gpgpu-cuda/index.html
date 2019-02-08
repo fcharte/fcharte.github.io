@@ -32,7 +32,11 @@
   
   <a href="http://fcharte.com/manuales/">Manuales</a>
   
-  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  <a href="http://fcharte.com/docencia/">Docencia</a>
+  
+  <a href="http://fcharte.com/investigacion/">Investigación</a>
+  
+  <a href="http://fcharte.com/publicaciones/">Publicaciones</a>
   
 </nav>
 
@@ -122,10 +126,10 @@
     <span class="kt">float</span><span class="o">*</span> <span class="n">M2</span><span class="p">,</span> 
     <span class="kt">float</span> <span class="n">Constante</span><span class="p">)</span>
 <span class="p">{</span>
-   <span class="c1">// Se obtiene el número de thread
-</span>   <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
-   <span class="c1">// y se procesa el dato que corresponde
-</span>   <span class="n">M2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">M1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">Constante</span><span class="p">;</span>
+   <span class="c1">// Se obtiene el número de thread</span>
+   <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+   <span class="c1">// y se procesa el dato que corresponde</span>
+   <span class="n">M2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">M1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">Constante</span><span class="p">;</span>
 <span class="p">}</span><span class="o">&lt;/</span><span class="n">textarea</span><span class="o">&gt;</span></code></pre></figure>
 
 <p>	En una CPU moderna, como los <b>Athlon Phenom</b> o <b>Core i7</b>, es posible dividir los datos de entrada en cuatro o seis partes pero sin ninguna garantía de que se procesarán en paralelo, salvo que se programe explícitamente el reparto trabajando a bajo nivel. En una GPU y usando CUDA, por el contrario, esos datos se dividirán en bloques mucho más pequeños, al existir 240, 512, 1024 o más núcleos de procesamiento, garantizándose la ejecución en paralelo si necesidad de recurrir a la programación en ensamblador.</p>
@@ -137,7 +141,7 @@
     <footer>
   <div class="inner footer-inner">
     <div>
-      &copy; 1997-2017 Francisco Charte.
+      &copy; 1997-2019 Francisco Charte.
       
       <nav class="main-navigation">
   
@@ -146,6 +150,8 @@
   <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
   
   <a href="https://github.com/fcharte">GitHub</a>
+  
+  <a href="https://scholar.google.es/citations?user=i8l_80EAAAAJ&hl=es">Google Scholar</a>
   
 </nav>
 

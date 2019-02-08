@@ -32,7 +32,11 @@
   
   <a href="http://fcharte.com/manuales/">Manuales</a>
   
-  <a href="http://www.fcharte.com">Antiguo sitio web</a>
+  <a href="http://fcharte.com/docencia/">Docencia</a>
+  
+  <a href="http://fcharte.com/investigacion/">Investigación</a>
+  
+  <a href="http://fcharte.com/publicaciones/">Publicaciones</a>
   
 </nav>
 
@@ -64,9 +68,9 @@ Partiendo de una instalación de Ubuntu 14.04LTS, el primer paso ha sido instala
 
 <p>Actualizada la base de datos, usaríamos la siguiente secuencia de órdenes para instalar Java y Python junto con sus librerías:</p>
 
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh">sudo apt-get -y install oracle-java7-installer
-sudo apt-get -y install python-software-properties
-sudo apt-get -y install python-numpy python-scipy python-matplotlib ipython ipython-notebook 
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">sudo </span>apt-get <span class="nt">-y</span> <span class="nb">install </span>oracle-java7-installer
+<span class="nb">sudo </span>apt-get <span class="nt">-y</span> <span class="nb">install </span>python-software-properties
+<span class="nb">sudo </span>apt-get <span class="nt">-y</span> <span class="nb">install </span>python-numpy python-scipy python-matplotlib ipython ipython-notebook 
 python-pandas python-sympy python-nose</code></pre></figure>
 
 <p>A continuación iremos al <a href="http://www.scala-lang.org/files/archive">repositorio de Scala</a>, descargaremos el paquete <code>.deb</code> más reciente, lo abriremos con el gestor de paquetes y procederemos a instalarlo, tal y como se aprecia en la siguiente imagen:</p>
@@ -76,9 +80,9 @@ python-pandas python-sympy python-nose</code></pre></figure>
 <p>El siguiente software a instalar es <a href="http://www.scala-sbt.org/">Scala sbt</a>, una herramienta que nos permitirá construir Spark a partir de su código fuente. Podemos descargarlo e instalarlo con el gestor de paquetes o bien hacerlo desde la línea de comandos, de la siguiente forma:</p>
 
 <figure class="highlight"><pre><code class="language-sh" data-lang="sh">wget https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb
-sudo dpkg -i sbt-0.13.7.deb
-sudo apt-get -y update
-sudo apt-get -y install sbt</code></pre></figure>
+<span class="nb">sudo </span>dpkg <span class="nt">-i</span> sbt-0.13.7.deb
+<span class="nb">sudo </span>apt-get <span class="nt">-y</span> update
+<span class="nb">sudo </span>apt-get <span class="nt">-y</span> <span class="nb">install </span>sbt</code></pre></figure>
 
 <p>Terminada esta última parte del proceso, ya tenemos todos los prerrequisitos necesarios para proceder a instalar Spark en nuestra máquina.
 
@@ -138,7 +142,7 @@ Finalizado todo el proceso de instalación y configuración del software, ahora 
     <footer>
   <div class="inner footer-inner">
     <div>
-      &copy; 1997-2017 Francisco Charte.
+      &copy; 1997-2019 Francisco Charte.
       
       <nav class="main-navigation">
   
@@ -147,6 +151,8 @@ Finalizado todo el proceso de instalación y configuración del software, ahora 
   <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
   
   <a href="https://github.com/fcharte">GitHub</a>
+  
+  <a href="https://scholar.google.es/citations?user=i8l_80EAAAAJ&hl=es">Google Scholar</a>
   
 </nav>
 
