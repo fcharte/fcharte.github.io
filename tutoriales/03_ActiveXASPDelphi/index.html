@@ -12,31 +12,31 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
-<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+<link rel="stylesheet" href="https://fcharte.com/assets/css/monokai.css">
 
-<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+<link rel="stylesheet" href="https://fcharte.com/assets/css/numbersections.css">
 
-<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+<link rel="stylesheet" href="https://fcharte.com/assets/css/main.css">
 
   </head>
   <body class="layout-post">
 
     <header>
   <div class="inner header-inner">
-    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <a class="header-title" href="https://fcharte.com">Torre de Babel</a>
     <nav class="main-navigation">
   
-  <a href="http://fcharte.com/about/">Sobre mí</a>
+  <a href="https://fcharte.com/about/">Sobre mí</a>
   
-  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  <a href="https://fcharte.com/tutoriales/">Tutoriales</a>
   
-  <a href="http://fcharte.com/manuales/">Manuales</a>
+  <a href="https://fcharte.com/manuales/">Manuales</a>
   
-  <a href="http://fcharte.com/docencia/">Docencia</a>
+  <a href="https://fcharte.com/docencia/">Docencia</a>
   
-  <a href="http://fcharte.com/investigacion/">Investigación</a>
+  <a href="https://fcharte.com/investigacion/">Investigación</a>
   
-  <a href="http://fcharte.com/publicaciones/">Publicaciones</a>
+  <a href="https://fcharte.com/publicaciones/">Publicaciones</a>
   
 </nav>
 
@@ -71,7 +71,7 @@
 
 </p><p>La Figura 1 representa gráficamente y de manera simplificada el proceso en que interviene un componente ActiveX de tipo ASP. El cliente envía una petición al servidor, solicitándole un determinado documento ASP. IIS procesa dicho documento, ejecutando el código que hay en su interior para obtener como resultado un documento HTML. Durante la ejecución, el motor ASP usa un control ActiveX para generar todo o parte de ese contenido dinámico. Sirviéndose de los objetos integrados en el motor ASP, el control puede obtener datos sobre la solicitud, la sesión de trabajo y otros elementos, generando finalmente la respuesta.
 
-</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/vbxasp/EsquemaFuncionamiento.png" title="Figura 1. Representación esquemática de los diversos elementos que intervienen en el uso de un componente ASP"></image></p>
+</p><p style="text-align:center"><image src="https://fcharte.com/assets/img/vbxasp/EsquemaFuncionamiento.png" title="Figura 1. Representación esquemática de los diversos elementos que intervienen en el uso de un componente ASP"></image></p>
 
 
 <p>Los dos objetos usados más habitualmente son <code>Request</code> y <code>Response</code>, cada uno de los cuales cuenta con varias colecciones y propiedades. Mediante la colección <code>Form</code> del objeto <code>Request</code>, por ejemplo, es posible acceder a los valores introducidos por el usuario en un formulario HTML. La colección Cookies, con la que cuentan ambos objetos, puede utilizarse tanto para leer como para escribir cookies en el sistema del usuario.
@@ -84,7 +84,7 @@
 <a id="el-nuevo-asistente-para-objetos-asp" class="anchor" href="#el-nuevo-asistente-para-objetos-asp" aria-hidden="true"><span class="octicon octicon-link"></span></a>El nuevo asistente para objetos ASP</h2>
 <p>En la página <b>ActiveX</b> del Depósito de objetos de Delphi 5 hay disponible un nuevo asistente, identificado por la etiqueta <b>Active Server Object</b> y con el icono que puede verse en la Figura 2.  Como todos los asistentes que generan componentes COM, éste debe ser usado previa creación de una librería o ejecutable de tipo ActiveX. 
 
-</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/vbxasp/IconoNuevoAsistente.png" title="Figura 2. En la página ActiveX del Depósito de objetos se encuentra el asistente para la creación de objetos ASP"></image></p>
+</p><p style="text-align:center"><image src="https://fcharte.com/assets/img/vbxasp/IconoNuevoAsistente.png" title="Figura 2. En la página ActiveX del Depósito de objetos se encuentra el asistente para la creación de objetos ASP"></image></p>
 
 
 <p>El asistente consta de una simple ventana, la mostrada en la Figura 3, en la que se dan varias opciones para personalizar el objeto ASP a crear. Tras introducir el nombre, podremos elegir el modelo de gestión de hilos y el modo de creación de objetos. En el apartado <b>Active Server Type</b> existen dos opciones, cuya finalidad es indicar el tipo de servidor con el que funcionará el componente. Por defecto está elegida la primera de ellas, que es la apropiada para IIS 3 y 4. En caso de que estemos usando IIS 5, por ejemplo en Windows 2000, habrá que seleccionar la segunda opción.
@@ -101,12 +101,12 @@
 
 </p><p>Los componentes ASP que vamos a crear a continuación estarán alojados en una librería ActiveX, por lo que tendrás que comenzar seleccionando la opción <b>File|New ...</b> para abrir el Depósito de objetos, haciendo doble clic sobre el elemento <b>ActiveX Library</b> de la página <b>ActiveX</b>. Este paso lo daremos una sola vez, de tal forma que una sola DLL almacenará los diversos componentes.
 
-</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/vbxasp/AsistenteASP.png" title="Figura 3. El asistente nos permite elegir el tipo de servidor a usar, dándonos también opción a crear una página ASP para crear el objeto"></image></p>
+</p><p style="text-align:center"><image src="https://fcharte.com/assets/img/vbxasp/AsistenteASP.png" title="Figura 3. El asistente nos permite elegir el tipo de servidor a usar, dándonos también opción a crear una página ASP para crear el objeto"></image></p>
 
 
 <p>Acto seguido habrá que añadir el primer componente ASP, usando para ello el asistente anteriormente citado. Tan sólo modificaremos el nombre, que será <code>HolaMundoASP</code>. Al cerrar el asistente se abrirá el editor de librerías de tipos ActiveX, que usaremos, como se aprecia en la Figura 4, para añadir un nuevo método a la interfaz <code>IHolaMundoASP</code>. Este método, llamado <code>HolaMundo</code>, se limitará a emitir el clásico saludo como respuesta a la solicitud de los clientes.
 
-</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/vbxasp/LibreriaTipos.png" title="Figura 4. En el editor de librerías de tipos especificaremos los nombres y parámetros de todos los métodos con que contará el componente"></image></p>
+</p><p style="text-align:center"><image src="https://fcharte.com/assets/img/vbxasp/LibreriaTipos.png" title="Figura 4. En el editor de librerías de tipos especificaremos los nombres y parámetros de todos los métodos con que contará el componente"></image></p>
 
 <p>El módulo de código generado por el asistente será similar al del Listado 1. Lo único que haremos será completar la implementación del método <code>HolaMundo</code>. Observa cómo se usa la propiedad <code>Response</code>, concretamente su método <code>Write</code>, para enviar la cadena al cliente. Finalizada la implementación, habrá que compilar el proyecto para generar la correspondiente DLL, que copiaremos en la carpeta <b>scripts</b> o equivalente de nuestra configuración de servidor IIS. Como todo componente COM, éste deberá ser apropiadamente registrado para poder utilizarse. Con este fin puedes usar la utilidad <b>regsvr32</b>.
 
@@ -167,7 +167,7 @@
 <span class="nt">&lt;/BODY&gt;</span>
 <span class="nt">&lt;/HTML&gt;</span></code></pre></figure>
 
-</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/vbxasp/ResultadoHolaMundo.png" title="Figura 5. Resultado obtenido al solicitar la página ASP que utiliza el componente HolaMundo"></image></p>
+</p><p style="text-align:center"><image src="https://fcharte.com/assets/img/vbxasp/ResultadoHolaMundo.png" title="Figura 5. Resultado obtenido al solicitar la página ASP que utiliza el componente HolaMundo"></image></p>
 
 <h2>
 <a id="la-interfaz-iresponse" class="anchor" href="#la-interfaz-iresponse" aria-hidden="true"><span class="octicon octicon-link"></span></a>La interfaz <code>IResponse</code>
@@ -212,7 +212,7 @@
 </span>    <span class="k">end</span><span class="p">;</span>
 <span class="k">end</span><span class="p">;</span></code></pre></figure>
 
-</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/vbxasp/ListaTabla.png" title="Figura 6. Tabla HTML generada a partir de una tabla Paradox"></image></p>
+</p><p style="text-align:center"><image src="https://fcharte.com/assets/img/vbxasp/ListaTabla.png" title="Figura 6. Tabla HTML generada a partir de una tabla Paradox"></image></p>
 
 <h2>
 <a id="la-interfaz-irequest" class="anchor" href="#la-interfaz-irequest" aria-hidden="true"><span class="octicon octicon-link"></span></a>La interfaz <code>IRequest</code>
@@ -262,9 +262,9 @@
 
 </p><p>Observa cómo se realiza una conversión de tipo para poder mostrar los datos recuperados del formulario. Hay que tener en cuenta que estamos trabajando con objetos COM automatizables, con colecciones en las que los elementos siempre son considerados <code>OleVariant</code>, de ahí que sea preciso convertir al tipo que corresponda en cada paso. En las Figuras 7 y 8 puedes ver el formulario y la respuesta obtenida.
 
-</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/vbxasp/Formulario.png" title="Figura 7. Usamos el formulario HTML para facilitar los hipotéticos datos de registro en la sede web"></image></p>
+</p><p style="text-align:center"><image src="https://fcharte.com/assets/img/vbxasp/Formulario.png" title="Figura 7. Usamos el formulario HTML para facilitar los hipotéticos datos de registro en la sede web"></image></p>
 
-<p style="text-align:center"><image src="http://fcharte.com/assets/img/vbxasp/Validacion.png" title="Figura 8. El componente ASP recupera los datos del formulario y nos da una respuesta"></image></p>
+<p style="text-align:center"><image src="https://fcharte.com/assets/img/vbxasp/Validacion.png" title="Figura 8. El componente ASP recupera los datos del formulario y nos da una respuesta"></image></p>
 
 <h2>
 <a id="un-punto-de-partida" class="anchor" href="#un-punto-de-partida" aria-hidden="true"><span class="octicon octicon-link"></span></a>Un punto de partida</h2>

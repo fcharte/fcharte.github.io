@@ -12,31 +12,31 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
-<link rel="stylesheet" href="http://fcharte.com/assets/css/monokai.css">
+<link rel="stylesheet" href="https://fcharte.com/assets/css/monokai.css">
 
-<link rel="stylesheet" href="http://fcharte.com/assets/css/numbersections.css">
+<link rel="stylesheet" href="https://fcharte.com/assets/css/numbersections.css">
 
-<link rel="stylesheet" href="http://fcharte.com/assets/css/main.css">
+<link rel="stylesheet" href="https://fcharte.com/assets/css/main.css">
 
   </head>
   <body class="layout-post">
 
     <header>
   <div class="inner header-inner">
-    <a class="header-title" href="http://fcharte.com">Torre de Babel</a>
+    <a class="header-title" href="https://fcharte.com">Torre de Babel</a>
     <nav class="main-navigation">
   
-  <a href="http://fcharte.com/about/">Sobre mí</a>
+  <a href="https://fcharte.com/about/">Sobre mí</a>
   
-  <a href="http://fcharte.com/tutoriales/">Tutoriales</a>
+  <a href="https://fcharte.com/tutoriales/">Tutoriales</a>
   
-  <a href="http://fcharte.com/manuales/">Manuales</a>
+  <a href="https://fcharte.com/manuales/">Manuales</a>
   
-  <a href="http://fcharte.com/docencia/">Docencia</a>
+  <a href="https://fcharte.com/docencia/">Docencia</a>
   
-  <a href="http://fcharte.com/investigacion/">Investigación</a>
+  <a href="https://fcharte.com/investigacion/">Investigación</a>
   
-  <a href="http://fcharte.com/publicaciones/">Publicaciones</a>
+  <a href="https://fcharte.com/publicaciones/">Publicaciones</a>
   
 </nav>
 
@@ -70,7 +70,7 @@
 <a id="cuadros-de-diálogo-de-uso-común" class="anchor" href="#cuadros-de-di%C3%A1logo-de-uso-com%C3%BAn" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cuadros de diálogo de uso común</h2>
 <p>La mayor parte de las aplicaciones, independientemente de su finalidad concreta, cuentan con necesidades más o menos comunes: abrir archivos o guardarlos, seleccionar tipos de letra, imprimir información, etc. Tan comunes son estas necesidades, que el propio sistema operativo aporta una solución común: unos cuadros de diálogo que, como no podía ser de otra manera, se apellidan de uso común. Los componentes que encontramos en la página Dialogs de la paleta de Delphi (véase Figura 1), lo que hacen es simplificar para nosotros, los programadores que utilizamos Delphi, la utilización de esos servicios del sistema.
 
-</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/selectfolder/PaginaDialogs.png" title="Figura 1. Detalle de la página Dialogs de la Paleta de componentes de Delphi"></image></p>
+</p><p style="text-align:center"><image src="https://fcharte.com/assets/img/selectfolder/PaginaDialogs.png" title="Figura 1. Detalle de la página Dialogs de la Paleta de componentes de Delphi"></image></p>
 
 <p>Utilizar uno de los componentes de la citada página, es algo que se reduce a establecer algunas propiedades, generalmente durante la fase de diseño, y llamar posteriormente, en ejecución, al método <code>Execute()</code>, que hace aparecer el cuadro de diálogo. Cuando éste es cerrado, el programa puede recuperar la selección del usuario leyendo algunas propiedades.
 
@@ -78,7 +78,7 @@
 
 </p><p>Windows cuenta con una función, llamada <code>SHBrowseForFolder()</code>, que hace precisamente lo que podemos necesitar en esas ocasiones. Dicha función abre un cuadro de diálogo como el mostrado en la Figura 2, permitiendo al usuario seleccionar cualquiera de las carpetas existentes en el sistema. Para poder utilizar esta función, deberá incluirse el módulo <code>ShlObj</code> en nuestro proyecto.
 
-</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/selectfolder/CuadroDialogo.png" title="Figura 2. Cuadro de diálogo de selección de carpetas"></image></p>
+</p><p style="text-align:center"><image src="https://fcharte.com/assets/img/selectfolder/CuadroDialogo.png" title="Figura 2. Cuadro de diálogo de selección de carpetas"></image></p>
 
 
 <p>Tener que utilizar la función <code>SHBrowseForFolder()</code> cada vez que se precisa facilitar la selección de una carpeta, no es, precisamente, nada cómodo. Como veremos en un momento, es preciso preparar una estructura de parámetros, escribir una función callback para procesar mensajes, convertir identificadores de Windows en caminos que podamos usar en el programa, etc. Se trata, por tanto, de una candidata perfecta para ser encapsulada en forma de componente.
@@ -595,11 +595,11 @@
 <a id="probando-el-componente-tselectfolderdialog" class="anchor" href="#probando-el-componente-tselectfolderdialog" aria-hidden="true"><span class="octicon octicon-link"></span></a>Probando el componente TSelectFolderDialog</h2>
 <p>La forma más simple de comprobar el funcionamiento de este componente, una vez instalado en la Paleta de componentes, consiste en establecer algunas propiedades, desplegar el menú emergente y seleccionar la primera opción disponible, como puede verse en la Figura 3.
 
-</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/selectfolder/PropiedadesComponente.png" title="Figura 3. Propiedades y menú emergente del componente TSelectFolderDialog"></image></p>
+</p><p style="text-align:center"><image src="https://fcharte.com/assets/img/selectfolder/PropiedadesComponente.png" title="Figura 3. Propiedades y menú emergente del componente TSelectFolderDialog"></image></p>
 
 <p>Si quiere algo más elaborado, no tiene mas que aprovechar los eventos del componente y escribir algo de código. Con un mínimo de código, se utiliza el componente para elegir una carpeta, un ordenador o una impresora desde el mismo programa. Además, se aprovecha el evento <code>OnSelChanged</code> para recuperar el icono del elemento elegido, disponiéndolo como icono del formulario.
 
-</p><p style="text-align:center"><image src="http://fcharte.com/assets/img/selectfolder/Demostracion.png" title="Figura 3. El programa de demostración en funcionamiento"></image></p>
+</p><p style="text-align:center"><image src="https://fcharte.com/assets/img/selectfolder/Demostracion.png" title="Figura 3. El programa de demostración en funcionamiento"></image></p>
 
 
 <p>Con algo más de código, podría efectuar cualquier otra operación que se le ocurra, como examinar los elementos elegidos para activar o desactivar el botón, añadir una línea de estado, etc.
