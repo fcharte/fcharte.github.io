@@ -120,3 +120,8 @@ p.nota {
 
 table {
   border: 1px solid silver; }
+
+.Asignatura {
+  background-color: #e6e6e6;
+  margin-bottom: 1em;
+  padding: 1em; }
