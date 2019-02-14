@@ -1,3 +1,4 @@
+@charset "UTF-8";
 body {
   font-size: 18px;
   line-height: 1.8;
@@ -125,3 +126,44 @@ table {
   background-color: #e6e6e6;
   margin-bottom: 1em;
   padding: 1em; }
+
+#IndicePublicaciones {
+  margin-left: 2em;
+  column-count: 2; }
+
+dt {
+  display: inline;
+  border: none;
+  background-color: black;
+  color: white;
+  padding: 10px; }
+
+dt a {
+  color: white;
+  font-weight: bold; }
+
+dt:before {
+  display: block; }
+
+dd {
+  margin-bottom: 1em;
+  line-height: normal; }
+
+blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "“" "”" "‘" "’";
+  line-height: normal; }
+
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em; }
+
+blockquote p {
+  display: inline; }
