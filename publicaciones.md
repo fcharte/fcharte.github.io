@@ -4,6 +4,8 @@ title: Publicaciones
 permalink: /publicaciones/
 ---
 
+<p style="font-size: small"><a href="https://simidat-apps.ujaen.es/views/MyCV-publications.pdf">Download PDF with all data</a></p>
+
 <h1>Citations</h1>
 <table><tr>
   <td>
