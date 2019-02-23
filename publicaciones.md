@@ -4,6 +4,24 @@ title: Publicaciones
 permalink: /publicaciones/
 ---
 
+<h1>Citations</h1>
+<table><tr>
+  <td>
+   <a href="GScholar.png"><img style="width: 100%" src="GScholar.png" alt="Gráfica de publicaciones en Google Scholar" title="Publicaciones según Google Scholar"/></a>
+  </td>
+  <td>
+   <a href="Scopus.png"><img style="width: 100%" src="Scopus.png" alt="Gráfica de publicaciones en Scopus" title="Publicaciones según Scopus"/></a>
+  </td>
+</tr></table>
+
+<h1>Summary of publications</h1>
+<h2>Research/Academic productions</h2>
+   <a href="SummaryResearch.png"><img style="width: 100%" src="SummaryResearch.png" alt="Gráfica de publicaciones de investigación/académicas" title="Number of publications grouped by type and impact"/></a>
+
+<h2>Didactic production</h2>
+  <a href="SummaryDidactic.png"><img style="width: 100%" src="SummaryDidactic.png" alt="Gráfica de publicaciones didácticas" title="Number of publications grouped by type and impact"/></a>
+
+<h1>Índice de publicaciones</h1>
 <ol id="IndicePublicaciones">
   <li><a href="#HJournals">Journal contributions</a> (18)</li>
   <ul>
@@ -17,6 +35,7 @@ permalink: /publicaciones/
     <li><a href="#HConfInt">International conferences</a> (21)</li>
     <li><a href="#HConfLocal">Local conferences</a> (7)</li>
   </ul>
+  <li><a href="#OtherAcademicWorks">Other academic works</a> (4)</li>
   <li><a href="#Software">Software packages</a> (5)</li>
   <li><a href="#Monographs">Monographs</a> (128)</li>
   <ul>
@@ -1130,6 +1149,65 @@ El descubrimiento de subgrupos es una tarea de la miner&iacute;a de
   adem&aacute;s permite realizar un an&aacute;lisis exploratorio de datos b&aacute;sico.
 </font></blockquote>
 <p></p>
+</dd><br />
+</dl><h1 id="OtherAcademicWorks">Other academic works</h1>
+<dl>
+
+<dt>
+[<a name="Charte:PHDT2015">1</a>]
+</dt>
+<dd>
+Francisco&nbsp;Charte Ojeda.
+ Nuevos m&eacute;todos de computaci&oacute;n flexible para
+  clasificaci&oacute;n multietiqueta, 2015.
+ Tesis doctoral en el Programa Oficial de Doctorado en Tecnolog&iacute;as
+  de la Informaci&oacute;n y la Comunicaci&oacute;n.&nbsp;
+[&nbsp;<a href="BIBEntries.html#Charte:PHDT2015">bib</a>&nbsp;| 
+<a href="https://fcharte.com/assets/pdfs/PhdThesis-CharteFco.pdf">.pdf</a>&nbsp;]
+
+</dd><br />
+
+
+<dt>
+[<a name="Charte:TFM2011">2</a>]
+</dt>
+<dd>
+Francisco&nbsp;Charte Ojeda.
+ Estudio y definici&oacute;n de tareas de preprocesamiento para
+  clasificadores multietiqueta, 2011.
+ Proyecto fin de m&aacute;ster de la titulaci&oacute;n M&aacute;ster en Soft
+  Computing e Inteligencia Computacional.&nbsp;
+[&nbsp;<a href="BIBEntries.html#Charte:TFM2011">bib</a>&nbsp;| 
+<a href="https://fcharte.com/assets/pdfs/MasterSCSI-TrabajoFinMaster-CharteFco.pdf">.pdf</a>&nbsp;]
+
+</dd><br />
+
+
+<dt>
+[<a name="Charte:PFC2010">3</a>]
+</dt>
+<dd>
+Francisco&nbsp;Charte Ojeda.
+ Modelo para la implementaci&oacute;n de interfaces de usuario
+  adaptativas, 2010.
+ Proyecto fin de carrera de la titulaci&oacute;n Ingenier&iacute;a en
+  Inform&aacute;tica.&nbsp;
+[&nbsp;<a href="BIBEntries.html#Charte:PFC2010">bib</a>&nbsp;]
+
+</dd><br />
+
+
+<dt>
+[<a name="Charte:PFC2008">4</a>]
+</dt>
+<dd>
+Francisco&nbsp;Charte Ojeda.
+ Biblioteca de problemas de programaci&oacute;n en ensamblador, 2008.
+ Proyecto fin de carrera de la titulaci&oacute;n Ingenier&iacute;a
+  T&eacute;cnica en Inform&aacute;tica de Gesti&oacute;n.&nbsp;
+[&nbsp;<a href="BIBEntries.html#Charte:PFC2008">bib</a>&nbsp;| 
+<a href="https://fcharte.com/assets/pdfs/PFC-ITIG-CharteFco.pdf">.pdf</a>&nbsp;]
+
 </dd><br />
 </dl><h1 id="Software">Software packages</h1>
 <dl>
