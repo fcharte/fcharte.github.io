@@ -53,14 +53,14 @@
 <li class="toc-entry toc-h2"><a href="#la-función-filtroxml">La función FILTROXML</a></li>
 </ul><p>Cada nueva versión de Excel incorpora múltiples opciones nuevas en la interfaz de usuario, pero también hay novedades menos obvias como son el medio centenar de funciones añadidas en la versión 2013 a la ya extensa biblioteca con que contaba este producto. Muchas de esas nuevas funciones extienden categorías ya existentes: para operar con fechas, manipular textos, etc. También se ha creado una nueva categoría: la de las funciones web.</p>
 
-<image width="800px" src="https://www.fcharte.com/imagenes/Funcwebexcel.png" title="Nuevas funciones web en Excel 2013"></image>
+<image width="100%" src="https://www.fcharte.com/imagenes/Funcwebexcel.png" title="Nuevas funciones web en Excel 2013"></image>
 
 <h2>
 <a id="la-función-servicioweb" class="anchor" href="#la-funci%C3%B3n-servicioweb" aria-hidden="true"><span class="octicon octicon-link"></span></a>La función <code>SERVICIOWEB</code>
 </h2>
 <p>La función <code>SERVICIOWEB</code> permite recuperar en una celdilla información ofrecida por un servicio web. Toma como único parámetro el URL completo, incluyendo los parámetros que pudiesen necesitarse, y al calcularse lo que hace es ponerse en contacto con el servicio, enviando la solicitud facilitada, y almacenar en la celdilla la respuesta que se obtenga. En la imagen inferior puede verse parte del resultado obtenido cuando se usa esta función para acceder a la lista de últimos artículos publicados en el conocido sitio <a href="http://slashdot.org">Slashdot</a>.</p>
 
-<image width="800px" src="https://www.fcharte.com/imagenes/20130215.1.png" title="Información obtenida con SERVICIOWEB"></image>
+<image width="100%" src="https://www.fcharte.com/imagenes/20130215.1.png" title="Información obtenida con SERVICIOWEB"></image>
 
 <p>En principio esto podría no parecer excesivamente interesante para un usuario de Excel. Alojar un documento XML completo en una celdilla no es precisamente la vía más cómoda para interpretar la información que contiene.</p>
 
@@ -73,11 +73,11 @@
 
 <p>Asumiendo que tenemos en una celdilla de la hoja de cálculo el resultado antes devuelto por la función SERVICIOWEB, podríamos usar la expresión XPath <code>//item/title</code> para obtener el título de todas las entradas y colocarlo en las celdillas del rango seleccionado, como se ve en la imagen siguiente.</p>
 
-<image width="800px" src="https://www.fcharte.com/imagenes/20130215.2.png" title="Extraemos los títulos de las entradas"></image>
+<image width="100%" src="https://www.fcharte.com/imagenes/20130215.2.png" title="Extraemos los títulos de las entradas"></image>
 
 <p>De manera similar podríamos obtener el enlace que nos llevaría a la noticia correspondiente a cada título, cambiando la consulta XPath anterior por <code>//item/link</code>. El resultado podríamos colocarlo una columna más a la derecha, de forma que cada título tuviese a continuación el enlace que le corresponde. De esta forma sería muy sencillo unir ambos datos, con la función <code>HIPERVINCULO</code>, para tener en la hoja de cálculo una lista de títulos que, a su vez, son enlaces que abrirían la entrada completa. Es lo que se ha hecho en la imagen siguiente.</p>
 
-<image width="800px" src="https://www.fcharte.com/imagenes/20130215.3.png" title="La hoja de cálculo con los hipervínculos a las entradas de Slashdot"></image>
+<image width="100%" src="https://www.fcharte.com/imagenes/20130215.3.png" title="La hoja de cálculo con los hipervínculos a las entradas de Slashdot"></image>
 
 <p>Las celdillas en las que se han usado las funciones <code>SERVICIOWEB</code> y <code>FILTROXML</code> podrían trasladarse a otra hoja del mismo libro, dejando en la hoja con la que trabajaría el usuario solamente la lista de hipervínculos. Esta se actualizaría automáticamente al recalcular el libro o bien a demanda, pulsando <strong>F9</strong>, de forma que popdemos tener siempre la lista de últimas noticias sin necesidad de abandonar Excel y abrir el navegador web. Obviamente este es solo un ejemplo demostrativo, las aplicaciones prácticas de la obtención de información desde un servicio web y extracción de datos concretos son mucho más interesantes que la inserción de un <i>feed</i> en una hoja de cálculo.</p>
 
