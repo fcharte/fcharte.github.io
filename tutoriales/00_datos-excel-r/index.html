@@ -8,7 +8,7 @@
 <title>Intercambio de datos entre Excel y R&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
 
 <link href="data:text/css,pre%20%2Eoperator%2C%0Apre%20%2Eparen%20%7B%0A%20color%3A%20rgb%28104%2C%20118%2C%20135%29%0A%7D%0A%0Apre%20%2Eliteral%20%7B%0A%20color%3A%20%23990073%0A%7D%0A%0Apre%20%2Enumber%20%7B%0A%20color%3A%20%23099%3B%0A%7D%0A%0Apre%20%2Ecomment%20%7B%0A%20color%3A%20%23998%3B%0A%20font%2Dstyle%3A%20italic%0A%7D%0A%0Apre%20%2Ekeyword%20%7B%0A%20color%3A%20%23900%3B%0A%20font%2Dweight%3A%20bold%0A%7D%0A%0Apre%20%2Eidentifier%20%7B%0A%20color%3A%20rgb%280%2C%200%2C%200%29%3B%0A%7D%0A%0Apre%20%2Estring%20%7B%0A%20color%3A%20%23d14%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="https://assets-cdn.github.com/assets/frameworks-148da7a2b8b9ad739a5a0b8b68683fed4ac7e50ce8185f17d86aa05e75ed376e.css">
+<!--link rel="stylesheet" href="https://assets-cdn.github.com/assets/frameworks-148da7a2b8b9ad739a5a0b8b68683fed4ac7e50ce8185f17d86aa05e75ed376e.css"-->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
@@ -186,7 +186,7 @@
 
 <p>Una vez que tenemos la información en el archivo CSV/DIF llega el momento de importarla a R. Para leer un CSV tenemos a nuestra disposición múltiples funciones: <code>read.csv</code>, <code>read.csv2</code>, <code>read.delim</code> y la más genérica <code>read.table</code>. Vamos a concentrarnos en las dos primeras que son las que más se ajustan a lo que necesitamos en este momento. Ambas precisan como parámetro indispensable el nombre del archivo a leer y por defecto asumen que habrá una primera línea con los encabezados: los títulos de las columnas. La diferencia fundamental es que la primera asume que el formato sigue el estándar CSV: se usa el punto para decimales y la coma como separador de valores, mientras que la segunda está preconfigurada para el formato que suele usarse en algunos países europeos: coma para decimales y punto y coma como separador de valores. Si el formato que tenemos que leer no es ninguno de estos dos, como ocurre en nuestro caso que utiliza el punto para los decimales pero separa los valores con punto y coma, podemos usar cualquiera de las dos incluyendo los parámetros <code>dec</code> y/o <code>sep</code> para indicarlo. En la imagen siguiente puede verse cómo se ha usado <code>read.csv</code> para obtener el contenido del archivo en un data.frame.</p>
 
-<image src="http://www.fcharte.com/imagenes/20130330-2.png" title="Importamos el archivo CSV desde R" width="800px"></image>
+<image src="https://www.fcharte.com/imagenes/20130330-2.png" title="Importamos el archivo CSV desde R" width="800px"></image>
 
 <p>Para importar en R el contenido de un archivo en formato DIF recurriemos a la función <code>read.DIF</code>. Si la estructura del archivo se ajusta estrictamente al estándar, solamente habrá que facilitar el nombre del archivo y se obtendrá como resultado un data.frame con los datos. En el caso de Excel, no obstante, hay una diferencia importante: el orden en que se entregan filas y columnas está invertido, siendo necesario agregar el parámetro <code>transpose</code> dándole el valor <code>TRUE</code> (por defecto es <code>FALSE</code>) tal y como se aprecia en la siguiente imagen.</p>
 
