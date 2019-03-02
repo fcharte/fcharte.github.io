@@ -71,9 +71,9 @@
 </ol>
 <p>Las dos imágenes siguientes muestran el procedimiento descrito.</p>
 
-<image src="http://www.fcharte.com/imagenes/20130326-1.png" title="Copiamos los datos desde Excel al portapapeles" width="800px"></image>
+<image src="https://www.fcharte.com/imagenes/20130326-1.png" title="Copiamos los datos desde Excel al portapapeles" width="800px"></image>
 
-<image src="http://www.fcharte.com/imagenes/20130326-2.png" title="Obtenemos los datos desde R, almacenándolos en un data.frame" width="800px"></image>
+<image src="https://www.fcharte.com/imagenes/20130326-2.png" title="Obtenemos los datos desde R, almacenándolos en un data.frame" width="800px"></image>
 
 <p>En este momento podríamos trabajar con los datos desde R, realizando el procesamiento que necesitemos.</p>
 
@@ -180,7 +180,7 @@
 </li>
 </ol>
 
-<image src="http://www.fcharte.com/imagenes/20130330-1.png" title="Guardamos los datos desde Excel a CSV/DIF" width="800px"></image>
+<image src="https://www.fcharte.com/imagenes/20130330-1.png" title="Guardamos los datos desde Excel a CSV/DIF" width="800px"></image>
 
 <p>Al guardar en cualquiera de estos dos formato Excel escribirá en el archivo de destino todo el contenido de la hoja actual, no la selección que tuviésemos hecha. Por ello es preciso el paso previo en que se crea una hoja auxiliar (o un nuevo libro) y se copia en ella la información a exportar. Esa hoja, lógicamente, puede ser eliminada al final. Si esta operación vamos a realizarla a menudo lo más cómodo es registrar una macro de Excel con todos los pasos, partiendo desde la copia al portapapeles de la selección actual e incluyendo la inserción de la nueva hoja, pegado de los datos, selección de la opción <b>Guardar como</b> y establecimiento del formato de exportación. De esta forma en adelante solo habrá que ejecutar la macro, que puede ser asignada a una cierta combinación de teclas, tras haber marcado el rango de celdillas a exportar.</p>
 
@@ -190,7 +190,7 @@
 
 <p>Para importar en R el contenido de un archivo en formato DIF recurriemos a la función <code>read.DIF</code>. Si la estructura del archivo se ajusta estrictamente al estándar, solamente habrá que facilitar el nombre del archivo y se obtendrá como resultado un data.frame con los datos. En el caso de Excel, no obstante, hay una diferencia importante: el orden en que se entregan filas y columnas está invertido, siendo necesario agregar el parámetro <code>transpose</code> dándole el valor <code>TRUE</code> (por defecto es <code>FALSE</code>) tal y como se aprecia en la siguiente imagen.</p>
 
-<image src="http://www.fcharte.com/imagenes/20130330-3.png" title="Importamos el archivo DIF desde R" width="800px"></image>
+<image src="https://www.fcharte.com/imagenes/20130330-3.png" title="Importamos el archivo DIF desde R" width="800px"></image>
 
 <p>Supongamos ahora que el sentido de transferencia de la información se invierte: tenemos un data.frame en R con datos que necesitamos enviar a alguien que los tratará con Excel. Para ello lo primero que haremos será generar el archivo CSV, sencillamente usando la función <code>write.csv</code> con dos parámetros: el data.frame que contiene los datos y el argumento <code>file</code> indicando el nombre del archivo de destino. También podemos usar <code>write.csv2</code> para cambiar los separadores de decimales y valores, o bien incluir los parámetros <code>dec</code> y <code>sep</code> indicados anteriormente. El resultado será un archivo CSV que enviaremos al destinatario.</p>
 
@@ -207,13 +207,13 @@
  </li>
 <li>En el segundo paso es donde tendremos que configurar el separador de valores, desmarcando el que aparece por defecto (<b>Tabulación</b> normalmente) y marcando <b>Coma</b> o <b>Punto y coma</b> según el caso. En la parte inferior de la ventana podremos apreciar cuál es el resultado que se obtendría según la configuración establecida actualmente.</li>
 
-<image width="800px" src="http://www.fcharte.com/imagenes/20130330-4.png" title="Configuramos el separador de valores al importar en Excel"></image>
+<image width="800px" src="https://www.fcharte.com/imagenes/20130330-4.png" title="Configuramos el separador de valores al importar en Excel"></image>
 
  <li>En el tercer paso del asistente podemos configurar el formato aplicado a cada una de las columnas de valores. En caso de que el separador de decimales no sea el adecuado, según la configuración que se haya establecido en Excel, usaremos el botón <b>Avanzadas</b> para abrir un pequeño cuadro de diálogo en el que podremos indicar explícitamente cuál es el separador decimal.
 </li>
 </ol>
   
-<image width="800px" src="http://www.fcharte.com/imagenes/20130330-5.png" title="Configuramos el separador decimal al importar en Excel"></image>
+<image width="800px" src="https://www.fcharte.com/imagenes/20130330-5.png" title="Configuramos el separador decimal al importar en Excel"></image>
 
 <p>Una vez llegado al última paso del asistente podremos elegir el destino de los datos, por defecto será la posición actual en la hoja, y completar el proceso de importación. Ya tenemos el contenido del data.frame de R en la hoja de cálculo.
 
@@ -244,13 +244,13 @@
 
 <p>En la imagen siguiente puede verse un ejemplo de uso de esta función. En él se agregan a un libro existente tres nuevas hojas, con los nombres de tres meses, y datos hipotéticamente correspondientes a las ventas diarias. En la imagen de más abajo puede verse el libro tras abrirlo en Excel.</p>
 
-<image width="800px" src="http://www.fcharte.com/imagenes/20130407-1.png" title="Agregamos hojas con datos a un libro Excel desde R"></image>
+<image width="800px" src="https://www.fcharte.com/imagenes/20130407-1.png" title="Agregamos hojas con datos a un libro Excel desde R"></image>
 
-<image width="800px" src="http://www.fcharte.com/imagenes/20130407-2.png" title="El libro abierto en Excel"></image>
+<image width="800px" src="https://www.fcharte.com/imagenes/20130407-2.png" title="El libro abierto en Excel"></image>
 
 <p>La función complementaria a la anterior, mediante la que podemos leer desde R información almacenada en un libro Excel sin necesidad de tener instalada esta aplicación, es <code>read.xlsx</code>. El primer argumento será en este caso el nombre del archivo donde está almacenada la información, siendo obligatorio indicar un número de hoja con el parámetro <code>sheetIndex</code> o bien su nombre con el parámetro <code>sheetName</code>. Sin más parámetros la función leerá todo el contenido de la hoja indicada, generará un data.frame incluyendo títulos de columnas y lo devolverá. En caso de que nos interese leer un conjunto concreto de celdillas, no la hoja completa, recurriremos a los parámetros <code>colIndex</code> y <code>rowIndex</code> para especificar qué columnas y qué filas han de recuperarse. Estas no tienen necesariamente que ser contiguas. En el ejemplo de la imagen siguiente se recupera la primera fila y las filas 23 a 32.</p>
 
-<image width="800px" src="http://www.fcharte.com/imagenes/20130407-3.png" title="Recuperamos un rango de datos de una hoja Excel"></image>
+<image width="800px" src="https://www.fcharte.com/imagenes/20130407-3.png" title="Recuperamos un rango de datos de una hoja Excel"></image>
 
 <p>Por defecto la función <code>read.xlsx</code> evaluará las fórmulas que pudieran existir en la hoja de cálculo, almacenando en el data.frame el resultado que produzcan. Dando el valor <code>TRUE</code> al parámetro <code>keepFormulas</code> se anulará la evaluación, obteniendo en su lugar el texto de la fórmula.</p>
 

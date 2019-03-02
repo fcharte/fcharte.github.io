@@ -59,9 +59,9 @@
 <a id="configuración-de-apariencia-en-windows-7" class="anchor" href="#configuraci%C3%B3n-de-apariencia-en-windows-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuración de apariencia en Windows 7</h2>
 <p>En Windows 7 encontramos dicha opción en la ventana <b>Color y apariencia de las ventanas</b> (véase imagen inferior) y da paso a un cuadro de diálogo (siguiente imagen debajo de la anterior) que prácticamente no ha cambiado en la última década y que los más experimentados reconocerán de inmediato.</p>
 
-<image width="800px" src="http://www.fcharte.com/imagenes/20120726.1.png" title="Ventana de personalización de colores en Windows 7"></image>
+<image width="800px" src="https://www.fcharte.com/imagenes/20120726.1.png" title="Ventana de personalización de colores en Windows 7"></image>
 
-<image width="800px" src="http://www.fcharte.com/imagenes/20120726.2.png" title="Cuadro de diálogo de configuración avanzada de la apariencia en Windows 7"></image>
+<image width="800px" src="https://www.fcharte.com/imagenes/20120726.2.png" title="Cuadro de diálogo de configuración avanzada de la apariencia en Windows 7"></image>
 
 <p>
 
@@ -71,13 +71,13 @@
 
 <p>En realidad la anterior es una verdad a medias en algunos casos. En la imagen inferior puede verse cómo la ventana <b>Color y apariencia de las ventanas</b> se ha simplificado al extremo, no existiendo opción alguna que nos permita acceder al cuadro de diálogo mencionado anteriormente. Esto es algo que descubrí ayer a raíz de una consulta que me realizaron por Twitter.</p>
 
-<image width="800px" src="http://www.fcharte.com/imagenes/20120726.3.png" title="Ventana de personalización de colores en Windows 8"></image>
+<image width="800px" src="https://www.fcharte.com/imagenes/20120726.3.png" title="Ventana de personalización de colores en Windows 8"></image>
 
 <h2>
 <a id="recurriendo-al-registro-de-windows" class="anchor" href="#recurriendo-al-registro-de-windows" aria-hidden="true"><span class="octicon octicon-link"></span></a>Recurriendo al registro de Windows</h2>
 <p>La primera solución que se me ocurrió fue abrir el registro y buscar la sección en la que se almacenan estos parámetros avanzados de apariencia en Windows 7. La respuesta: <code>HKCU\Control Panel\Desktop\WindowMetrics</code>. El contenido de esta clave es prácticamente idéntico en Windows 7 y Windows 8 Release Preview, por lo que es fácil suponer que los parámetros avanzados siguen utilizándose a pesar de que no haya un cuadro de diálogo como el de Windows 7 que permita modificarlos fácilmente.</p>
 
-<image width="800px" src="http://www.fcharte.com/imagenes/20120726.4.png" title="Valores de la entrada del registro donde se almacenan los parámetros de apariencia"></image>
+<image width="800px" src="https://www.fcharte.com/imagenes/20120726.4.png" title="Valores de la entrada del registro donde se almacenan los parámetros de apariencia"></image>
 
 <p>La interpretación de los valores no resulta sencilla a menos que uno esté acostumbrado a trabajar con números hexadecimales, algo habitual entre los programadores. No obstante, cualquier usuario de Windows 7 puede tomar la configuración que tenga en su sistema actual exportando esa clave del registro a un archivo y, a continuación, importándola en el nuevo Windows 8. Es un método que funciona, pero cabe preguntarse si hay alguna vía más fácil.</p>
 
