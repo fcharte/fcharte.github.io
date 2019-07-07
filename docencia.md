@@ -23,7 +23,6 @@ Edificio A3 - Despacho 245 (2ª planta) - <a href="http://eps.ujaen.es/detallePr
 
   <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/tutorias/p/73570">Horario actualizado en web de la EPS</a> (Se aconseja reservar hora con antelación)
 <hr/>
-
 ## Curso 2018/2019 <a name="Curso2018-2019"></a>
 
 ### Primer cuatrimestre
@@ -139,17 +138,17 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
 
 ### Asignados
 
-- Distribución de cargas de trabajo entre múltiples clientes mediante tecnologías web
-- Aplicación web para el seguimiento del aprendizaje activo de asignaturas de estudios universitarios
 - Entrenador didáctico de la pila de protocolos TCP/IP
 - Sistema basado en Deep Learning para la identificación de estilos de cómics
-- Sistema para la identificación automática de vehículos a partir de fotografías
 - Paquete R de acceso al Portal de datos abiertos del Gobierno de España
 - Predicción del consumo eléctrico a partir de datos históricos y variables exógenas
 - Sistema IoT/Edge computing para el control remoto de acceso mediante tarjetas inteligentes y Raspberry Pi
 
 ### Completados
 
+- Sistema para la identificación automática de vehículos a partir de fotografías - **Sobresaliente - julio 2019**
+- Distribución de cargas de trabajo entre múltiples clientes mediante tecnologías web - **Notable - julio 2019**
+- Aplicación web para el seguimiento del aprendizaje activo de asignaturas de estudios universitarios - **Sobresaliente - junio 2019**
 - Desarrollo de una librería de algoritmos de extracción de reglas descriptivas en R y de la interfaz de usuario asociada - **Sobresaliente**
 - Desarrollo de una aplicación móvil para el control y la monitorización de servidores - **Matrícula de honor**
 - Desarrollo de software para la monitorización de redes sobre Raspberry Pi - **Notable**
