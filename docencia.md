@@ -4,6 +4,7 @@ title: Docencia
 permalink: /docencia/
 ---
 
+- [Curso 2019/2020](#Curso2019-2020)
 - [Curso 2018/2019](#Curso2018-2019)
 - [Curso 2017/2018](#Curso2017-2018)
 - [Curso 2016/2017](#Curso2016-2017)
@@ -17,12 +18,46 @@ Edificio A3 - Despacho 245 (2ª planta) - <a href="http://eps.ujaen.es/detallePr
 ## Horario de tutorías
 - Lunes 9:30-11:30
 
-- Miércoles 11:30-13:30
+- Martes 17:30-18:30
 
-- Jueves 10:30-12:30
+- Miércoles 9:30-12:30
 
   <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/tutorias/p/73570">Horario actualizado en web de la EPS</a> (Se aconseja reservar hora con antelación)
 <hr/>
+## Curso 2019/2020 <a name="Curso2019-2020"></a>
+
+### Primer cuatrimestre
+
+<div class="Asignatura">
+<h4>- Arquitectura de computadores</h4>
+<p><a href="https://dv.ujaen.es/goto_docencia_crs_277838.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2019-20/4/133A/13312001/es/2019-20-13312001_es.html">Guía docente</a></p>
+<p>Prácticas: grupos viernes 8:30-10:30, 10:30-12:30 y 12:30-14:30</p>
+</div>
+<hr/>
+
+### Segundo cuatrimestre
+
+<div class="Asignatura">
+<h4>- Programación y administración de redes</h4>
+<p><a href="https://dv.ujaen.es/goto_docencia_crs_312217.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2019-20/4/133A/13312025/es/2019-20-13312025_es.html">Guía docente</a></p>
+<p>Teoría (grupo B, tardes): lunes 15:30-16:30 y martes 18:30-19:30<br/>
+Prácticas: grupos jueves 8:30-10:30, 10:30-12:30 y 12:30-14:30</p>
+</div>
+<div class="Asignatura">
+<h4>- Programación hardware</h4>
+<p><a href="https://dv.ujaen.es/goto_docencia_crs_432814.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2019-20/4/133A/13313012/es/2019-20-13313012_es.html">Guía docente</a></p>
+<p>Teoría: lunes 17:30-18:30, martes 15:30-16:30<br/>
+Prácticas: lunes 18:30-19:30, martes 16:30-17:30</p>
+</div>
+<div class="Asignatura">
+<h4>- Sistemas empotrados y ubicuos</h4>
+<p><a href="https://dv.ujaen.es/goto_docencia_crs_528452.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2019-20/4/740A/74012003/es/2019-20-74012003_es.html">Guía docente</a></p>
+<p>Teoría: miércoles 17:30-19:30<br/>
+Prácticas: jueves 15:30-17:30</p>
+</div>
+
+## 
+
 ## Curso 2018/2019 <a name="Curso2018-2019"></a>
 
 ### Primer cuatrimestre
