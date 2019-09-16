@@ -34,7 +34,6 @@ Edificio A3 - Despacho 245 (2ª planta) - <a href="http://eps.ujaen.es/detallePr
 <p>Prácticas: grupos viernes 8:30-10:30, 10:30-12:30 y 12:30-14:30</p>
 </div>
 <hr/>
-
 ### Segundo cuatrimestre
 
 <div class="Asignatura">
@@ -56,7 +55,6 @@ Prácticas: lunes 18:30-19:30, martes 16:30-17:30</p>
 Prácticas: jueves 15:30-17:30</p>
 </div>
 
-## 
 
 ## Curso 2018/2019 <a name="Curso2018-2019"></a>
 
@@ -161,8 +159,9 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
 <p>Teoría y prácticas - grupo único  (EPSL -Ingeniería en Telecomunicaciones)</p>
 </div>
 
-
 ## Trabajos fin de grado (TFG) <a name="TFGs"></a>
+
+Consulta la lista de TFG disponibles en la web de la [Escuela Politécnica Superior](http://eps.ujaen.es/PFC.html).
 
 ### Propuestos
 
@@ -170,18 +169,18 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
 - Desarrollo de interfaz web para un simulador de procesador DLX
 - Diseño de una Unidad aritmético-lógica a nivel de hardware e implementación en FPGA
 - Implementación hardware de una red neuronal artificial para reconocimiento de dígitos numéricos manuscritos
+- Entrenador didáctico de la pila de protocolos TCP/IP
 
 ### Asignados
 
-- Entrenador didáctico de la pila de protocolos TCP/IP
-- Sistema basado en Deep Learning para la identificación de estilos de cómics
-- Paquete R de acceso al Portal de datos abiertos del Gobierno de España
 - Predicción del consumo eléctrico a partir de datos históricos y variables exógenas
 - Sistema IoT/Edge computing para el control remoto de acceso mediante tarjetas inteligentes y Raspberry Pi
 
 ### Completados
 
-- Sistema para la identificación automática de vehículos a partir de fotografías - **Sobresaliente - julio 2019**
+- Sistema basado en Deep Learning para la identificación de estilos de cómics - **Sobresaliente - septiembre 2019 (propuesta Matrícula)**
+- Paquete R de acceso al Portal de datos abiertos del Gobierno de España - **Sobresaliente - julio 2019 (propuesta Matrícula)**
+- Sistema para la identificación automática de vehículos a partir de fotografías - **Sobresaliente - julio 2019 (propuesta Matrícula)**
 - Distribución de cargas de trabajo entre múltiples clientes mediante tecnologías web - **Notable - julio 2019**
 - Aplicación web para el seguimiento del aprendizaje activo de asignaturas de estudios universitarios - **Sobresaliente - junio 2019**
 - Desarrollo de una librería de algoritmos de extracción de reglas descriptivas en R y de la interfaz de usuario asociada - **Sobresaliente**
