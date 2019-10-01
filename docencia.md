@@ -9,7 +9,7 @@ permalink: /docencia/
 - [Curso 2017/2018](#Curso2017-2018)
 - [Curso 2016/2017](#Curso2016-2017)
 - [Curso 2010/2011](#Curso2010-2011)
-- [Trabajos fin de grado](#TFGs)
+- [Trabajos fin de grado](#TFGs) (**Nuevas propuestas octubre 2019**)
 
 ## Localización en la Escuela Politécnica Superior de Jaén
 
@@ -165,6 +165,10 @@ Consulta la lista de TFG disponibles en la web de la [Escuela Politécnica Super
 
 ### Propuestos
 
+- Asistente para el etiquetado de objetos presentes en imágenes
+- Paquete R para recopilación y análisis de datos de calidad del aire en España
+- Paquete R para el análisis de datos bibliométricos en publicaciones científicas
+- SCHEMATIZE: App para el reconocimiento óptico de diagramas mentales dibujados a mano
 - THUMDER (THe UltiMate Dlx EmulatoR): emulador multiplataforma DLX con fines didácticos
 - Desarrollo de interfaz web para un simulador de procesador DLX
 - Diseño de una Unidad aritmético-lógica a nivel de hardware e implementación en FPGA
@@ -173,12 +177,16 @@ Consulta la lista de TFG disponibles en la web de la [Escuela Politécnica Super
 
 ### Asignados
 
+- Detección de anomalías en imágenes georeferenciadas mediante técnicas de aprendizaje profundo
+- Detección e identificación de presencia de animales en imágenes de foto-trampeo
+- Seguimiento de vehículos en secuencias de vídeo a partir de identificación de matrículas
 - Predicción del consumo eléctrico a partir de datos históricos y variables exógenas
 - Sistema IoT/Edge computing para el control remoto de acceso mediante tarjetas inteligentes y Raspberry Pi
 
 ### Completados
 
 - Sistema basado en Deep Learning para la identificación de estilos de cómics - **Sobresaliente - septiembre 2019 (propuesta Matrícula)**
+- Análisis del desbalanceo en redes neuronales convolucionales - **Sobresaliente - julio 2019**
 - Paquete R de acceso al Portal de datos abiertos del Gobierno de España - **Sobresaliente - julio 2019 (propuesta Matrícula)**
 - Sistema para la identificación automática de vehículos a partir de fotografías - **Sobresaliente - julio 2019 (propuesta Matrícula)**
 - Distribución de cargas de trabajo entre múltiples clientes mediante tecnologías web - **Notable - julio 2019**
