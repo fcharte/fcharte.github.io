@@ -40,13 +40,29 @@ Edificio A3 - Despacho 245 (2ª planta) - <a href="http://eps.ujaen.es/detallePr
 <h4>- Programación y administración de redes</h4>
 <p><a href="https://dv.ujaen.es/goto_docencia_crs_312217.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2019-20/4/133A/13312025/es/2019-20-13312025_es.html">Guía docente</a></p>
 <p>Teoría (grupo B, tardes): lunes 15:30-16:30 y martes 18:30-19:30<br/>
-Prácticas: grupos jueves 8:30-10:30, 10:30-12:30 y 12:30-14:30</p>
+Prácticas: grupos jueves 8:30-10:30 y 10:30-12:30</p>
+<h4>Recursos</h4>
+<ul>
+<li><a href="https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,978-84-7829-119-9&tab=Jaen&search_scope=CATALOGO&vid=34CBUA_UJA:VU1&lang=es&offset=0">Redes de computadoras: un enfoque descendente</a> - Versión digital en BUJA
+<li><a href="http://www.tcpipguide.com/free/t_toc.htm">The TCP/IP Guide</a> - Descripciones exhaustivas de TCP/IP y todos los protocolos asociados
+<li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489430004994&institutionId=4994&customerId=4985">Java Network Programming</a> - Versión digital en BUJA
+</ul>
 </div>
+
 <div class="Asignatura">
 <h4>- Programación hardware</h4>
 <p><a href="https://dv.ujaen.es/goto_docencia_crs_432814.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2019-20/4/133A/13313012/es/2019-20-13313012_es.html">Guía docente</a></p>
 <p>Teoría: lunes 17:30-18:30, martes 15:30-16:30<br/>
 Prácticas: lunes 18:30-19:30, martes 16:30-17:30</p>
+<h4>
+    Recursos
+    <ul>
+        <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489370004994&institutionId=4994&customerId=4985">
+Vhdl for Logic Synthesis</a> - Versión digital en BUJA</li>
+        <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489350004994&institutionId=4994&customerId=4985">Linux Device Drivers</a> - Versión digital en BUJA</li>
+        <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489320004994&institutionId=4994&customerId=4985">Fundamentos de sistemas digitales</a> - Versión digital en BUJA</li>
+    </ul>
+    </h4>
 </div>
 <div class="Asignatura">
 <h4>- Sistemas empotrados y ubicuos</h4>
