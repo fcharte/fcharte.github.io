@@ -55,14 +55,13 @@ Prácticas: grupos jueves 8:30-10:30 y 10:30-12:30</p>
 <p>Teoría: lunes 17:30-18:30, martes 15:30-16:30<br/>
 Prácticas: lunes 18:30-19:30, martes 16:30-17:30</p>
 <h4>
-    Recursos
+    Recursos</h4>
     <ul>
         <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489370004994&institutionId=4994&customerId=4985">
 Vhdl for Logic Synthesis</a> - Versión digital en BUJA</li>
         <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489350004994&institutionId=4994&customerId=4985">Linux Device Drivers</a> - Versión digital en BUJA</li>
         <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489320004994&institutionId=4994&customerId=4985">Fundamentos de sistemas digitales</a> - Versión digital en BUJA</li>
     </ul>
-    </h4>
 </div>
 <div class="Asignatura">
 <h4>- Sistemas empotrados y ubicuos</h4>
