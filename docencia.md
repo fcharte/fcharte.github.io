@@ -43,9 +43,9 @@ Edificio A3 - Despacho 245 (2ª planta) - <a href="http://eps.ujaen.es/detallePr
 Prácticas: grupos jueves 8:30-10:30 y 10:30-12:30</p>
 <h4>Recursos</h4>
 <ul>
-<li><a href="https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,978-84-7829-119-9&tab=Jaen&search_scope=CATALOGO&vid=34CBUA_UJA:VU1&lang=es&offset=0">Redes de computadoras: un enfoque descendente</a> - Versión digital en BUJA
-<li><a href="http://www.tcpipguide.com/free/t_toc.htm">The TCP/IP Guide</a> - Descripciones exhaustivas de TCP/IP y todos los protocolos asociados
-<li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489430004994&institutionId=4994&customerId=4985">Java Network Programming</a> - Versión digital en BUJA
+  <li><a href="https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,978-84-7829-119-9&tab=Jaen&search_scope=CATALOGO&vid=34CBUA_UJA:VU1&lang=es&offset=0">Redes de computadoras: un enfoque descendente</a> - Versión digital en BUJA
+  <li><a href="http://www.tcpipguide.com/free/t_toc.htm">The TCP/IP Guide</a> - Descripciones exhaustivas de TCP/IP y todos los protocolos asociados
+  <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489430004994&institutionId=4994&customerId=4985">Java Network Programming</a> - Versión digital en BUJA
 </ul>
 </div>
 
@@ -54,14 +54,13 @@ Prácticas: grupos jueves 8:30-10:30 y 10:30-12:30</p>
 <p><a href="https://dv.ujaen.es/goto_docencia_crs_432814.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2019-20/4/133A/13313012/es/2019-20-13313012_es.html">Guía docente</a></p>
 <p>Teoría: lunes 17:30-18:30, martes 15:30-16:30<br/>
 Prácticas: lunes 18:30-19:30, martes 16:30-17:30</p>
-<h4>
-    Recursos</h4>
-    <ul>
-        <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489370004994&institutionId=4994&customerId=4985">
+<h4>Recursos</h4>
+<ul>
+  <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489370004994&institutionId=4994&customerId=4985">
 Vhdl for Logic Synthesis</a> - Versión digital en BUJA</li>
-        <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489350004994&institutionId=4994&customerId=4985">Linux Device Drivers</a> - Versión digital en BUJA</li>
-        <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489320004994&institutionId=4994&customerId=4985">Fundamentos de sistemas digitales</a> - Versión digital en BUJA</li>
-    </ul>
+  <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489350004994&institutionId=4994&customerId=4985">Linux Device Drivers</a> - Versión digital en BUJA</li>
+  <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489320004994&institutionId=4994&customerId=4985">Fundamentos de sistemas digitales</a> - Versión digital en BUJA</li>
+</ul>
 </div>
 <div class="Asignatura">
 <h4>- Sistemas empotrados y ubicuos</h4>
