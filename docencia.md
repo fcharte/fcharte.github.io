@@ -44,6 +44,7 @@ Edificio A3 - Despacho 245 (2ª planta) - <a href="http://eps.ujaen.es/detallePr
 Prácticas: grupos jueves 8:30-10:30 y 10:30-12:30</p>
   <h4>Recursos</h4>
   <ul>
+    <li><a href="https://twitter.com/EPSJ_PAR">La asignatura en Twitter</a></li>
     <li><a href="https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,978-84-7829-119-9&tab=Jaen&search_scope=CATALOGO&vid=34CBUA_UJA:VU1&lang=es&offset=0">Redes de computadoras: un enfoque descendente</a> - Versión digital en BUJA</li>
   <li><a href="http://www.tcpipguide.com/free/t_toc.htm">The TCP/IP Guide</a> - Descripciones exhaustivas de TCP/IP y todos los protocolos asociados</li>
   <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489430004994&institutionId=4994&customerId=4985">Java Network Programming</a> - Versión digital en BUJA</li>
