@@ -178,13 +178,12 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
 <p>Teoría y prácticas - grupo único  (EPSL -Ingeniería en Telecomunicaciones)</p>
 </div>
 
-## Trabajos fin de grado (TFG) <a name="TFGs"></a>
+## Trabajos fin de grado/máster (TFG/TFM) <a name="TFGs"></a>
 
-Consulta la lista de TFG disponibles en la web de la [Escuela Politécnica Superior](http://eps.ujaen.es/PFC.html).
+Consulta la lista de TFG/TFM disponibles en la web de la [Escuela Politécnica Superior](https://eps.ujaen.es/principal/trabajo-fin-de-grado-master).
 
 ### Propuestos
 
-- Asistente para el etiquetado de objetos presentes en imágenes
 - Paquete R para recopilación y análisis de datos de calidad del aire en España
 - Paquete R para el análisis de datos bibliométricos en publicaciones científicas
 - SCHEMATIZE: App para el reconocimiento óptico de diagramas mentales dibujados a mano
@@ -201,6 +200,7 @@ Consulta la lista de TFG disponibles en la web de la [Escuela Politécnica Super
 - Seguimiento de vehículos en secuencias de vídeo a partir de identificación de matrículas
 - Predicción del consumo eléctrico a partir de datos históricos y variables exógenas
 - Sistema IoT/Edge computing para el control remoto de acceso mediante tarjetas inteligentes y Raspberry Pi
+- Asistente para el etiquetado de objetos presentes en imágenes
 
 ### Completados
 
