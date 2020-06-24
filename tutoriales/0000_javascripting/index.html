@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Java como lenguaje de &lt;em&gt;scripting&lt;/em&gt;&lt;/i&gt;&lt;br/&gt;&lt;p class=&quot;author&quot;&gt;by Francisco Charte.&lt;/p&gt; - Torre de Babel</title>
+
+<link href="data:text/css,pre%20%2Eoperator%2C%0Apre%20%2Eparen%20%7B%0A%20color%3A%20rgb%28104%2C%20118%2C%20135%29%0A%7D%0A%0Apre%20%2Eliteral%20%7B%0A%20color%3A%20%23990073%0A%7D%0A%0Apre%20%2Enumber%20%7B%0A%20color%3A%20%23099%3B%0A%7D%0A%0Apre%20%2Ecomment%20%7B%0A%20color%3A%20%23998%3B%0A%20font%2Dstyle%3A%20italic%0A%7D%0A%0Apre%20%2Ekeyword%20%7B%0A%20color%3A%20%23900%3B%0A%20font%2Dweight%3A%20bold%0A%7D%0A%0Apre%20%2Eidentifier%20%7B%0A%20color%3A%20rgb%280%2C%200%2C%200%29%3B%0A%7D%0A%0Apre%20%2Estring%20%7B%0A%20color%3A%20%23d14%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
+<!--link rel="stylesheet" href="https://assets-cdn.github.com/assets/frameworks-148da7a2b8b9ad739a5a0b8b68683fed4ac7e50ce8185f17d86aa05e75ed376e.css"-->
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Inconsolata|Source+Sans+Pro:400,400i,700" rel="stylesheet">
+<link rel="stylesheet" href="https://fcharte.com/assets/css/monokai.css">
+
+<link rel="stylesheet" href="https://fcharte.com/assets/css/numbersections.css">
+
+<link rel="stylesheet" href="https://fcharte.com/assets/css/main.css">
+
+  </head>
+  <body class="layout-post">
+
+    <header>
+  <div class="inner header-inner">
+    <a class="header-title" href="https://fcharte.com">Torre de Babel</a>
+    <nav class="main-navigation">
+  
+  <a href="https://fcharte.com/about/">Sobre mí</a>
+  
+  <a href="https://fcharte.com/tutoriales/">Tutoriales</a>
+  
+  <a href="https://fcharte.com/manuales/">Manuales</a>
+  
+  <a href="https://fcharte.com/docencia/">Docencia</a>
+  
+  <a href="https://fcharte.com/investigacion/">Investigación</a>
+  
+  <a href="https://fcharte.com/publicaciones/">Publicaciones</a>
+  
+</nav>
+
+  </div>
+</header>
+
+    <div class="main">
+      <div class="inner main-inner">
+        <h1>Java como lenguaje de <em>scripting</em></i><br/><p class="author">by Francisco Charte.</p></h1>
+
+<article>
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#java-como-lenguaje-de-scripting">¿Java como lenguaje de scripting?</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#creación-de-scripts-java-usando-jshell">Creación de scripts Java usando jshell</a></li>
+<li class="toc-entry toc-h3"><a href="#creación-de-scripts-java-11-y-posteriores">Creación de scripts Java 11 y posteriores</a></li>
+</ul>
+</li>
+</ul><p>Aunque la mayor parte de usuarios de GNU/Linux han interactuado en algún momento con <strong>Bash</strong>, al acceder a una línea de comandos o terminal, aquellos con cierta experiencia conocen además la potencia de Bash como lenguaje de <em>scripting</em>. Gracias a él es posible automatizar infinidad de tareas, no necesitándose más que un editor de texto básico para escribir el <em>script</em>. La asignación de permisos de ejecución, junto con la inclusión en la primera línea del <em>script</em> del conocido como <em>shebang</em>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+instrucciones_del_script</code></pre></figure>
+
+<p>En realidad, el <em>shebang</em> es un mecanismo genérico que nos permite comunicar al sistema operativo qué intérprete debe usar para ejecutar el <em>script</em>, lo cual abre las puertas a usar otros lenguajes como Perl o Python. La sintaxis básica de la <em>shebang</em> es la mostrada a continuación:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!ruta_al_intérprete [parámetros]</span>
+instrucciones_del_script</code></pre></figure>
+
+<p>Los que comienzan a trabajar con GNU/Linux, o aquellos que no han llegado a familiarizarse con la peculiar sintaxis de <code>bash</code> a pesar de llevar más tiempo usando dicho sistema operativo, pueden recurrir al citado mecanismo genérico para escribir sus <em>scripts</em> en el lenguaje de programación que más cómodo les resulte. Este tutorial está dirigido especialmente a programadores que, conociendo el <strong>el lenguaje Java</strong>, quieren automatizar tareas simples con <em>scripts</em> sencillos escritos en dicho lenguaje.</p>
+
+<h2>
+<a id="java-como-lenguaje-de-scripting" class="anchor" href="#java-como-lenguaje-de-scripting" aria-hidden="true"><span class="octicon octicon-link"></span></a>¿Java como lenguaje de <em>scripting</em>?</h2>
+<p>La mayoría de los programadores, especialmente aquellos que usamos Java desde hace años, tienen asumido que se trata de un lenguaje de programación apropiado para el desarrollo de aplicaciones empresariales. Al igual que otros lenguajes clásicos, como C o C++, Java está sujeto al ciclo <b>Edición - Compilación - Ejecución</b> y suele emplearse un entorno de desarrollo específico para trabajar con él.</p>
+
+<p>Las últimas versiones de Java, sin embargo, han ido incorporando características que hacen posible su uso como un lenguaje de <em>scripting</em> más, al estilo de Perl, Python o el propio Bash. Los dos cambios más importantes se producen con Java 9, lanzado a finales de 2017, y con Java 11, disponible desde finales de 2018.</p>
+
+<p class="nota">Desde 1995 a 2017 solo han existido ocho versiones principales de Java, pero desde Java 9 se está lanzando una nueva versión cada 6 meses, lógicamente con menos novedades y cambios respecto a las versiones previas.</p>
+
+<h3>
+<a id="creación-de-scripts-java-usando-jshell" class="anchor" href="#creaci%C3%B3n-de-scripts-java-usando-jshell" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creación de <em>scripts</em> Java usando <code>jshell</code>
+</h3>
+<p>Desde la versión 9 el JDK de Java incluye una utilidad, denominada <code>jshell</code>, que funciona como una línea de comandos Java. Sin necesidad de escribir clases ni funciones, <code>jshell</code> permite ejecutar cualquier sentencia Java. 
+    
+</p><blockquote>
+En <a href="https://github.com/fcharte/MLC-Tools-Sessions/blob/master/Java-session-mulan.md">este módulo de mi Github</a>, por ejemplo, puedes ver una sesión en la que mediante <code>jshell</code> se usan unas bibliotecas externas para analizar datos.
+</blockquote>
+
+Aunque <code>jshell</code> está pensado para su uso de forma interactiva, también permite ejecutar <em>scripts</em> que tengamos almacenados en un archivo. Para ello no tenemos más que invocar a la herramienta facilitando el nombre de dicho archivo. Este finalizará habitualmente con la orden <code>/exit</code> para devolver el control, en lugar de quedarse a la espera en la propia línea de comandos de <code>jshell</code>.
+
+Podemos convertir un <em>script</em> Java en uno ejecutable desde la línea de comandos de Linux simplemente agregando una cabecera de una línea, tal y como se muestra en el siguiente ejemplo:
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//usr/bin/env jshell --execution local "$0" "$@"; exit $?</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hola desde jshell"</span><span class="o">)</span>
+<span class="o">/</span><span class="n">exit</span>
+<span class="o">&lt;/</span><span class="n">textarea</span><span class="o">&gt;</span></code></pre></figure>
+
+La secuencia de inicio <code>//</code> es análoga a <code>#!</code>, con la ventaja de que no interfiere en la posterior interpretación del archivo por parte de <code>jshell</code>. Con el comando <code>env</code> localizamos la ruta donde está instalado <code>jshell</code>, al que facilitamos como parámetros el propio nombre del archivo que contiene el <em>script</em>, representado por <code>$0</code>, y el vector con el resto de parámetros facilitados desde la línea de comandos, parámetro <code>$@</code>.
+
+Al ejecutar esa primera parte de la cabecera, <code>jshell</code> leerá el contenido del <em>script</em>, lo ejecutará y, dado que el último comando es <code>/exit</code>, devolverá el control. Este retornará a la primera línea del archivo, tras el punto y coma de separación, encontrándose con la instrucción <code>exit</code>. Su finalidad es terminar la ejecución sin que <code>bash</code> procese el resto del código.
+
+Tras dar permisos de ejecución a este archivo, en la siguiente imagen podemos ver cómo se ejecuta directamente desde la línea de comandos como lo haría cualquier otro <em>script</em> en Linux:
+
+<p style="text-align: center">
+<img src="../assets/img/javascripting/jshell.png" title="Un script escrito en lenguaje Java ejecutándose con JShell"></p>
+
+<h3>
+<a id="creación-de-scripts-java-11-y-posteriores" class="anchor" href="#creaci%C3%B3n-de-scripts-java-11-y-posteriores" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creación de <em>scripts</em> Java 11 y posteriores</h3>
+<p>Las versiones 11 y posteriores de Java incorporan una funcionalidad nueva que permite ejecutar directamente módulos de código fuente Java sin necesidad de compilación. Solo funciona para módulos aislados, es decir, no podemos ejecutar directamente una aplicación compleja que se componga de múltiples clases distribuidas por varios archivos fuente. No obstante, de cara a hacer posible el <em>scripting</em> usando Java eso es todo lo necesario.</p>
+
+<p>Asumiendo que hemos creado un archivo <code>programa.java</code> conteniendo una clase Java, con su correspondiente función <code>main()</code>, para ejecutarla no tenemos más que escribir en la consola <code>java programa.java</code>. La invocación a <code>java</code> puede llevarse a cabo mediante la notación <em>shebang</em> descrita antes. Habitualmente se agrega el parámetro <code>--source N</code> para indicar la versión de Java a la que se ajusta el código fuente.</p>
+
+<p>En el siguiente ejemplo, alojado en un archivo llamado <code>Itime</code>, usamos los servicios de <em>sockets</em> de Java para conectar con un servidor NTP de Internet y obtener la fecha y hora actuales, mostrándolos por la consola:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="o">!/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">java</span> <span class="o">--</span><span class="n">source</span> <span class="mi">11</span>	
+<span class="kn">import</span> <span class="nn">java.net.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">InternetTime</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kt">var</span> <span class="n">conexion</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Socket</span><span class="o">(</span><span class="s">"3.se.pool.ntp.org"</span><span class="o">,</span> <span class="mi">13</span><span class="o">);</span>
+    <span class="kt">var</span> <span class="n">entrada</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Scanner</span><span class="o">(</span><span class="n">conexion</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">());</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">entrada</span><span class="o">.</span><span class="na">nextLine</span><span class="o">());</span>
+    <span class="n">conexion</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+<span class="o">&lt;/</span><span class="n">textarea</span><span class="o">&gt;</span></code></pre></figure>
+
+<p>Siempre dando por supuesto que tenemos instalada en nuestro sistema una versión de Java 11 o posterior, bastaría con dar permisos de ejecución a <code>Itime</code> para poder ejecutarlo como un <em>script</em> cualquiera.</p>
+
+<p style="text-align: center">
+    <img src="../assets/img/javascripting/java11.png" title="Un script escrito en lenguaje Java ejecutándose con Java 11"></p>
+    
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class="inner footer-inner">
+    <div>
+      &copy; 1997-2019 Francisco Charte.
+      
+      <nav class="main-navigation">
+  
+  <a href="https://www.researchgate.net/profile/F_Charte">ResearchGate</a>
+  
+  <a href="http://orcid.org/0000-0002-3083-8942">ORCID</a>
+  
+  <a href="https://github.com/fcharte">GitHub</a>
+  
+  <a href="https://scholar.google.es/citations?user=i8l_80EAAAAJ&hl=es">Google Scholar</a>
+  
+</nav>
+
+      
+    </div>
+    <p>Contenido distribuido bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a></p>
+  </div>
+</footer>
+
+
+  </body>
+</html>
