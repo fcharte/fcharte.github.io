@@ -1,0 +1,86 @@
+---
+layout: post
+title: Java como lenguaje de <em>scripting</em></i><br/><p class="author">by Francisco Charte.</p>
+toc: true
+numbersections: true
+---
+
+<p>Aunque la mayor parte de usuarios de GNU/Linux han interactuado en algún momento con <strong>Bash</strong>, al acceder a una línea de comandos o terminal, aquellos con cierta experiencia conocen además la potencia de Bash como lenguaje de <em>scripting</em>. Gracias a él es posible automatizar infinidad de tareas, no necesitándose más que un editor de texto básico para escribir el <em>script</em>. La asignación de permisos de ejecución, junto con la inclusión en la primera línea del <em>script</em> del conocido como <em>shebang</em>:</p>
+
+{% highlight bash %}
+#!/bin/bash
+instrucciones_del_script
+{% endhighlight %}
+
+<p>En realidad, el <em>shebang</em> es un mecanismo genérico que nos permite comunicar al sistema operativo qué intérprete debe usar para ejecutar el <em>script</em>, lo cual abre las puertas a usar otros lenguajes como Perl o Python. La sintaxis básica de la <em>shebang</em> es la mostrada a continuación:</p>
+
+{% highlight bash %}
+#!ruta_al_intérprete [parámetros]
+instrucciones_del_script
+{% endhighlight %}
+
+<p>Los que comienzan a trabajar con GNU/Linux, o aquellos que no han llegado a familiarizarse con la peculiar sintaxis de <code>bash</code> a pesar de llevar más tiempo usando dicho sistema operativo, pueden recurrir al citado mecanismo genérico para escribir sus <em>scripts</em> en el lenguaje de programación que más cómodo les resulte. Este tutorial está dirigido especialmente a programadores que, conociendo el <strong>el lenguaje Java</strong>, quieren automatizar tareas simples con <em>scripts</em> sencillos escritos en dicho lenguaje.</p>
+
+<h2>¿Java como lenguaje de <em>scripting</em>?</h2>
+<p>La mayoría de los programadores, especialmente aquellos que usamos Java desde hace años, tienen asumido que se trata de un lenguaje de programación apropiado para el desarrollo de aplicaciones empresariales. Al igual que otros lenguajes clásicos, como C o C++, Java está sujeto al ciclo <b>Edición - Compilación - Ejecución</b> y suele emplearse un entorno de desarrollo específico para trabajar con él.</p>
+
+<p>Las últimas versiones de Java, sin embargo, han ido incorporando características que hacen posible su uso como un lenguaje de <em>scripting</em> más, al estilo de Perl, Python o el propio Bash. Los dos cambios más importantes se producen con Java 9, lanzado a finales de 2017, y con Java 11, disponible desde finales de 2018.</p>
+
+<p class="nota">Desde 1995 a 2017 solo han existido ocho versiones principales de Java, pero desde Java 9 se está lanzando una nueva versión cada 6 meses, lógicamente con menos novedades y cambios respecto a las versiones previas.</p>
+
+<h3>Creación de <em>scripts</em> Java usando <code>jshell</code></h3>
+<p>Desde la versión 9 el JDK de Java incluye una utilidad, denominada <code>jshell</code>, que funciona como una línea de comandos Java. Sin necesidad de escribir clases ni funciones, <code>jshell</code> permite ejecutar cualquier sentencia Java. 
+    
+<blockquote>
+En <a href="https://github.com/fcharte/MLC-Tools-Sessions/blob/master/Java-session-mulan.md">este módulo de mi Github</a>, por ejemplo, puedes ver una sesión en la que mediante <code>jshell</code> se usan unas bibliotecas externas para analizar datos.</p>
+</blockquote>
+
+Aunque <code>jshell</code> está pensado para su uso de forma interactiva, también permite ejecutar <em>scripts</em> que tengamos almacenados en un archivo. Para ello no tenemos más que invocar a la herramienta facilitando el nombre de dicho archivo. Este finalizará habitualmente con la orden <code>/exit</code> para devolver el control, en lugar de quedarse a la espera en la propia línea de comandos de <code>jshell</code>.
+
+Podemos convertir un <em>script</em> Java en uno ejecutable desde la línea de comandos de Linux simplemente agregando una cabecera de una línea, tal y como se muestra en el siguiente ejemplo:
+
+{% highlight java %}
+//usr/bin/env jshell --execution local "$0" "$@"; exit $?
+System.out.println("Hola desde jshell")
+/exit
+</textarea>
+{% endhighlight %}
+
+La secuencia de inicio <code>//</code> es análoga a <code>#!</code>, con la ventaja de que no interfiere en la posterior interpretación del archivo por parte de <code>jshell</code>. Con el comando <code>env</code> localizamos la ruta donde está instalado <code>jshell</code>, al que facilitamos como parámetros el propio nombre del archivo que contiene el <em>script</em>, representado por <code>$0</code>, y el vector con el resto de parámetros facilitados desde la línea de comandos, parámetro <code>$@</code>.
+
+Al ejecutar esa primera parte de la cabecera, <code>jshell</code> leerá el contenido del <em>script</em>, lo ejecutará y, dado que el último comando es <code>/exit</code>, devolverá el control. Este retornará a la primera línea del archivo, tras el punto y coma de separación, encontrándose con la instrucción <code>exit</code>. Su finalidad es terminar la ejecución sin que <code>bash</code> procese el resto del código.
+
+Tras dar permisos de ejecución a este archivo, en la siguiente imagen podemos ver cómo se ejecuta directamente desde la línea de comandos como lo haría cualquier otro <em>script</em> en Linux:
+
+<p style="text-align: center">
+<img src="../assets/img/javascripting/jshell.png" title="Un script escrito en lenguaje Java ejecutándose con JShell" /></p>
+
+<h3>Creación de <em>scripts</em> Java 11 y posteriores</h3>
+<p>Las versiones 11 y posteriores de Java incorporan una funcionalidad nueva que permite ejecutar directamente módulos de código fuente Java sin necesidad de compilación. Solo funciona para módulos aislados, es decir, no podemos ejecutar directamente una aplicación compleja que se componga de múltiples clases distribuidas por varios archivos fuente. No obstante, de cara a hacer posible el <em>scripting</em> usando Java eso es todo lo necesario.</p>
+
+<p>Asumiendo que hemos creado un archivo <code>programa.java</code> conteniendo una clase Java, con su correspondiente función <code>main()</code>, para ejecutarla no tenemos más que escribir en la consola <code>java programa.java</code>. La invocación a <code>java</code> puede llevarse a cabo mediante la notación <em>shebang</em> descrita antes. Habitualmente se agrega el parámetro <code>--source N</code> para indicar la versión de Java a la que se ajusta el código fuente.</p>
+
+<p>En el siguiente ejemplo, alojado en un archivo llamado <code>Itime</code>, usamos los servicios de <em>sockets</em> de Java para conectar con un servidor NTP de Internet y obtener la fecha y hora actuales, mostrándolos por la consola:</p>
+
+{% highlight java %}
+#!/usr/bin/java --source 11	
+import java.net.*;
+import java.io.*;
+import java.util.*;
+
+public class InternetTime {
+  public static void main(String[] args) throws Exception {
+    var conexion = new Socket("3.se.pool.ntp.org", 13);
+    var entrada = new Scanner(conexion.getInputStream());
+    System.out.println(entrada.nextLine());
+    conexion.close();
+  }
+}
+</textarea>
+{% endhighlight %}
+
+<p>Siempre dando por supuesto que tenemos instalada en nuestro sistema una versión de Java 11 o posterior, bastaría con dar permisos de ejecución a <code>Itime</code> para poder ejecutarlo como un <em>script</em> cualquiera.</p>
+
+<p style="text-align: center">
+    <img src="../assets/img/javascripting/java11.png" title="Un script escrito en lenguaje Java ejecutándose con Java 11" /></p>
+    
