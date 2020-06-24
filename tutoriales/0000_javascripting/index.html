@@ -90,8 +90,7 @@ Podemos convertir un <em>script</em> Java en uno ejecutable desde la línea de c
 
 <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//usr/bin/env jshell --execution local "$0" "$@"; exit $?</span>
 <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hola desde jshell"</span><span class="o">)</span>
-<span class="o">/</span><span class="n">exit</span>
-<span class="o">&lt;/</span><span class="n">textarea</span><span class="o">&gt;</span></code></pre></figure>
+<span class="o">/</span><span class="n">exit</span></code></pre></figure>
 
 La secuencia de inicio <code>//</code> es análoga a <code>#!</code>, con la ventaja de que no interfiere en la posterior interpretación del archivo por parte de <code>jshell</code>. Con el comando <code>env</code> localizamos la ruta donde está instalado <code>jshell</code>, al que facilitamos como parámetros el propio nombre del archivo que contiene el <em>script</em>, representado por <code>$0</code>, y el vector con el resto de parámetros facilitados desde la línea de comandos, parámetro <code>$@</code>.
 
@@ -122,8 +121,7 @@ Tras dar permisos de ejecución a este archivo, en la siguiente imagen podemos v
     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">entrada</span><span class="o">.</span><span class="na">nextLine</span><span class="o">());</span>
     <span class="n">conexion</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
   <span class="o">}</span>
-<span class="o">}</span>
-<span class="o">&lt;/</span><span class="n">textarea</span><span class="o">&gt;</span></code></pre></figure>
+<span class="o">}</span></code></pre></figure>
 
 <p>Siempre dando por supuesto que tenemos instalada en nuestro sistema una versión de Java 11 o posterior, bastaría con dar permisos de ejecución a <code>Itime</code> para poder ejecutarlo como un <em>script</em> cualquiera.</p>
 
