@@ -43,7 +43,6 @@ Podemos convertir un <em>script</em> Java en uno ejecutable desde la línea de c
 //usr/bin/env jshell --execution local "$0" "$@"; exit $?
 System.out.println("Hola desde jshell")
 /exit
-</textarea>
 {% endhighlight %}
 
 La secuencia de inicio <code>//</code> es análoga a <code>#!</code>, con la ventaja de que no interfiere en la posterior interpretación del archivo por parte de <code>jshell</code>. Con el comando <code>env</code> localizamos la ruta donde está instalado <code>jshell</code>, al que facilitamos como parámetros el propio nombre del archivo que contiene el <em>script</em>, representado por <code>$0</code>, y el vector con el resto de parámetros facilitados desde la línea de comandos, parámetro <code>$@</code>.
@@ -76,7 +75,6 @@ public class InternetTime {
     conexion.close();
   }
 }
-</textarea>
 {% endhighlight %}
 
 <p>Siempre dando por supuesto que tenemos instalada en nuestro sistema una versión de Java 11 o posterior, bastaría con dar permisos de ejecución a <code>Itime</code> para poder ejecutarlo como un <em>script</em> cualquiera.</p>
