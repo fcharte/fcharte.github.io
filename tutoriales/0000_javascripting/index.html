@@ -57,12 +57,12 @@
 </li>
 </ul><p>Aunque la mayor parte de usuarios de GNU/Linux han interactuado en algún momento con <strong>Bash</strong>, al acceder a una línea de comandos o terminal, aquellos con cierta experiencia conocen además la potencia de Bash como lenguaje de <em>scripting</em>. Gracias a él es posible automatizar infinidad de tareas, no necesitándose más que un editor de texto básico para escribir el <em>script</em>. La asignación de permisos de ejecución, junto con la inclusión en la primera línea del <em>script</em> del conocido como <em>shebang</em>:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
 instrucciones_del_script</code></pre></figure>
 
 <p>En realidad, el <em>shebang</em> es un mecanismo genérico que nos permite comunicar al sistema operativo qué intérprete debe usar para ejecutar el <em>script</em>, lo cual abre las puertas a usar otros lenguajes como Perl o Python. La sintaxis básica de la <em>shebang</em> es la mostrada a continuación:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!ruta_al_intérprete [parámetros]</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!ruta_al_intérprete [parámetros]</span>
 instrucciones_del_script</code></pre></figure>
 
 <p>Los que comienzan a trabajar con GNU/Linux, o aquellos que no han llegado a familiarizarse con la peculiar sintaxis de <code>bash</code> a pesar de llevar más tiempo usando dicho sistema operativo, pueden recurrir al citado mecanismo genérico para escribir sus <em>scripts</em> en el lenguaje de programación que más cómodo les resulte. Este tutorial está dirigido especialmente a programadores que, conociendo el <strong>el lenguaje Java</strong>, quieren automatizar tareas simples con <em>scripts</em> sencillos escritos en dicho lenguaje.</p>
@@ -88,7 +88,7 @@ Aunque <code>jshell</code> está pensado para su uso de forma interactiva, tambi
 
 Podemos convertir un <em>script</em> Java en uno ejecutable desde la línea de comandos de Linux simplemente agregando una cabecera de una línea, tal y como se muestra en el siguiente ejemplo:
 
-<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//usr/bin/env jshell --execution local "$0" "$@"; exit $?</span>
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//usr/bin/env jshell --execution local "$0" "$@"; exit $?</span>
 <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hola desde jshell"</span><span class="o">)</span>
 <span class="o">/</span><span class="n">exit</span>
 <span class="o">&lt;/</span><span class="n">textarea</span><span class="o">&gt;</span></code></pre></figure>
@@ -100,7 +100,7 @@ Al ejecutar esa primera parte de la cabecera, <code>jshell</code> leerá el cont
 Tras dar permisos de ejecución a este archivo, en la siguiente imagen podemos ver cómo se ejecuta directamente desde la línea de comandos como lo haría cualquier otro <em>script</em> en Linux:
 
 <p style="text-align: center">
-<img src="../assets/img/javascripting/jshell.png" title="Un script escrito en lenguaje Java ejecutándose con JShell"></p>
+<img src="/assets/img/javascripting/jshell.png" title="Un script escrito en lenguaje Java ejecutándose con JShell"></p>
 
 <h3>
 <a id="creación-de-scripts-java-11-y-posteriores" class="anchor" href="#creaci%C3%B3n-de-scripts-java-11-y-posteriores" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creación de <em>scripts</em> Java 11 y posteriores</h3>
@@ -128,7 +128,7 @@ Tras dar permisos de ejecución a este archivo, en la siguiente imagen podemos v
 <p>Siempre dando por supuesto que tenemos instalada en nuestro sistema una versión de Java 11 o posterior, bastaría con dar permisos de ejecución a <code>Itime</code> para poder ejecutarlo como un <em>script</em> cualquiera.</p>
 
 <p style="text-align: center">
-    <img src="../assets/img/javascripting/java11.png" title="Un script escrito en lenguaje Java ejecutándose con Java 11"></p>
+    <img src="/assets/img/javascripting/java11.png" title="Un script escrito en lenguaje Java ejecutándose con Java 11"></p>
     
 </article>
 
