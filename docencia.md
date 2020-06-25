@@ -6,7 +6,7 @@ permalink: /docencia/
 
 ## Localización en la Escuela Politécnica Superior de Jaén
 
-Edificio A3 - Despacho 245 (2ª planta) - <a href="http://eps.ujaen.es/detalleProfesor.php?cp=570">Ficha en EPS</a>
+Edificio A3 - Despacho 245 (2ª planta) - <a href="http://eps-anterior.ujaen.es/Profesorado/Detalles/?cp=570">Ficha en EPS</a>
 
 ## Horario de tutorías
 
