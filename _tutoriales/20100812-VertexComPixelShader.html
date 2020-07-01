@@ -3,6 +3,8 @@ layout: post
 title: Cómo comunicar un <i>vertex shader</i> con un <i>pixel shader</i><br/><p class="author">by Francisco Charte.</p>
 toc: true
 numbersections: true
+category: "Shaders"
+date: 2010-08-12
 ---
 
 <p>Como se apuntó en un tutorial previo, los VS y PS pueden comunicarse a través de parámetros <code>varying</code>. Para ser más exactos habría que decir que el VS puede entregar información al PS, por ejemplo a través de los campos <code>gl_FrontColor</code> y <code>gl_TexCoord[N]</code>. También pueden declararse parámetros <code>varying</code> a medida, declarándolos antes de la función <code>main()</code> con la siguiente sintaxis:

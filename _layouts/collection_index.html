@@ -2,9 +2,18 @@
 layout: default
 ---
 
+<div class="tags">
+    {% assign categorias = site.tutoriales | group_by: "category" | sort: "name" | map: "name" | join: "," | split: "," | uniq  %}
+    <div class="categorias">
+        {% for category in categorias %}
+        <span class="tag"><a href="/category/{{ category }}">{{ category }}</a></span>
+        {% endfor %}
+    </div>
+</div>
+
 <h1>{{ page.title }}</h1>
 
-{% assign sorted = (page.col | sort: 'date') | reverse %}
+{% assign sorted = page.col | sort: 'date' | reverse %}
 {% for element in sorted %}
 <article>
 <h2><a href="{{ element.url | prepend: site.baseurl | prepend: site.url }}">{{ element.title }}</a></h2>
