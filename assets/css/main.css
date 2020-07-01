@@ -168,6 +168,21 @@ blockquote:before {
 blockquote p {
   display: inline; }
 
+.tags {
+  width: 85%;
+  background-color: #202020; }
+
+.tag {
+  padding-left: 1em;
+  padding-right: 1em;
+  border: 1px solid white;
+  background-color: black;
+  margin-left: 5px; }
+
+.tag > a {
+  color: white;
+  text-decoration: none; }
+
 .accordion > input[name="collapse"] {
   display: none; }
 
