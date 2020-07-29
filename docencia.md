@@ -10,15 +10,70 @@ Edificio A3 - Despacho 245 (2ª planta) - <a href="http://eps-anterior.ujaen.es/
 
 ## Horario de tutorías
 
-| Lunes      | Martes      | Miércoles  |
-| ---------- | ----------- | ---------- |
-| 9:30-11:30 | 17:30-18:30 | 9:30-12:30 |
+- Lunes: 16:30 - 17:30
+- Martes: 9:30 - 12:30
+- Jueves: 10:30 - 12:30
 
 <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/tutorias/p/73570">Horario actualizado en web de la EPS</a> (Se aconseja reservar hora con antelación)
 
 <hr/>
 
 ## Asignaturas (horarios, guías docentes, bibliografía, etc.)
+
+<section class="accordion">
+  <input type="checkbox" name="collapse" id="curso2021">
+  <h2 class="handle"><label for="curso2021">Curso 2020/2021</label></h2>
+  <div class="content">
+    <h3>Primer cuatrimestre</h3>
+    <div class="Asignatura">
+      <h4>- Arquitectura de computadores</h4>
+      <p><a href="https://dv.ujaen.es/goto_docencia_crs_277838.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2020-21/4/133A/13312001/es/2020-21-13312001_es.html">Guía docente</a></p>
+      <p>Prácticas: grupos miércoles 10:30-12:30, 15:30-17:30 y 17:30-19:30</p>
+
+      <h4>Recursos</h4>
+      <ul>
+        <li><a href="https://www.youtube.com/watch?v=3Y0Eq2afOLw">Vídeo de instalación y configuración de DOSBox y WinDLX</a>, herramientas para los dos primeros bloques de prácticas.</li>
+        <li><a href="https://www.youtube.com/watch?v=5ToT30prqZs">Vídeo que describe el procedimiento de trabajo con WinDLX</a>, el simulador de procesador DLX a usar en los dos primeros bloques de prácticas.</li>
+        <li><a href="https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,84-9732-274-6&tab=Jaen&search_scope=CATALOGO&vid=34CBUA_UJA:VU1&lang=es&offset=0">Arquitectura de computadoras (libro)</a> - Versión digital en BUJA</li>
+        <li><a href="https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,9788496856837&tab=Jaen&search_scope=CATALOGO&vid=34CBUA_UJA:VU1&lang=es&offset=0">Problemas de ingeniería de computadores (libro)</a> - Versión en digital BUJA</li>
+      </ul>
+    </div>
+
+    <h3>Segundo cuatrimestre</h3>
+      <div class="Asignatura">
+        <h4>- Programación y administración de redes</h4>
+        <p><a href="https://dv.ujaen.es/goto_docencia_crs_312217.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2020-21/4/133A/13312025/es/2020-21-13312025_es.html">Guía docente</a></p>
+        <p>Teoría (grupo A, mañanas): lunes 11:30-12:30 y martes 12:30-13:30<br/>
+      Prácticas: grupo jueves 8:30-10:30</p>
+
+        <h4>Recursos</h4>
+        <ul>
+          <li><a href="https://twitter.com/EPSJ_PAR">La asignatura en Twitter</a></li>
+          <li><a href="https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,978-84-7829-119-9&tab=Jaen&search_scope=CATALOGO&vid=34CBUA_UJA:VU1&lang=es&offset=0">Redes de computadoras: un enfoque descendente (libro)</a> - Versión digital en BUJA</li>
+        <li><a href="http://www.tcpipguide.com/free/t_toc.htm">The TCP/IP Guide (Web)</a> - Descripciones exhaustivas de TCP/IP y todos los protocolos asociados</li>
+        <li><a href="https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,9781784391157&tab=Jaen&search_scope=CATALOGO&vid=34CBUA_UJA:VU1&lang=es&offset=0">Learning Python network programming (libro)</a> - Versión digital en BUJA</li>
+        <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489430004994&institutionId=4994&customerId=4985">Java Network Programming (libro)</a> - Versión digital en BUJA</li>
+        <li><a href="https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,970-10-5882-8&tab=Jaen&search_scope=CATALOGO&vid=34CBUA_UJA:VU1&lang=es&offset=0">Manual de administración de Linux (libro)</a> - Versión digital en BUJA</li>
+        <li><a href="https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,1-4493-0856-2&tab=Jaen&search_scope=CATALOGO&vid=34CBUA_UJA:VU1&lang=es&offset=0">Programming HTML5 applications (libro)</a> - Versión digital en BUJA</li>
+        <li><a href="http://youtube.com/fcharte">Canal de YouTube - Vídeos de la asignatura</a> sobre preparación de materiales para prácticas, programación con sockets, encapsulamiento TCP/IP, etc.</li>
+      </ul>
+      </div>
+      <div class="Asignatura">
+      <h4>- Programación hardware</h4>
+      <p><a href="https://dv.ujaen.es/goto_docencia_crs_432814.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2020-21/4/133A/13313012/es/2020-21-13313012_es.html">Guía docente</a></p>
+      <p>Teoría: martes 15:30-16:30, miércoles 17:30-18:30<br/>
+      Prácticas: martes 16:30-17:30, miércoles 18:30-19:30</p>
+
+      <h4>Recursos</h4>
+      <ul>
+        <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489370004994&institutionId=4994&customerId=4985">
+      Vhdl for Logic Synthesis (libro)</a> - Versión digital en BUJA</li>
+        <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489350004994&institutionId=4994&customerId=4985">Linux Device Drivers (libro)</a> - Versión digital en BUJA</li>
+        <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&package_service_id=1862489320004994&institutionId=4994&customerId=4985">Fundamentos de sistemas digitales (libro)</a> - Versión digital en BUJA</li>
+      </ul>
+      </div>
+  </div>
+</section>
 
 <section class="accordion">
   <input type="checkbox" name="collapse" id="curso1920">
