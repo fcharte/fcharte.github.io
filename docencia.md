@@ -6,7 +6,7 @@ permalink: /docencia/
 
 ## Localización en la Escuela Politécnica Superior de Jaén
 
-Edificio A3 - Despacho 245 (2ª planta) - <a href="http://eps-anterior.ujaen.es/Profesorado/Detalles/?cp=570">Ficha en EPS</a>
+Edificio A3 - Despacho 241 (2ª planta) - <a href="http://eps-anterior.ujaen.es/Profesorado/Detalles/?cp=570">Ficha en EPS</a>
 
 ## Horario de tutorías
 
@@ -259,7 +259,6 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
 <li> Diseño de una Unidad aritmético-lógica a nivel de hardware e implementación en FPGA</li>
 <li> Implementación hardware de una red neuronal artificial para reconocimiento de dígitos numéricos manuscritos</li>
 <li> Entrenador didáctico de la pila de protocolos TCP/IP</li>
-<li> Predicción del consumo eléctrico a partir de datos históricos y variables exógenas</li>
 </ul>
 </div>
 </section>
@@ -272,7 +271,9 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
 <li> CarDreamer: Fantasy car designs dreamed by a neural network</li>
 <li> Anotación de acordes en piezas musicales con aprendizaje profundo</li>
 <li> Sistema IoT/Edge computing para el control remoto de acceso mediante tarjetas inteligentes y Raspberry Pi</li>
-<li> Asistente para el etiquetado de objetos presentes en imágenes</li>
+<li> Predicción del consumo eléctrico a partir de datos históricos y variables exógenas</li>
+<li> Identificación de tumores de mama a partir de análisis de imágenes con técnicas de aprendizaje profundo</li>
+<li> Detección de incendios en areas forestales usando algoritmos de deep learning</li>
 </ul>
 </div>
 </section>
@@ -282,6 +283,7 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
   <h2 class="handle"><label for="TFTDefendidos">TFT defendidos</label></h2>
 <div class="content">
 <ul>
+<li> Asistente para el etiquetado de objetos presentes en imágenes - <b>Sobresaliente - septiembre 2020</b></li>
 <li> Deep Learning for Multi-Object Detections under Pre-processed Conditions with Audio Feedback - <b>Sobresaliente - junio 2020 (propuesta Matrícula)</b></li>
 <li> Detección de anomalías en imágenes georeferenciadas mediante técnicas de aprendizaje profundo - <b>Sobresaliente - junio 2020 (propuesta Matrícula)</b></li>
 <li> Detección e identificación de presencia de animales en imágenes de foto-trampeo - <b>Sobresaliente - junio 2020 (propuesta Matrícula)</b></li>
