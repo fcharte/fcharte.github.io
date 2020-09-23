@@ -32,6 +32,7 @@ Edificio A3 - Despacho 241 (2ª planta) - <a href="http://eps-anterior.ujaen.es/
 
       <h4>Recursos</h4>
       <ul>
+        <li><a href="https://meet.google.com/gju-mntp-vpr">Sala de Meet</a> para seguir las sesiones de prácticas.</li>
         <li><a href="https://www.youtube.com/watch?v=3Y0Eq2afOLw">Vídeo de instalación y configuración de DOSBox y WinDLX</a>, herramientas para los dos primeros bloques de prácticas.</li>
         <li><a href="https://www.youtube.com/watch?v=5ToT30prqZs">Vídeo que describe el procedimiento de trabajo con WinDLX</a>, el simulador de procesador DLX a usar en los dos primeros bloques de prácticas.</li>
         <li><a href="https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,84-9732-274-6&tab=Jaen&search_scope=CATALOGO&vid=34CBUA_UJA:VU1&lang=es&offset=0">Arquitectura de computadoras (libro)</a> - Versión digital en BUJA</li>
