@@ -255,12 +255,11 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
 <ul>
 <li> Paquete R para recopilación y análisis de datos de calidad del aire en España</li>
 <li> Paquete R para el análisis de datos bibliométricos en publicaciones científicas</li>
-<li> SCHEMATIZE: App para el reconocimiento óptico de diagramas mentales dibujados a mano</li>
-<li> THUMDER (<em>THe UltiMate Dlx EmulatoR</em>): emulador multiplataforma DLX con fines didácticos</li>
-<li> Desarrollo de interfaz web para un simulador de procesador DLX</li>
 <li> Diseño de una Unidad aritmético-lógica a nivel de hardware e implementación en FPGA</li>
 <li> Implementación hardware de una red neuronal artificial para reconocimiento de dígitos numéricos manuscritos</li>
 <li> Entrenador didáctico de la pila de protocolos TCP/IP</li>
+<li> CarDreamer: Fantasy car designs dreamed by a neural network</li>
+<li> Sistema IoT/Edge computing para el control remoto de acceso mediante tarjetas inteligentes y Raspberry Pi</li>
 </ul>
 </div>
 </section>
@@ -270,9 +269,11 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
   <h2 class="handle"><label for="TFTAsignados">TFT asignados</label></h2>
 <div class="content">
 <ul>
-<li> CarDreamer: Fantasy car designs dreamed by a neural network</li>
+<li> SCHEMATIZE: App para el reconocimiento óptico de diagramas mentales dibujados a mano</li>
+<li> THUMDER (<em>THe UltiMate Dlx EmulatoR</em>): emulador multiplataforma DLX con fines didácticos</li>
+<li> Desarrollo de interfaz web para un simulador de procesador DLX</li>
 <li> Anotación de acordes en piezas musicales con aprendizaje profundo</li>
-<li> Sistema IoT/Edge computing para el control remoto de acceso mediante tarjetas inteligentes y Raspberry Pi</li>
+<li> Cybersecurity: hacking and penetration testing methodologies and techniques</li>
 <li> Predicción del consumo eléctrico a partir de datos históricos y variables exógenas</li>
 <li> Identificación de tumores de mama a partir de análisis de imágenes con técnicas de aprendizaje profundo</li>
 <li> Detección de incendios en areas forestales usando algoritmos de deep learning</li>
