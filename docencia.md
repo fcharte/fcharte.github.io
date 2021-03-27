@@ -252,15 +252,14 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
 
 <p>Consulta la lista de TFG/TFM disponibles en la web de la <a href="https://eps.ujaen.es/principal/trabajo-fin-de-grado-master">Escuela Politécnica Superior</a>.</p>
 
-<ul>
+<ol>
 <li> Paquete R para recopilación y análisis de datos de calidad del aire en España</li>
 <li> Paquete R para el análisis de datos bibliométricos en publicaciones científicas</li>
 <li> Diseño de una Unidad aritmético-lógica a nivel de hardware e implementación en FPGA</li>
 <li> Implementación hardware de una red neuronal artificial para reconocimiento de dígitos numéricos manuscritos</li>
 <li> Entrenador didáctico de la pila de protocolos TCP/IP</li>
 <li> CarDreamer: Fantasy car designs dreamed by a neural network</li>
-<li> Sistema IoT/Edge computing para el control remoto de acceso mediante tarjetas inteligentes y Raspberry Pi</li>
-</ul>
+</ol>
 </div>
 </section>
 
@@ -268,7 +267,7 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
   <input type="checkbox" name="collapse" id="TFTAsignados">
   <h2 class="handle"><label for="TFTAsignados">TFT asignados</label></h2>
 <div class="content">
-<ul>
+<ol>
 <li> SCHEMATIZE: App para el reconocimiento óptico de diagramas mentales dibujados a mano</li>
 <li> THUMDER (<em>THe UltiMate Dlx EmulatoR</em>): emulador multiplataforma DLX con fines didácticos</li>
 <li> Desarrollo de interfaz web para un simulador de procesador DLX</li>
@@ -277,7 +276,9 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
 <li> Predicción del consumo eléctrico a partir de datos históricos y variables exógenas</li>
 <li> Identificación de tumores de mama a partir de análisis de imágenes con técnicas de aprendizaje profundo</li>
 <li> Detección de incendios en areas forestales usando algoritmos de deep learning</li>
-</ul>
+<li> Estudio de migración de sistema heredado a arquitecturas abiertas modernas (TFM)</li>
+<li> Sistema IoT/Edge computing para el control remoto de acceso mediante tarjetas inteligentes y Raspberry Pi (TFM)</li>
+</ol>
 </div>
 </section>
 
@@ -285,9 +286,9 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
   <input type="checkbox" name="collapse" id="TFTDefendidos">
   <h2 class="handle"><label for="TFTDefendidos">TFT defendidos</label></h2>
 <div class="content">
-<ul>
+<ol reversed>
 <li> Asistente para el etiquetado de objetos presentes en imágenes - <b>Sobresaliente - septiembre 2020</b></li>
-<li> Deep Learning for Multi-Object Detections under Pre-processed Conditions with Audio Feedback - <b>Sobresaliente - junio 2020 (propuesta Matrícula)</b></li>
+<li> Deep Learning for Multi-Object Detections under Pre-processed Conditions with Audio Feedback (TFM) - <b>Sobresaliente - junio 2020 (propuesta Matrícula)</b></li>
 <li> Detección de anomalías en imágenes georeferenciadas mediante técnicas de aprendizaje profundo - <b>Sobresaliente - junio 2020 (propuesta Matrícula)</b></li>
 <li> Detección e identificación de presencia de animales en imágenes de foto-trampeo - <b>Sobresaliente - junio 2020 (propuesta Matrícula)</b></li>
 <li> Seguimiento de vehículos en secuencias de vídeo a partir de identificación de matrículas - <b>Sobresaliente - junio 2020 (propuesta Matrícula)</b></li>
@@ -301,6 +302,6 @@ Prácticas: grupos 1-3 (EPSL - Ing. Técnica de Telecomunicaciones - Esp. Telem�
 <li> Desarrollo de una aplicación móvil para el control y la monitorización de servidores - <b>Matrícula de honor</b></li>
 <li> Desarrollo de software para la monitorización de redes sobre Raspberry Pi - <b>Notable</b></li>
 <li> Néfele: plataforma web para el análisis y agregación de predicciones meteorológicas - <b>Notable</b></li>
-</ul>
+</ol>
 </div>
 </section>
