@@ -14,7 +14,7 @@ Edificio A3 - Despacho 241 (2ª planta) - <a href="http://eps-anterior.ujaen.es/
 - Miércoles: 9:30 - 11:30
 - Jueves: 9:30 - 12:30
 
-<a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/tutorias/p/73570">Horario actualizado en web de la EPS</a> (Se aconseja reservar hora con antelación)
+<a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/tutorias/p/73570">Horario actualizado en web de la EPS</a> (Se aconseja reservar hora con antelación) 
 <p><b>Sala de Google Meet</b> <a href="https://meet.google.com/tkp-osmy-xbs">para tutorías</a>. </p>
 <p><b>Sala de Google Meet</b> <a href="https://meet.google.com/xpv-pash-fij"> para sesiones de teoría/prácticas</a>. </p>
 <hr/>
