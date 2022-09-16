@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>docencia.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+
+/*
+  xt256.css
+
+  Contact: initbar [at] protonmail [dot] ch
+         : github.com/initbar
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  color: #eaeaea;
+  background: #000;
+  padding: 0.5em;
+}
+
+.hljs-subst {
+  color: #eaeaea;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+.hljs-builtin-name,
+.hljs-type {
+  color: #eaeaea;
+}
+
+.hljs-params {
+  color: #da0000;
+}
+
+.hljs-literal,
+.hljs-number,
+.hljs-name {
+  color: #ff0000;
+  font-weight: bolder;
+}
+
+.hljs-comment {
+  color: #969896;
+}
+
+.hljs-selector-id,
+.hljs-quote {
+  color: #00ffff;
+}
+
+.hljs-template-variable,
+.hljs-variable,
+.hljs-title {
+  color: #00ffff;
+  font-weight: bold;
+}
+
+.hljs-selector-class,
+.hljs-keyword,
+.hljs-symbol {
+  color: #fff000;
+}
+
+.hljs-string,
+.hljs-bullet {
+  color: #00ff00;
+}
+
+.hljs-tag,
+.hljs-section {
+  color: #000fff;
+}
+
+.hljs-selector-tag {
+  color: #000fff;
+  font-weight: bold;
+}
+
+.hljs-attribute,
+.hljs-built_in,
+.hljs-regexp,
+.hljs-link {
+  color: #ff00ff;
+}
+
+.hljs-meta {
+  color: #fff;
+  font-weight: bolder;
+}
+
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="localizaci%C3%B3n-en-la-escuela-polit%C3%A9cnica-superior-de-ja%C3%A9n">Localización en la Escuela Politécnica Superior de Jaén</h2>
+<p>Edificio A3 - Despacho 241 (2ª planta) - <a href="http://eps-anterior.ujaen.es/Profesorado/Detalles/?cp=570">Ficha en EPS</a></p>
+<h2 id="horario-de-tutor%C3%ADas">Horario de tutorías</h2>
+<ul>
+<li>Martes: 10:30 - 12:30</li>
+<li>Miércoles: 10:30 - 12:30 y 16:30 - 18:30</li>
+</ul>
+<p><a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/tutorias/p/73570">Horario actualizado en web de la EPS</a> (Se aconseja reservar hora con antelación)</p>
+<hr>
+<h2 id="asignaturas-horarios-gu%C3%ADas-docentes-bibliograf%C3%ADa-etc">Asignaturas (horarios, guías docentes, bibliografía, etc.)</h2>
+<section class="accordion">
+  <input type="checkbox" name="collapse" id="curso2223">
+  <h2 class="handle"><label for="curso2223">Curso 2022/2023</label></h2>
+  <div class="content">
+    <h3>Primer cuatrimestre</h3>
+    <div class="Asignatura">
+      <h4>- Arquitectura de computadores</h4>
+      <p><a href="https://platea.ujaen.es/course/view.php?id=10802">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2022-23/4/133A/13312001/es/2022-23-13312001_es.html">Gu&#xED;a docente</a></p>
+      <p>Pr&#xE1;cticas: grupos lunes 8:30-10:30 y 10:30-12:30</p>
+</div></div></section><pre><code>  &lt;h4&gt;Recursos&lt;/h4&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=3Y0Eq2afOLw&quot;&gt;Vídeo de instalación y configuración de DOSBox y WinDLX&lt;/a&gt;, herramientas para los dos primeros bloques de prácticas.&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=5ToT30prqZs&quot;&gt;Vídeo que describe el procedimiento de trabajo con WinDLX&lt;/a&gt;, el simulador de procesador DLX a usar en los dos primeros bloques de prácticas.&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,84-9732-274-6&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Arquitectura de computadoras (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,9788496856837&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Problemas de ingeniería de computadores (libro)&lt;/a&gt; - Versión en digital BUJA&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+  
+
+<section class="accordion">
+  <input type="checkbox" name="collapse" id="curso2122">
+  <h2 class="handle"><label for="curso2122">Curso 2021/2022</label></h2>
+  <div class="content">
+    <h3>Primer cuatrimestre</h3>
+    <div class="Asignatura">
+      <h4>- Arquitectura de computadores</h4>
+      <p><a href="https://platea.ujaen.es/course/view.php?id=5948">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2021-22/4/133A/13312001/es/2021-22-13312001_es.html">Gu&#xED;a docente</a></p>
+      <p>Pr&#xE1;cticas: grupos martes 8:30-10:30, 10:30-12:30 y 12:30-14:30</p>
+</div></div></section><pre><code>  &lt;h4&gt;Recursos&lt;/h4&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href=&quot;https://meet.google.com/gju-mntp-vpr&quot;&gt;Sala de Meet&lt;/a&gt; para seguir las sesiones de prácticas.&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=3Y0Eq2afOLw&quot;&gt;Vídeo de instalación y configuración de DOSBox y WinDLX&lt;/a&gt;, herramientas para los dos primeros bloques de prácticas.&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=5ToT30prqZs&quot;&gt;Vídeo que describe el procedimiento de trabajo con WinDLX&lt;/a&gt;, el simulador de procesador DLX a usar en los dos primeros bloques de prácticas.&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,84-9732-274-6&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Arquitectura de computadoras (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,9788496856837&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Problemas de ingeniería de computadores (libro)&lt;/a&gt; - Versión en digital BUJA&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;h3&gt;Segundo cuatrimestre&lt;/h3&gt;
+  &lt;div class=&quot;Asignatura&quot;&gt;
+    &lt;h4&gt;- Programación y administración de redes&lt;/h4&gt;
+    &lt;p&gt;&lt;a href=&quot;https://platea.ujaen.es/course/view.php?id=1547&quot;&gt;Docencia virtual&lt;/a&gt; - &lt;a href=&quot;https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2021-22/4/133A/13312025/es/2021-22-13312025_es.html&quot;&gt;Guía docente&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;Teoría (grupo B, tardes): martes 17:30-18:30 y jueves 17:30-18:30&lt;br/&gt;
+  Prácticas: grupos lunes 8:30-10:30 y 10:30-12:30&lt;/p&gt;
+
+    &lt;h4&gt;Recursos&lt;/h4&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://twitter.com/EPSJ_PAR&quot;&gt;La asignatura en Twitter&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,978-84-7829-119-9&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Redes de computadoras: un enfoque descendente (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;http://www.tcpipguide.com/free/t_toc.htm&quot;&gt;The TCP/IP Guide (Web)&lt;/a&gt; - Descripciones exhaustivas de TCP/IP y todos los protocolos asociados&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,9781784391157&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Learning Python network programming (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&amp;package_service_id=1862489430004994&amp;institutionId=4994&amp;customerId=4985&quot;&gt;Java Network Programming (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,970-10-5882-8&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Manual de administración de Linux (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,1-4493-0856-2&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Programming HTML5 applications (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;http://youtube.com/fcharte&quot;&gt;Canal de YouTube - Vídeos de la asignatura&lt;/a&gt; sobre preparación de materiales para prácticas, programación con sockets, encapsulamiento TCP/IP, etc.&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;Asignatura&quot;&gt;
+  &lt;h4&gt;- Programación hardware&lt;/h4&gt;
+  &lt;p&gt;&lt;a href=&quot;https://platea.ujaen.es/course/view.php?id=4184&quot;&gt;Docencia virtual&lt;/a&gt; - &lt;a href=&quot;https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2021-22/4/133A/13313012/es/2021-22-13313012_es.html&quot;&gt;Guía docente&lt;/a&gt;&lt;/p&gt;
+  &lt;p&gt;Teoría: lunes 19:30-20:30, jueves 15:30-16:30&lt;br/&gt;
+  Prácticas: lunes 20:30-21:30, jueves 16:30-17:30&lt;/p&gt;
+
+  &lt;h4&gt;Recursos&lt;/h4&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&amp;package_service_id=1862489370004994&amp;institutionId=4994&amp;customerId=4985&quot;&gt;
+  Vhdl for Logic Synthesis (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&amp;package_service_id=1862489350004994&amp;institutionId=4994&amp;customerId=4985&quot;&gt;Linux Device Drivers (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&amp;package_service_id=1862489320004994&amp;institutionId=4994&amp;customerId=4985&quot;&gt;Fundamentos de sistemas digitales (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+</code></pre>
+  
+
+<section class="accordion">
+  <input type="checkbox" name="collapse" id="curso2021">
+  <h2 class="handle"><label for="curso2021">Curso 2020/2021</label></h2>
+  <div class="content">
+    <h3>Primer cuatrimestre</h3>
+    <div class="Asignatura">
+      <h4>- Arquitectura de computadores</h4>
+      <p><a href="https://dv.ujaen.es/goto_docencia_crs_277838.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2020-21/4/133A/13312001/es/2020-21-13312001_es.html">Gu&#xED;a docente</a></p>
+      <p>Pr&#xE1;cticas: grupos mi&#xE9;rcoles 10:30-12:30, 15:30-17:30 y 17:30-19:30</p>
+</div></div></section><pre><code>  &lt;h4&gt;Recursos&lt;/h4&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href=&quot;https://meet.google.com/gju-mntp-vpr&quot;&gt;Sala de Meet&lt;/a&gt; para seguir las sesiones de prácticas.&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=3Y0Eq2afOLw&quot;&gt;Vídeo de instalación y configuración de DOSBox y WinDLX&lt;/a&gt;, herramientas para los dos primeros bloques de prácticas.&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=5ToT30prqZs&quot;&gt;Vídeo que describe el procedimiento de trabajo con WinDLX&lt;/a&gt;, el simulador de procesador DLX a usar en los dos primeros bloques de prácticas.&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,84-9732-274-6&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Arquitectura de computadoras (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,9788496856837&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Problemas de ingeniería de computadores (libro)&lt;/a&gt; - Versión en digital BUJA&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;h3&gt;Segundo cuatrimestre&lt;/h3&gt;
+  &lt;div class=&quot;Asignatura&quot;&gt;
+    &lt;h4&gt;- Programación y administración de redes&lt;/h4&gt;
+    &lt;p&gt;&lt;a href=&quot;https://dv.ujaen.es/goto_docencia_crs_312217.html&quot;&gt;Docencia virtual&lt;/a&gt; - &lt;a href=&quot;https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2020-21/4/133A/13312025/es/2020-21-13312025_es.html&quot;&gt;Guía docente&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;Teoría (grupo A, mañanas): lunes 11:30-12:30 y martes 12:30-13:30&lt;br/&gt;
+  Prácticas: grupo jueves 8:30-10:30&lt;/p&gt;
+
+    &lt;h4&gt;Recursos&lt;/h4&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://twitter.com/EPSJ_PAR&quot;&gt;La asignatura en Twitter&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,978-84-7829-119-9&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Redes de computadoras: un enfoque descendente (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;http://www.tcpipguide.com/free/t_toc.htm&quot;&gt;The TCP/IP Guide (Web)&lt;/a&gt; - Descripciones exhaustivas de TCP/IP y todos los protocolos asociados&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,9781784391157&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Learning Python network programming (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&amp;package_service_id=1862489430004994&amp;institutionId=4994&amp;customerId=4985&quot;&gt;Java Network Programming (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,970-10-5882-8&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Manual de administración de Linux (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,1-4493-0856-2&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0&quot;&gt;Programming HTML5 applications (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;http://youtube.com/fcharte&quot;&gt;Canal de YouTube - Vídeos de la asignatura&lt;/a&gt; sobre preparación de materiales para prácticas, programación con sockets, encapsulamiento TCP/IP, etc.&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;Asignatura&quot;&gt;
+  &lt;h4&gt;- Programación hardware&lt;/h4&gt;
+  &lt;p&gt;&lt;a href=&quot;https://dv.ujaen.es/goto_docencia_crs_432814.html&quot;&gt;Docencia virtual&lt;/a&gt; - &lt;a href=&quot;https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2020-21/4/133A/13313012/es/2020-21-13313012_es.html&quot;&gt;Guía docente&lt;/a&gt;&lt;/p&gt;
+  &lt;p&gt;Teoría: martes 15:30-16:30, miércoles 17:30-18:30&lt;br/&gt;
+  Prácticas: martes 16:30-17:30, miércoles 18:30-19:30&lt;/p&gt;
+
+  &lt;h4&gt;Recursos&lt;/h4&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&amp;package_service_id=1862489370004994&amp;institutionId=4994&amp;customerId=4985&quot;&gt;
+  Vhdl for Logic Synthesis (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&amp;package_service_id=1862489350004994&amp;institutionId=4994&amp;customerId=4985&quot;&gt;Linux Device Drivers (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&amp;package_service_id=1862489320004994&amp;institutionId=4994&amp;customerId=4985&quot;&gt;Fundamentos de sistemas digitales (libro)&lt;/a&gt; - Versión digital en BUJA&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+</code></pre>
+  
+
+<section class="accordion">
+  <input type="checkbox" name="collapse" id="curso1920">
+  <h2 class="handle"><label for="curso1920">Curso 2019/2020</label></h2>
+<div class="content">
+  <h3>Primer cuatrimestre</h3>
+  <div class="Asignatura">
+    <h4>- Arquitectura de computadores</h4>
+    <p><a href="https://dv.ujaen.es/goto_docencia_crs_277838.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2019-20/4/133A/13312001/es/2019-20-13312001_es.html">Gu&#xED;a docente</a></p>
+    <p>Pr&#xE1;cticas: grupos viernes 8:30-10:30, 10:30-12:30 y 12:30-14:30</p>
+  </div>
+</div></section>  <h3>Segundo cuatrimestre</h3>
+  <div class="Asignatura">
+    <h4>- Programaci&#xF3;n y administraci&#xF3;n de redes</h4>
+    <p><a href="https://dv.ujaen.es/goto_docencia_crs_312217.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2019-20/4/133A/13312025/es/2019-20-13312025_es.html">Gu&#xED;a docente</a></p>
+    <p>Teor&#xED;a (grupo B, tardes): lunes 15:30-16:30 y martes 18:30-19:30<br>
+  Pr&#xE1;cticas: grupos jueves 8:30-10:30 y 10:30-12:30</p>
+    <h4>Recursos</h4>
+    <ul>
+      <li><a href="https://twitter.com/EPSJ_PAR">La asignatura en Twitter</a></li>
+      <li><a href="https://buscaenbuja.ujaen.es/discovery/search?query=any,contains,978-84-7829-119-9&amp;tab=Jaen&amp;search_scope=CATALOGO&amp;vid=34CBUA_UJA:VU1&amp;lang=es&amp;offset=0">Redes de computadoras: un enfoque descendente</a> - Versi&#xF3;n digital en BUJA</li>
+    <li><a href="http://www.tcpipguide.com/free/t_toc.htm">The TCP/IP Guide</a> - Descripciones exhaustivas de TCP/IP y todos los protocolos asociados</li>
+    <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&amp;package_service_id=1862489430004994&amp;institutionId=4994&amp;customerId=4985">Java Network Programming</a> - Versi&#xF3;n digital en BUJA</li>
+  </ul>
+  </div>
+  <div class="Asignatura">
+  <h4>- Programaci&#xF3;n hardware</h4>
+  <p><a href="https://dv.ujaen.es/goto_docencia_crs_432814.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2019-20/4/133A/13313012/es/2019-20-13313012_es.html">Gu&#xED;a docente</a></p>
+  <p>Teor&#xED;a: lunes 17:30-18:30, martes 15:30-16:30<br>
+  Pr&#xE1;cticas: lunes 18:30-19:30, martes 16:30-17:30</p>
+  <h4>Recursos</h4>
+  <ul>
+    <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&amp;package_service_id=1862489370004994&amp;institutionId=4994&amp;customerId=4985">
+  Vhdl for Logic Synthesis</a> - Versi&#xF3;n digital en BUJA</li>
+    <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&amp;package_service_id=1862489350004994&amp;institutionId=4994&amp;customerId=4985">Linux Device Drivers</a> - Versi&#xF3;n digital en BUJA</li>
+    <li><a href="https://buscaenbuja.ujaen.es/view/action/uresolver.do?operation=resolveService&amp;package_service_id=1862489320004994&amp;institutionId=4994&amp;customerId=4985">Fundamentos de sistemas digitales</a> - Versi&#xF3;n digital en BUJA</li>
+  </ul>
+  </div>
+  <div class="Asignatura">
+  <h4>- Sistemas empotrados y ubicuos</h4>
+  <p><a href="https://dv.ujaen.es/goto_docencia_crs_528452.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2019-20/4/740A/74012003/es/2019-20-74012003_es.html">Gu&#xED;a docente</a></p>
+  <p>Teor&#xED;a: mi&#xE9;rcoles 17:30-19:30<br>
+  Pr&#xE1;cticas: jueves 15:30-17:30</p>
+  </div>
+
+
+<section class="accordion">
+  <input type="checkbox" name="collapse" id="curso1918">
+  <h2 class="handle"><label for="curso1819">Curso 2018/2019</label></h2>
+<div class="content">
+  <h3>Primer cuatrimestre</h3>
+<div class="Asignatura">
+<h4>- Arquitectura de computadores</h4>
+<p><a href="https://dv.ujaen.es/goto_docencia_crs_277838.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2018-19/4/133A/13312001/es/2018-19-13312001_es.html">Gu&#xED;a docente</a></p>
+<p>Pr&#xE1;cticas: grupos jueves 12:30-14:30, 15:30-17:30 y 17:30-19:30</p>
+</div>
+</div></section><h3>Segundo cuatrimestre</h3>
+<div class="Asignatura">
+<h4>- Programaci&#xF3;n y administraci&#xF3;n de redes</h4>
+<p><a href="https://dv.ujaen.es/goto_docencia_crs_312217.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2018-19/4/133A/13312025/es/2018-19-13312025_es.html">Gu&#xED;a docente</a></p>
+<p>Teor&#xED;a (grupo A, ma&#xF1;anas): lunes 11:30-12:30 y martes 10:30-11:30<br>
+Pr&#xE1;cticas: grupos viernes 10:30-12:30 y 12:30-14:30</p>
+</div>
+<div class="Asignatura">
+<h4>- Programaci&#xF3;n hardware</h4>
+<p><a href="https://dv.ujaen.es/goto_docencia_crs_432814.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2018-19/4/133A/13313012/es/2018-19-13313012_es.html">Gu&#xED;a docente</a></p>
+<p>Teor&#xED;a: lunes 15:30-16:30, mi&#xE9;rcoles 15:30-16:30<br>
+Pr&#xE1;cticas: lunes 16:30-17:30, mi&#xE9;rcoles 16:30-17:30</p>
+</div>
+<div class="Asignatura">
+<h4>- Sistemas empotrados y ubicuos</h4>
+<p><a href="https://dv.ujaen.es/goto_docencia_crs_528452.html">Docencia virtual</a> - <a href="https://uvirtual.ujaen.es/pub/es/informacionacademica/catalogoguiasdocentes/p/2018-19/4/740A/74012003/es/2018-19-74012003_es.html">Gu&#xED;a docente</a></p>
+<p>Teor&#xED;a: viernes 17:30-19:30<br>
+Pr&#xE1;cticas: lunes 15:30-17:30</p>
+</div>
+
+
+<section class="accordion">
+  <input type="checkbox" name="collapse" id="curso1718">
+  <h2 class="handle"><label for="curso1718">Curso 2017/2018</label></h2>
+<div class="content">
+  <h3>Primer cuatrimestre</h3>
+<div class="Asignatura">
+<h4>- Arquitectura de computadores</h4>
+<p>Pr&#xE1;cticas: grupos lunes 10:30-12:30, 12:30-14:30 y 17:30-19:30</p>
+</div>
+<h3>Segundo cuatrimestre</h3>
+<div class="Asignatura">
+<h4>- Programaci&#xF3;n y administraci&#xF3;n de redes</h4>
+<p>Teor&#xED;a (grupo B, tardes): mi&#xE9;rcoles 15:30-16:30 y viernes 17:30-18:30<br>
+Pr&#xE1;cticas: grupos lunes 12:30-14:30 y 15:30-17:30</p>
+</div>
+<div class="Asignatura">
+<h4>- Programaci&#xF3;n hardware</h4>
+<p>Teor&#xED;a: lunes 17:30-18:30, martes 17:30-18:30<br>
+Pr&#xE1;cticas: lunes 18:30-19:30, martes 18:30-19:30</p>
+</div>
+<div class="Asignatura">
+<h4>- Sistemas empotrados y ubicuos</h4>
+<p>Teor&#xED;a: jueves 15:30-17:30<br>
+Pr&#xE1;cticas: viernes 15:30-17:30</p>
+</div>
+</div>
+</section>
+<section class="accordion">
+  <input type="checkbox" name="collapse" id="curso1617">
+  <h2 class="handle"><label for="curso1617">Curso 2016/2017</label></h2>
+<div class="content">
+  <h3>Primer cuatrimestre</h3>
+<div class="Asignatura">
+<h4>- Arquitectura de computadores</h4>
+<p>Pr&#xE1;cticas: grupo martes 19:30-21:30</p>
+</div>
+<div class="Asignatura">
+<h4>- Fundamentos de arquitectura de computadores</h4>
+<p>Pr&#xE1;cticas: grupos jueves 12:30-14:30 y 19:30-21:30</p>
+</div>
+<div class="Asignatura">
+<h4>- Sistemas empotrados y ubicuos</h4>
+<p>Teor&#xED;a: lunes 17:30-19:30<br>
+Pr&#xE1;cticas: martes 15:30-17:30</p>
+</div>
+<hr>
+<h3>Segundo cuatrimestre</h3>
+<div class="Asignatura">
+<h4>- Programaci&#xF3;n y administraci&#xF3;n de redes</h4>
+<p>Teor&#xED;a (grupo B, tardes): lunes 16:30-17:30 y jueves 16:30-17:30<br>
+Pr&#xE1;cticas: grupos martes 15:30-17:30 y 17:30-19:30</p>
+</div>
+<div class="Asignatura">
+<h4>- Programaci&#xF3;n hardware</h4>
+<p>Teor&#xED;a: lunes 19:30-20:30, mi&#xE9;rcoles 19:30-20:30<br>
+Pr&#xE1;cticas: lunes 20:30-21:30, mi&#xE9;rcoles 20:30-21:30</p>
+</div>
+</div>
+</section>
+<section class="accordion">
+  <input type="checkbox" name="collapse" id="curso1011">
+  <h2 class="handle"><label for="curso1011">Curso 2010/2011</label></h2>
+<div class="content">
+  <h3>Segundo cuatrimestre</h3>
+<div class="Asignatura">
+<h4>-Programaci&#xF3;n II</h4>
+<p>Teor&#xED;a - grupo &#xFA;nico<br>
+Pr&#xE1;cticas: grupos 1-3 (EPSL - Ing. T&#xE9;cnica de Telecomunicaciones - Esp. Telem&#xE1;tica)</p>
+</div>
+<div class="Asignatura">
+<h4>- Programaci&#xF3;n avanzada</h4>
+<p>Teor&#xED;a y pr&#xE1;cticas - grupo &#xFA;nico (EPSL - Ing. T&#xE9;cnica de Telecomunicaciones - Esp. Telem&#xE1;tica)</p>
+</div>
+<div class="Asignatura">
+<h4>- Bases de datos</h4>
+<p>Teor&#xED;a y pr&#xE1;cticas - grupo &#xFA;nico  (EPSL -Ingenier&#xED;a en Telecomunicaciones)</p>
+</div>
+</div>
+</section>
+<hr>
+<h2 id="trabajos-fin-de-t%C3%ADtulo-tfgtfm">Trabajos fin de título (TFG/TFM)</h2>
+<section class="accordion">
+  <input type="checkbox" name="collapse" id="TFTPropuestos">
+  <h2 class="handle"><label for="TFTPropuestos">TFT propuestos</label></h2>
+<div class="content">
+</div></section><p>Consulta la lista de TFG/TFM disponibles en la web de la <a href="https://eps.ujaen.es/principal/trabajo-fin-de-grado-master">Escuela Polit&#xE9;cnica Superior</a>.</p>
+<ol>
+<li> Paquete R para recopilaci&#xF3;n y an&#xE1;lisis de datos de calidad del aire en Espa&#xF1;a</li>
+<li> Paquete R para el an&#xE1;lisis de datos bibliom&#xE9;tricos en publicaciones cient&#xED;ficas</li>
+<!--<li> Diseño de una Unidad aritmético-lógica a nivel de hardware e implementación en FPGA</li>
+<li> Implementación hardware de una red neuronal artificial para reconocimiento de dígitos numéricos manuscritos</li>-->
+</ol>
+
+
+<section class="accordion">
+  <input type="checkbox" name="collapse" id="TFTAsignados">
+  <h2 class="handle"><label for="TFTAsignados">TFT asignados</label></h2>
+<div class="content">
+<ol>
+<li> THUMDER (<em>THe UltiMate Dlx EmulatoR</em>): emulador multiplataforma DLX con fines did&#xE1;cticos</li>
+<li> CarDreamer: Fantasy car designs dreamed by a neural network</li>
+<li> Generaci&#xF3;n de personajes de ficci&#xF3;n mediante redes neuronales generativas</li>
+<!--<li> Estudio de migración de sistema heredado a arquitecturas abiertas modernas (TFM)</li> -->
+<!--<li> Sistema IoT/Edge computing para el control remoto de acceso mediante tarjetas inteligentes y Raspberry Pi (TFM)</li> -->
+</ol>
+</div>
+</section>
+<section class="accordion">
+  <input type="checkbox" name="collapse" id="TFTDefendidos">
+  <h2 class="handle"><label for="TFTDefendidos">TFT defendidos</label></h2>
+<div class="content">
+<ol reversed>
+<li> Entrenador did&#xE1;ctico de la pila de protocolos TCP/IP - <b>Sobresaliente - Septiembre 2022</b></li>
+<li> Procesamiento de im&#xE1;genes de foto-trampeo con t&#xE9;cnicas de aprendizaje profundo para el descarte autom&#xE1;tico de im&#xE1;genes vac&#xED;as - <b>Sobresaliente - julio 2022 (propuesta matr&#xED;cula)</b></li>
+<li> Desarrollo de interfaz web para un simulador de procesador DLX - <b>Sobresaliente - julio 2022 (propuesta matr&#xED;cula)</b></li>
+<li> SCHEMATIZE: App para el reconocimiento &#xF3;ptico de diagramas mentales dibujados a mano - <b>Sobresaliente - julio 2022</b> </li>
+<li> Cybersecurity: hacking and penetration testing methodologies and techniques - <b>Sobresaliente - septiembre 2021</b> </li>
+<li> Detecci&#xF3;n de incendios en areas forestales usando algoritmos de deep learning - <b>Sobresaliente - julio 2021 (propuesta matr&#xED;cula)</b></li>
+<li> Identificaci&#xF3;n de tumores de mama a partir de an&#xE1;lisis de im&#xE1;genes con t&#xE9;cnicas de aprendizaje profundo - <b>Sobresaliente - julio 2021</b></li>
+<li> Predicci&#xF3;n del consumo el&#xE9;ctrico a partir de datos hist&#xF3;ricos y variables ex&#xF3;genas  - <b>Sobresaliente - julio 2021</b></li>
+<li> Anotaci&#xF3;n de acordes en piezas musicales con aprendizaje profundo - <b>Sobresaliente - julio 2021 (propuesta matr&#xED;cula)</b></li>
+<li> Asistente para el etiquetado de objetos presentes en im&#xE1;genes - <b>Sobresaliente - septiembre 2020</b></li>
+<li> Deep Learning for Multi-Object Detections under Pre-processed Conditions with Audio Feedback (TFM) - <b>Sobresaliente - junio 2020 (propuesta Matr&#xED;cula)</b></li>
+<li> Detecci&#xF3;n de anomal&#xED;as en im&#xE1;genes georeferenciadas mediante t&#xE9;cnicas de aprendizaje profundo - <b>Sobresaliente - junio 2020 (propuesta Matr&#xED;cula)</b></li>
+<li> Detecci&#xF3;n e identificaci&#xF3;n de presencia de animales en im&#xE1;genes de foto-trampeo - <b>Sobresaliente - junio 2020 (propuesta Matr&#xED;cula)</b></li>
+<li> Seguimiento de veh&#xED;culos en secuencias de v&#xED;deo a partir de identificaci&#xF3;n de matr&#xED;culas - <b>Sobresaliente - junio 2020 (propuesta Matr&#xED;cula)</b></li>
+<li> Sistema basado en Deep Learning para la identificaci&#xF3;n de estilos de c&#xF3;mics - <b>Sobresaliente - septiembre 2019 (propuesta Matr&#xED;cula)</b></li>
+<li> An&#xE1;lisis del desbalanceo en redes neuronales convolucionales - <b>Sobresaliente - julio 2019</b></li>
+<li> Paquete R de acceso al Portal de datos abiertos del Gobierno de Espa&#xF1;a - <b>Sobresaliente - julio 2019 (propuesta Matr&#xED;cula)</b></li>
+<li> Sistema para la identificaci&#xF3;n autom&#xE1;tica de veh&#xED;culos a partir de fotograf&#xED;as - <b>Sobresaliente - julio 2019 (propuesta Matr&#xED;cula)</b></li>
+<li> Distribuci&#xF3;n de cargas de trabajo entre m&#xFA;ltiples clientes mediante tecnolog&#xED;as web - <b>Notable - julio 2019</b></li>
+<li> Aplicaci&#xF3;n web para el seguimiento del aprendizaje activo de asignaturas de estudios universitarios - <b>Sobresaliente - junio 2019</b></li>
+<li> Desarrollo de una librer&#xED;a de algoritmos de extracci&#xF3;n de reglas descriptivas en R y de la interfaz de usuario asociada - <b>Sobresaliente</b></li>
+<li> Desarrollo de una aplicaci&#xF3;n m&#xF3;vil para el control y la monitorizaci&#xF3;n de servidores - <b>Matr&#xED;cula de honor</b></li>
+<li> Desarrollo de software para la monitorizaci&#xF3;n de redes sobre Raspberry Pi - <b>Notable</b></li>
+<li> N&#xE9;fele: plataforma web para el an&#xE1;lisis y agregaci&#xF3;n de predicciones meteorol&#xF3;gicas - <b>Notable</b></li>
+</ol>
+</div>
+</section>
+
+</body>
+</html>
